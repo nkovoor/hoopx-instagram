@@ -3,7 +3,7 @@ import { TransitionSeries, linearTiming } from '@remotion/transitions';
 import { fade } from '@remotion/transitions/fade';
 import { slide } from '@remotion/transitions/slide';
 import {
-  AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing, Img, staticFile,
+  AbsoluteFill, Sequence, Audio, useCurrentFrame, useVideoConfig, interpolate, spring, Easing, Img, staticFile,
 } from 'remotion';
 
 const GOLD = '#FDB927';
@@ -368,8 +368,21 @@ export const seqFrames = (scenes) => scenes.reduce((a, s) => a + s.len, 0) - Mat
 const PRESENT = [() => slide({ direction: 'from-right' }), () => fade(), () => slide({ direction: 'from-bottom' }), () => fade()];
 
 // Shared scene player: smooth eased slide/fade between scenes (Remotion TransitionSeries)
-export const SceneSeries = ({ scenes }) => (
+const Music = ({ music, total }) => {
+  const { fps } = useVideoConfig();
+  if (!music) return null;
+  return (
+    <Audio
+      src={staticFile(music.file)}
+      startFrom={Math.round((music.startSec || 0) * fps)}
+      volume={(f) => Math.min(1, f / (fps * 0.8)) * Math.min(1, Math.max(0, (total - f) / (fps * 2))) * 0.85}
+    />
+  );
+};
+
+export const SceneSeries = ({ scenes, music }) => (
   <AbsoluteFill style={{ background: '#0c0018' }}>
+    <Music music={music} total={seqFrames(scenes)} />
     <TransitionSeries>
       {scenes.flatMap((s, i) => {
         const out = [<TransitionSeries.Sequence key={s.key} durationInFrames={s.len}>{s.el}</TransitionSeries.Sequence>];
@@ -386,7 +399,7 @@ export const SceneSeries = ({ scenes }) => (
 
 export const totalFrames = (night) => seqFrames(buildScenes(night));
 
-export const Reel = ({ night }) => <SceneSeries scenes={buildScenes(night)} />;
+export const Reel = ({ night, music }) => <SceneSeries scenes={buildScenes(night)} music={music} />;
 
 export {
   DrawRing, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,

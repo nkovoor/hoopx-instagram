@@ -305,4 +305,4 @@ export const buildStoryScenes = (night, story) => {
 
 export const storyFrames = (night, story) => seqFrames(buildStoryScenes(night, story));
 
-export const StoryReel = ({ night, story }) => <SceneSeries scenes={buildStoryScenes(night, story)} />;
+export const StoryReel = ({ night, story, music }) => <SceneSeries scenes={buildStoryScenes(night, story)} music={music} />;

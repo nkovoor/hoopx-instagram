@@ -32,5 +32,25 @@ if (story && Array.isArray(story.beats) && story.beats.length && story.hook) {
   composition = 'StoryReel';
   props = { night, story };
 }
+// A story only counts if it was written for this night (never post yesterday's story).
+if (props.story && story.etDate && story.etDate !== night.etDate) {
+  console.log(`story is for ${story.etDate}, night is ${night.etDate}: ignoring story`);
+  composition = 'NightReel';
+  props = { night };
+}
+
+// Music: pick a mood pool, rotate through it by date (no repeats until the pool is used up),
+// vary the start point on later cycles.
+const MOOD = { milestone: 'epic', record: 'epic', legend: 'legend', comeback: 'hype', 'game-winner': 'hype', rookie: 'hype', upset: 'hype', streak: 'hype' };
+const mood = composition === 'StoryReel' ? (MOOD[props.story.type] || 'hype') : 'chill';
+const dir = path.join(root, 'reel', 'public', 'music', mood);
+const pool = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.mp3')).sort() : [];
+if (pool.length) {
+  const day = Math.floor(Date.parse(night.etDate) / 86400000);
+  const file = pool[day % pool.length];
+  const cycle = Math.floor(day / pool.length);
+  props.music = { file: `music/${mood}/${file}`, startSec: (cycle % 3) * 10 };
+  console.log(`music=${props.music.file} start=${props.music.startSec}s`);
+}
 fs.writeFileSync(path.join(root, 'reel', 'props.json'), JSON.stringify(props));
 console.log(`composition=${composition}`);

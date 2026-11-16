@@ -1,0 +1,62 @@
+name: Daily Reel
+# Step 1 (07:30 UTC = 13:00 IST): fetch last night's results and commit data/night.json.
+# Step 2 (09:30 UTC = 15:00 IST): render the Reel from night.json + story.json and post it.
+# Schedules are left OFF until week-1 approval; run by hand with Run workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "ET date YYYYMMDD (blank = last night)"
+        required: false
+      post:
+        description: "Really post to Instagram? (true/false)"
+        default: "false"
+  # schedule:
+  #   - cron: "30 7 * * *"
+  #   - cron: "30 9 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reel/package-lock.json
+      - run: node --test test/fetch-night.test.mjs
+      - name: Fetch results
+        run: node scripts/fetch-night.mjs ${{ github.event.inputs.date }}
+      - id: gate
+        run: echo "status=$(node -p "require('./data/night.json').status")" >> "$GITHUB_OUTPUT"
+      - run: npm ci
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel
+      - id: prep
+        if: steps.gate.outputs.status == 'ok'
+        run: node scripts/prepare-props.mjs | tee -a "$GITHUB_OUTPUT"
+      - name: Render
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel
+        run: npx remotion render src/index.jsx ${{ steps.prep.outputs.composition }} out/reel.mp4 --props=props.json --codec=h264 --crf=20
+      - name: Post (dry run unless post=true)
+        if: steps.gate.outputs.status == 'ok'
+        env:
+          POST: ${{ github.event.inputs.post }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: node scripts/post.mjs
+      - uses: actions/upload-artifact@v4
+        if: steps.gate.outputs.status == 'ok'
+        with:
+          name: reel-${{ github.run_id }}
+          path: |
+            data/night.json
+            reel/out/reel.mp4
+          retention-days: 3
