@@ -1,0 +1,50 @@
+name: Carousel (Mon Week in Review / Thu HoopX 6 Watch)
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: "week or six"
+        default: "week"
+  schedule:
+    - cron: "10 9 * * 1"   # Monday 14:40 IST -> week
+    - cron: "10 9 * * 4"   # Thursday 14:40 IST -> six
+permissions:
+  contents: read
+jobs:
+  carousel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: reel/package-lock.json }
+      - id: k
+        run: |
+          if [ -n "${{ github.event.inputs.kind }}" ]; then echo "kind=${{ github.event.inputs.kind }}" >> "$GITHUB_OUTPUT";
+          elif [ "${{ github.event.schedule }}" = "10 9 * * 1" ]; then echo "kind=week" >> "$GITHUB_OUTPUT";
+          else echo "kind=six" >> "$GITHUB_OUTPUT"; fi
+      - run: node scripts/fetch-week.mjs
+      - id: prep
+        run: node scripts/prepare-carousel.mjs ${{ steps.k.outputs.kind }} | tee -a "$GITHUB_OUTPUT"
+      - run: npm ci
+        working-directory: reel
+      - name: Render slides
+        working-directory: reel
+        run: |
+          mkdir -p out/slides
+          for i in $(seq 0 $(( ${{ steps.prep.outputs.slides }} - 1 ))); do
+            node -e "const p=require('./carousel-props.json');p.slide=$i;require('fs').writeFileSync('cp.json',JSON.stringify(p))"
+            npx remotion still src/index.jsx Carousel out/slides/slide-$i.jpg --props=cp.json --image-format=jpeg --jpeg-quality=92
+          done
+      - name: Post (dry run unless POST_LIVE variable is true)
+        env:
+          POST: ${{ vars.POST_LIVE }}
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          if [ "${{ steps.k.outputs.kind }}" = "week" ]; then C="The NBA week in review: top performances, closest games and biggest blowouts. Unofficial fan account, not affiliated with the NBA or any team. #NBA #basketball #nbaweek #hoops";
+          else C="HoopX 6 Watch: how our six players did this week. Unofficial fan account, not affiliated with the NBA or any team. #NBA #basketball #hoops"; fi
+          node scripts/post-carousel.mjs "$C"
+      - uses: actions/upload-artifact@v4
+        with: { name: carousel-${{ github.run_id }}, path: reel/out/slides, retention-days: 3 }

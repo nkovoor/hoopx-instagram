@@ -6,6 +6,7 @@ import '@fontsource/outfit/500.css';
 import '@fontsource/outfit/600.css';
 import { Reel, totalFrames } from './Reel';
 import { StoryReel, storyFrames } from './Story';
+import { Carousel } from './Carousel';
 import { night as sampleNight } from './data';
 
 const sampleStory = {
@@ -17,6 +18,8 @@ const sampleStory = {
 
 const Root = () => (
   <>
+    <Composition id="Carousel" component={Carousel} fps={30} width={1080} height={1350} durationInFrames={1}
+      defaultProps={{ kind: 'six', slide: 1, data: { range: 'SAMPLE', players: [{ name: 'Sample Player', photo: null, team: 'LAL', primary: '#552583', secondary: '#FDB927', line: '30 PTS · 8 REB', result: 'W LAL 120 - GSW 110', date: 'MON NOV 9' }] } }} />
     {/* Main: the story-first Reel (needs data/night.json + data/story.json) */}
     <Composition
       id="StoryReel"

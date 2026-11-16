@@ -1,7 +1,7 @@
 name: Daily Reel
 # Step 1 (07:30 UTC = 13:00 IST): fetch last night's results and commit data/night.json.
 # Step 2 (09:30 UTC = 15:00 IST): render the Reel from night.json + story.json and post it.
-# Schedules are left OFF until week-1 approval; run by hand with Run workflow.
+# Posts only when the repo variable POST_LIVE is 'true'; otherwise it is a dry run (video saved as an artifact).
 on:
   workflow_dispatch:
     inputs:
@@ -11,9 +11,9 @@ on:
       post:
         description: "Really post to Instagram? (true/false)"
         default: "false"
-  # schedule:
-  #   - cron: "30 7 * * *"
-  #   - cron: "30 9 * * *"
+  schedule:
+    - cron: "30 7 * * *"   # 13:00 IST: fetch night.json for the story task
+    - cron: "30 9 * * *"   # 15:00 IST: render and post
 
 permissions:
   contents: write
@@ -32,8 +32,13 @@ jobs:
       - run: node --test test/fetch-night.test.mjs
       - name: Fetch results
         run: node scripts/fetch-night.mjs ${{ github.event.inputs.date }}
+      - name: Early run - commit night.json for the story task, then stop
+        if: github.event.schedule == '30 7 * * *'
+        run: |
+          git config user.name hoopx-bot; git config user.email bot@users.noreply.github.com
+          git add -f data/night.json && git commit -m "night data" && git push || true
       - id: gate
-        run: echo "status=$(node -p "require('./data/night.json').status")" >> "$GITHUB_OUTPUT"
+        run: if [ "${{ github.event.schedule }}" = "30 7 * * *" ]; then echo "status=early" >> "$GITHUB_OUTPUT"; else echo "status=$(node -p "require('./data/night.json').status")" >> "$GITHUB_OUTPUT"; fi
       - run: npm ci
         if: steps.gate.outputs.status == 'ok'
         working-directory: reel
@@ -47,7 +52,7 @@ jobs:
       - name: Post (dry run unless post=true)
         if: steps.gate.outputs.status == 'ok'
         env:
-          POST: ${{ github.event.inputs.post }}
+          POST: ${{ github.event.inputs.post || vars.POST_LIVE }}
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
