@@ -26,6 +26,7 @@ export const night = {
     last: 'WEMBANYAMA',
     team: 'SAN ANTONIO SPURS',
     colour: '#C4CED4',
+    note: 'SPURS: 10 WINS IN A ROW',
     stats: [
       { v: 32, k: 'PTS' },
       { v: 9, k: 'REB' },

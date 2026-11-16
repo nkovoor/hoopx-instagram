@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing,
 } from 'remotion';
-import { night } from './data';
 
 const GOLD = '#FDB927';
 const CREAM = '#FFF4DC';
@@ -13,6 +12,11 @@ const BEBAS = '"Bebas Neue", sans-serif';
 const OUTFIT = 'Outfit, sans-serif';
 
 const clamp = { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' };
+
+// Shrink text so long names (e.g. GILGEOUS-ALEXANDER) never overflow the 1080px frame.
+// perChar ~ average glyph width as a fraction of font size.
+const fit = (text, max, width, perChar = 0.5) =>
+  Math.min(max, Math.floor(width / (Math.max(String(text).length, 1) * perChar)));
 
 // Moving diagonal light streaks behind everything
 const Streaks = ({ colour = GOLD, speed = 1 }) => {
@@ -69,7 +73,7 @@ const Header = ({ text }) => (
 
 // ---------- Scenes ----------
 
-const Hook = () => {
+const Hook = ({ night }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const slam = spring({ frame: f - 8, fps, config: { damping: 11, stiffness: 160 } });
@@ -89,18 +93,18 @@ const Hook = () => {
       <div style={{
         position: 'absolute', top: 520, width: '100%', textAlign: 'center',
         transform: `scale(${scale}) translateX(${shake}px)`, opacity: f < 8 ? 0 : 1,
-        fontFamily: ANTON, fontSize: 340, lineHeight: 1, color: GOLD,
+        fontFamily: ANTON, fontSize: fit(night.hook.line1, 340, 1000, 0.52), lineHeight: 1, color: GOLD,
         textShadow: '0 0 60px rgba(253,185,39,0.55), 0 12px 0 #3a1500',
       }}>{night.hook.line1}</div>
       <div style={{
         position: 'absolute', top: 920, width: '100%', textAlign: 'center',
         clipPath: `inset(0 ${100 - l2}% 0 0)`,
-        fontFamily: ANTON, fontSize: 132, color: CREAM, letterSpacing: '0.02em',
+        fontFamily: ANTON, fontSize: fit(night.hook.line2, 132, 1000, 0.5), color: CREAM, letterSpacing: '0.02em',
       }}>{night.hook.line2}</div>
       <div style={{
         position: 'absolute', top: 1160, left: '50%', transform: `translateX(-50%) scale(${0.9 + sub * 0.1})`,
         opacity: sub, background: RED, color: '#fff', padding: '20px 44px', borderRadius: 14,
-        fontFamily: BEBAS, fontSize: 72, letterSpacing: '0.12em', whiteSpace: 'nowrap',
+        fontFamily: BEBAS, fontSize: fit(night.hook.sub, 72, 960, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap',
       }}>{night.hook.sub}</div>
       <div style={{
         position: 'absolute', bottom: 160, width: '100%', textAlign: 'center',
@@ -126,7 +130,7 @@ const TeamPanel = ({ team, top, won, enter, side }) => {
       <div style={{ position: 'absolute', left: 48, top: 40, fontFamily: ANTON, fontSize: 150, color: ink, lineHeight: 1, opacity: dim }}>
         {team.abbr}
       </div>
-      <div style={{ position: 'absolute', left: 52, bottom: 46, fontFamily: BEBAS, fontSize: 64, letterSpacing: '0.12em', color: ink, opacity: dim }}>
+      <div style={{ position: 'absolute', left: 52, bottom: 46, fontFamily: BEBAS, fontSize: fit(team.name, 64, 300, 0.5), letterSpacing: '0.12em', color: ink, opacity: dim }}>
         {team.name}
       </div>
       <div style={{
@@ -157,7 +161,7 @@ const GameCard = ({ game, index, total }) => {
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks colour={game.away.primary === '#C4CED4' ? '#C4CED4' : GOLD} />
-      <Header text={`FINAL · GAME ${index + 1} OF ${total}`} />
+      <Header text={`${game.label || 'FINAL'} · GAME ${index + 1} OF ${total}`} />
       <TeamPanel team={game.away} top={290} won={awayWon} enter={a} side="left" />
       <div style={{
         position: 'absolute', top: 690, width: '100%', textAlign: 'center',
@@ -166,21 +170,21 @@ const GameCard = ({ game, index, total }) => {
       <TeamPanel team={game.home} top={780} won={!awayWon} enter={b} side="right" />
       <div style={{
         position: 'absolute', left: 60, right: 60, top: 1250, transform: `translateY(${star}px)`, opacity: f > 52 ? 1 : 0,
-        background: CREAM, borderRadius: 24, padding: '30px 40px',
+        background: CREAM, borderRadius: 24, padding: '36px 40px 30px',
       }}>
         <div style={{ fontFamily: BEBAS, fontSize: 44, letterSpacing: '0.16em', color: '#5b1f8a' }}>TOP PERFORMER · {game.star.team}</div>
-        <div style={{ fontFamily: ANTON, fontSize: 96, color: '#12001f', lineHeight: 1.05 }}>{game.star.name}</div>
-        <div style={{ fontFamily: ANTON, fontSize: 70, color: RED, lineHeight: 1.1 }}>{game.star.line}</div>
+        <div style={{ fontFamily: ANTON, fontSize: fit(game.star.name, 96, 940, 0.5), color: '#12001f', lineHeight: 1.15 }}>{game.star.name}</div>
+        <div style={{ fontFamily: ANTON, fontSize: fit(game.star.line, 70, 940, 0.5), color: RED, lineHeight: 1.1 }}>{game.star.line}</div>
       </div>
       <div style={{
         position: 'absolute', bottom: 150, width: '100%', textAlign: 'center', opacity: note,
-        fontFamily: BEBAS, fontSize: 50, letterSpacing: '0.08em', color: GOLD,
+        fontFamily: BEBAS, fontSize: fit(game.note || '', 50, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
       }}>{game.note}</div>
     </AbsoluteFill>
   );
 };
 
-const PlayerOfNight = () => {
+const PlayerOfNight = ({ night }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = night.potn;
@@ -208,12 +212,12 @@ const PlayerOfNight = () => {
       <div style={{
         position: 'absolute', top: 420, width: '100%', textAlign: 'center',
         transform: `translateX(${interpolate(first, [0, 1], [-900, 0])}px)`,
-        fontFamily: ANTON, fontSize: 150, color: CREAM, lineHeight: 1,
+        fontFamily: ANTON, fontSize: fit(p.first, 150, 1000, 0.5), color: CREAM, lineHeight: 1,
       }}>{p.first}</div>
       <div style={{
         position: 'absolute', top: 570, width: '100%', textAlign: 'center',
         transform: `translateX(${interpolate(last, [0, 1], [900, 0])}px)`,
-        fontFamily: ANTON, fontSize: 168, color: p.colour, lineHeight: 1,
+        fontFamily: ANTON, fontSize: fit(p.last, 168, 1000, 0.5), color: p.colour, lineHeight: 1,
         textShadow: `0 0 50px rgba(196,206,212,0.45)`,
       }}>{p.last}</div>
       <div style={{
@@ -243,7 +247,7 @@ const PlayerOfNight = () => {
         position: 'absolute', top: 1450, width: '100%', textAlign: 'center',
         fontFamily: BEBAS, fontSize: 72, letterSpacing: '0.12em', color: CREAM,
         opacity: interpolate(f, [80, 92], [0, 1], clamp),
-      }}>SPURS: 10 WINS IN A ROW</div>
+      }}>{p.note}</div>
     </AbsoluteFill>
   );
 };
@@ -272,21 +276,58 @@ const Outro = () => {
   );
 };
 
-export const SCENES = (() => {
-  const list = [{ key: 'hook', len: 90, el: <Hook /> }];
-  night.games.forEach((g, i) => list.push({ key: `g${i}`, len: 135, el: <GameCard game={g} index={i} total={night.games.length} /> }));
-  list.push({ key: 'potn', len: 150, el: <PlayerOfNight /> });
+// Compact scoreboard of every game, shown after the featured games.
+const AllScores = ({ night }) => {
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const rows = night.games;
+  const rowH = Math.min(150, Math.floor(1250 / Math.max(rows.length, 1)));
+  return (
+    <AbsoluteFill style={{ background: BG }}>
+      <Grain /><Streaks speed={1.2} />
+      <Header text="ALL FINAL SCORES" />
+      {rows.map((g, i) => {
+        const pop = spring({ frame: f - (6 + i * 4), fps, config: { damping: 14 } });
+        const awayWon = g.away.score > g.home.score;
+        const sz = Math.floor(rowH * 0.5);
+        return (
+          <div key={i} style={{
+            position: 'absolute', left: 60, right: 60, top: 280 + i * rowH, height: rowH - 14,
+            transform: `translateX(${interpolate(pop, [0, 1], [i % 2 ? 900 : -900, 0])}px)`,
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '0 36px', borderRadius: 20, background: 'rgba(255,244,220,0.08)',
+            border: `3px solid ${g.away.primary === '#000000' ? GOLD : g.away.primary}`,
+            fontFamily: ANTON, fontSize: sz, color: CREAM,
+          }}>
+            <span style={{ color: awayWon ? GOLD : CREAM }}>{g.away.abbr} {g.away.score}</span>
+            <span style={{ fontFamily: BEBAS, fontSize: sz * 0.6, color: 'rgba(255,244,220,0.6)' }}>{g.label || 'FINAL'}</span>
+            <span style={{ color: awayWon ? CREAM : GOLD }}>{g.home.score} {g.home.abbr}</span>
+          </div>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+const FEATURED_MAX = 3;
+
+export const buildScenes = (night) => {
+  const featured = night.games.slice(0, FEATURED_MAX);
+  const list = [{ key: 'hook', len: 90, el: <Hook night={night} /> }];
+  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 135, el: <GameCard game={g} index={i} total={night.games.length} /> }));
+  if (night.games.length > featured.length) list.push({ key: 'all', len: 150, el: <AllScores night={night} /> });
+  if (night.potn) list.push({ key: 'potn', len: 150, el: <PlayerOfNight night={night} /> });
   list.push({ key: 'outro', len: 90, el: <Outro /> });
   return list;
-})();
+};
 
-export const TOTAL = SCENES.reduce((a, s) => a + s.len, 0);
+export const totalFrames = (night) => buildScenes(night).reduce((a, s) => a + s.len, 0);
 
-export const Reel = () => {
+export const Reel = ({ night }) => {
   let at = 0;
   return (
     <AbsoluteFill style={{ background: '#0c0018' }}>
-      {SCENES.map((s) => {
+      {buildScenes(night).map((s) => {
         const from = at; at += s.len;
         return (
           <Sequence key={s.key} from={from} durationInFrames={s.len}>
