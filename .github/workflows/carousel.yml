@@ -17,7 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: 22, cache: npm, cache-dependency-path: reel/package-lock.json }
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reel/package-lock.json
       - id: k
         run: |
           if [ -n "${{ github.event.inputs.kind }}" ]; then echo "kind=${{ github.event.inputs.kind }}" >> "$GITHUB_OUTPUT";
@@ -47,4 +50,7 @@ jobs:
           else C="HoopX 6 Watch: how our six players did this week. Unofficial fan account, not affiliated with the NBA or any team. #NBA #basketball #hoops"; fi
           node scripts/post-carousel.mjs "$C"
       - uses: actions/upload-artifact@v4
-        with: { name: carousel-${{ github.run_id }}, path: reel/out/slides, retention-days: 3 }
+        with:
+          name: carousel-${{ github.run_id }}
+          path: reel/out/slides
+          retention-days: 3
