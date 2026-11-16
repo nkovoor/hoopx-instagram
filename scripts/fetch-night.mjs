@@ -41,6 +41,7 @@ function teamOf(competitor) {
   return {
     abbr,
     name: (t.nickname || str(competitor?.team?.name) || abbr).toUpperCase(),
+    city: t.city || '', nick: t.nickname || '',
     fullName: t.name || str(competitor?.team?.displayName) || abbr,
     score: num(competitor?.score),
     quarters: (competitor?.linescores || []).map((l) => num(l?.value ?? l?.displayValue)).filter((v) => v !== null),
@@ -149,8 +150,8 @@ export function buildNight(scoreboard, etDate) {
     games.push({
       id: String(ev.id),
       label: ot ? `FINAL/${ot > 1 ? ot : ''}OT` : 'FINAL',
-      away: { abbr: a.abbr, name: a.name, score: a.score, quarters: a.quarters, primary: a.primary, secondary: a.secondary },
-      home: { abbr: h.abbr, name: h.name, score: h.score, quarters: h.quarters, primary: h.primary, secondary: h.secondary },
+      away: { abbr: a.abbr, name: a.name, city: (a.city || '').toUpperCase(), nick: (a.nick || a.name).toUpperCase(), score: a.score, quarters: a.quarters, primary: a.primary, secondary: a.secondary },
+      home: { abbr: h.abbr, name: h.name, city: (h.city || '').toUpperCase(), nick: (h.nick || h.name).toUpperCase(), score: h.score, quarters: h.quarters, primary: h.primary, secondary: h.secondary },
       winner: winner.abbr, margin, overtime: ot, tags, interest,
       leaders: extra,
       star: star ? { name: star.name.toUpperCase(), team: star.team, line: statLine(star.stats), photo: photoFor(star.name) } : { name: `${winner.name} WIN`, team: winner.abbr, line: `${h.score > a.score ? h.score : a.score}-${Math.min(h.score, a.score)}` },

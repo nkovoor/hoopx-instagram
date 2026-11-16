@@ -2,7 +2,7 @@
 // Everything shown comes from night.json (ESPN numbers) and story.json (written by the daily
 // Claude task, with a source for every claim). Nothing here is invented.
 import React from 'react';
-import { AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing } from 'remotion';
+import { AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing, Img, staticFile } from 'remotion';
 import {
   DrawRing, SceneSeries, seqFrames, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
 } from './Reel';
@@ -151,6 +151,7 @@ const MomentBeat = ({ beat, story, team }) => {
   return (
     <Frame title={beat.title || 'THE MOMENT'} team={team} story={story}>
       <div style={{ position: 'absolute', top: 340, left: 40, width: 1000, height: 1000, borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,0.6)', transform: `scale(${interpolate(f, [0, 210], [1, 1.06], clamp)})` }}>
+        {story?.court && <Img src={staticFile(story.court)} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />}
         <svg viewBox="0 0 1080 1000" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
           <defs>
             <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
@@ -165,7 +166,7 @@ const MomentBeat = ({ beat, story, team }) => {
               <stop offset="0" stopColor="rgba(255,240,200,0.35)" /><stop offset="1" stopColor="rgba(0,0,0,0.55)" />
             </radialGradient>
           </defs>
-          <rect width="1080" height="1000" fill="url(#planks)" />
+          {!story?.court && <rect width="1080" height="1000" fill="url(#planks)" />}
           <rect x="390" y="60" width="300" height="380" fill={team?.primary || '#552583'} opacity="0.85" />
           <g fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="7">
             <rect x="90" y="60" width="900" height="880" />
@@ -239,7 +240,7 @@ const PayoffBeat = ({ beat, story, team }) => {
 };
 
 const BEATS = { text: TextBeat, stat: StatBeat, quarters: QuartersBeat, moment: MomentBeat, ladder: LadderBeat, payoff: PayoffBeat };
-const BEAT_LEN = { text: 150, stat: 180, quarters: 210, moment: 210, ladder: 210, payoff: 180 };
+const BEAT_LEN = { text: 190, stat: 220, quarters: 260, moment: 260, ladder: 260, payoff: 220 };
 
 // Five games per page, each with the game's top scorer.
 const ScoresPage = ({ games, page, pages }) => {
@@ -289,7 +290,7 @@ const MAX_PAGES = 3;
 
 export const buildStoryScenes = (night, story) => {
   const team = teamOfStory(story, night);
-  const list = [{ key: 'hook', len: 90, el: <StoryHook story={story} night={night} /> }];
+  const list = [{ key: 'hook', len: 120, el: <StoryHook story={story} night={night} /> }];
   (story.beats || []).forEach((b, i) => {
     const C = BEATS[b.kind] || TextBeat;
     list.push({ key: `b${i}`, len: BEAT_LEN[b.kind] || 150, el: <C beat={b} night={night} story={story} team={team} /> });
@@ -297,9 +298,9 @@ export const buildStoryScenes = (night, story) => {
   const games = [...(night.games || [])];
   const pages = Math.min(MAX_PAGES, Math.ceil(games.length / PER_PAGE));
   for (let p = 0; p < pages; p += 1) {
-    list.push({ key: `s${p}`, len: 180, el: <ScoresPage games={games.slice(p * PER_PAGE, (p + 1) * PER_PAGE)} page={p + 1} pages={pages} /> });
+    list.push({ key: `s${p}`, len: 240, el: <ScoresPage games={games.slice(p * PER_PAGE, (p + 1) * PER_PAGE)} page={p + 1} pages={pages} /> });
   }
-  list.push({ key: 'outro', len: 120, el: <Outro /> });
+  list.push({ key: 'outro', len: 150, el: <Outro /> });
   return list;
 };
 

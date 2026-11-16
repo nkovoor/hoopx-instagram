@@ -158,15 +158,18 @@ const TeamPanel = ({ team, top, won, enter, side }) => {
   const ink = isLight(team.primary) ? '#0b0b0b' : '#ffffff';
   return (
     <div style={{
-      position: 'absolute', left: 60, right: 60, top, height: 290, transform: `translateX(${x}px)`,
+      position: 'absolute', left: 60, right: 60, top, height: 330, transform: `translateX(${x}px)`,
       background: `linear-gradient(110deg, ${team.primary} 0%, ${team.primary} 44%, ${team.secondary} 44%, ${team.secondary} 48%, ${team.primary} 48%)`,
       borderRadius: 28, overflow: 'hidden',
       boxShadow: won ? `0 0 0 6px ${GOLD}` : 'none',
     }}>
-      <div style={{ position: 'absolute', left: 44, top: 26, fontFamily: ANTON, fontSize: 124, color: ink, lineHeight: 1, opacity: dim }}>{team.abbr}</div>
-      <div style={{ position: 'absolute', left: 48, bottom: 30, fontFamily: BEBAS, fontSize: fit(team.name, 54, 300, 0.5), letterSpacing: '0.12em', color: ink, opacity: dim }}>{team.name}</div>
+      <div style={{ position: 'absolute', left: 44, top: 22, fontFamily: ANTON, fontSize: 118, color: ink, lineHeight: 1, opacity: dim }}>{team.abbr}</div>
+      <div style={{ position: 'absolute', left: 48, bottom: 26, width: 330, opacity: dim, color: ink, lineHeight: 1.05 }}>
+        {team.city ? <div style={{ fontFamily: BEBAS, fontSize: fit(team.city, 46, 330, 0.36), letterSpacing: '0.1em' }}>{team.city}</div> : null}
+        <div style={{ fontFamily: ANTON, fontSize: fit(team.nick || team.name, 60, 330, 0.5), letterSpacing: '0.04em' }}>{team.nick || team.name}</div>
+      </div>
       <div style={{
-        position: 'absolute', right: 44, top: 44, fontFamily: ANTON, fontSize: 170, lineHeight: 1,
+        position: 'absolute', right: 44, top: 60, fontFamily: ANTON, fontSize: 180, lineHeight: 1,
         color: won ? (isLight(team.primary) ? '#0b0b0b' : GOLD) : ink, opacity: dim,
       }}><Count to={team.score} start={14} dur={46} /></div>
       {won && (
@@ -185,21 +188,21 @@ const LineScore = ({ game, appear }) => {
   if (!q.length) return null;
   const cols = q.map((_, i) => (i < 4 ? `Q${i + 1}` : i === 4 ? 'OT' : `${i - 3}OT`)).concat('T');
   const row = (t, bold) => (
-    <div style={{ display: 'flex', alignItems: 'center', height: 76 }}>
-      <div style={{ width: 150, fontFamily: ANTON, fontSize: 52, color: bold ? GOLD : CREAM }}>{t.abbr}</div>
+    <div style={{ display: 'flex', alignItems: 'center', height: 100 }}>
+      <div style={{ width: 170, fontFamily: ANTON, fontSize: 60, color: bold ? GOLD : CREAM }}>{t.abbr}</div>
       {(t.quarters || []).concat(t.score).map((v, i, arr) => (
-        <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: ANTON, fontSize: i === arr.length - 1 ? 58 : 50, color: i === arr.length - 1 ? (bold ? GOLD : CREAM) : 'rgba(255,244,220,0.85)' }}>{v}</div>
+        <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: ANTON, fontSize: i === arr.length - 1 ? 66 : 58, color: i === arr.length - 1 ? (bold ? GOLD : CREAM) : 'rgba(255,244,220,0.85)' }}>{v}</div>
       ))}
     </div>
   );
   return (
     <div style={{
-      position: 'absolute', left: 60, right: 60, top: 880, opacity: appear, transform: `translateY(${(1 - appear) * 40}px)`,
-      background: 'rgba(255,244,220,0.08)', border: '3px solid rgba(253,185,39,0.45)', borderRadius: 24, padding: '14px 36px',
+      position: 'absolute', left: 60, right: 60, top: 1050, opacity: appear, transform: `translateY(${(1 - appear) * 40}px)`,
+      background: 'rgba(255,244,220,0.08)', border: '3px solid rgba(253,185,39,0.45)', borderRadius: 24, padding: '16px 36px 22px',
     }}>
-      <div style={{ display: 'flex', height: 56, alignItems: 'center', borderBottom: '2px solid rgba(253,185,39,0.35)' }}>
-        <div style={{ width: 150, fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.14em', color: GOLD }}>QUARTERS</div>
-        {cols.map((c, i) => <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.1em', color: GOLD }}>{c}</div>)}
+      <div style={{ display: 'flex', height: 78, alignItems: 'center', borderBottom: '2px solid rgba(253,185,39,0.35)' }}>
+        <div style={{ width: 170, fontFamily: BEBAS, fontSize: 44, letterSpacing: '0.14em', color: GOLD }}>QUARTERS</div>
+        {cols.map((c, i) => <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: BEBAS, fontSize: 44, letterSpacing: '0.1em', color: GOLD }}>{c}</div>)}
       </div>
       {row(game.away, game.away.score > game.home.score)}
       {row(game.home, game.home.score > game.away.score)}
@@ -214,40 +217,40 @@ const GameCard = ({ game, index, total }) => {
   const { fps } = useVideoConfig();
   const a = spring({ frame: f - 4, fps, config: { damping: 15, stiffness: 120 } });
   const b = spring({ frame: f - 14, fps, config: { damping: 15, stiffness: 120 } });
-  const lineIn = interpolate(f, [90, 112], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const starIn = interpolate(f, [150, 176], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const note = interpolate(f, [210, 228], [0, 1], clamp);
+  const lineIn = interpolate(f, [110, 136], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const starIn = interpolate(f, [190, 220], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const note = interpolate(f, [270, 292], [0, 1], clamp);
   const awayWon = game.away.score > game.home.score;
   const vs = spring({ frame: f - 24, fps, config: { damping: 9 } });
   const hasLine = (game.away.quarters || []).length > 0;
-  const starTop = hasLine ? 1190 : 920;
+  const starTop = hasLine ? 1440 : 1090;
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks colour={game.away.primary === '#C4CED4' ? '#C4CED4' : GOLD} speed={0.7} />
       <Header text={`${game.label || 'FINAL'} · GAME ${index + 1} OF ${total}`} />
-      <TeamPanel team={game.away} top={230} won={awayWon} enter={a} side="left" />
-      <div style={{ position: 'absolute', top: 528, width: '100%', textAlign: 'center', transform: `scale(${vs})`, fontFamily: BEBAS, fontSize: 52, letterSpacing: '0.2em', color: CREAM }}>AT</div>
-      <TeamPanel team={game.home} top={590} won={!awayWon} enter={b} side="right" />
+      <TeamPanel team={game.away} top={200} won={awayWon} enter={a} side="left" />
+      <div style={{ position: 'absolute', top: 548, width: '100%', textAlign: 'center', transform: `scale(${vs})`, fontFamily: BEBAS, fontSize: 52, letterSpacing: '0.2em', color: CREAM }}>AT</div>
+      <TeamPanel team={game.home} top={640} won={!awayWon} enter={b} side="right" />
       {hasLine && <LineScore game={game} appear={lineIn} />}
       <div style={{
         position: 'absolute', left: 60, right: 60, top: starTop, opacity: starIn, transform: `translateY(${(1 - starIn) * 60}px)`,
-        background: CREAM, borderRadius: 28, padding: '34px 40px', display: 'flex', alignItems: 'center', gap: 36,
+        background: CREAM, borderRadius: 28, padding: '24px 36px', display: 'flex', alignItems: 'center', gap: 32,
       }}>
-        <Portrait photo={game.star.photo} team={teamByAbbr(game, game.star.team)} size={300} />
+        <Portrait photo={game.star.photo} team={teamByAbbr(game, game.star.team)} size={230} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: BEBAS, fontSize: 42, letterSpacing: '0.16em', color: '#5b1f8a' }}>TOP PERFORMER · {game.star.team}</div>
-          <div style={{ fontFamily: ANTON, fontSize: fit(game.star.name, 84, 560, 0.5), color: '#12001f', lineHeight: 1.15 }}>{game.star.name}</div>
-          <div style={{ fontFamily: ANTON, fontSize: fit(game.star.line, 64, 560, 0.5), color: RED, lineHeight: 1.15 }}>{game.star.line}</div>
+          <div style={{ fontFamily: BEBAS, fontSize: 38, letterSpacing: '0.16em', color: '#5b1f8a' }}>TOP PERFORMER · {game.star.team}</div>
+          <div style={{ fontFamily: ANTON, fontSize: fit(game.star.name, 76, 600, 0.5), color: '#12001f', lineHeight: 1.15 }}>{game.star.name}</div>
+          <div style={{ fontFamily: ANTON, fontSize: fit(game.star.line, 58, 600, 0.5), color: RED, lineHeight: 1.15 }}>{game.star.line}</div>
         </div>
       </div>
       {(game.leaders || []).length > 0 && (
-        <div style={{ position: 'absolute', left: 60, right: 60, top: starTop + 400, opacity: note, fontFamily: BEBAS, fontSize: 44, letterSpacing: '0.1em', color: CREAM, textAlign: 'center', lineHeight: 1.4 }}>
+        <div style={{ position: 'absolute', left: 60, right: 60, top: starTop + 292, opacity: note, fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.1em', color: CREAM, textAlign: 'center', lineHeight: 1.4 }}>
           {game.leaders.map((l, i) => <div key={i}>{l}</div>)}
         </div>
       )}
       <div style={{
-        position: 'absolute', bottom: 110, width: '100%', textAlign: 'center', opacity: note,
-        fontFamily: BEBAS, fontSize: fit(game.note || '', 54, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
+        position: 'absolute', bottom: 36, width: '100%', textAlign: 'center', opacity: note,
+        fontFamily: BEBAS, fontSize: fit(game.note || '', 50, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
       }}>{game.note}</div>
     </AbsoluteFill>
   );
@@ -355,11 +358,11 @@ const FEATURED_MAX = 3;
 
 export const buildScenes = (night) => {
   const featured = night.games.slice(0, FEATURED_MAX);
-  const list = [{ key: 'hook', len: 150, el: <Hook night={night} /> }];
-  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 270, el: <GameCard game={g} index={i} total={night.games.length} /> }));
-  if (night.games.length > featured.length) list.push({ key: 'all', len: 210, el: <AllScores night={night} /> });
-  if (night.potn) list.push({ key: 'potn', len: 240, el: <PlayerOfNight night={night} /> });
-  list.push({ key: 'outro', len: 120, el: <Outro /> });
+  const list = [{ key: 'hook', len: 180, el: <Hook night={night} /> }];
+  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 350, el: <GameCard game={g} index={i} total={night.games.length} /> }));
+  if (night.games.length > featured.length) list.push({ key: 'all', len: 270, el: <AllScores night={night} /> });
+  if (night.potn) list.push({ key: 'potn', len: 300, el: <PlayerOfNight night={night} /> });
+  list.push({ key: 'outro', len: 150, el: <Outro /> });
   return list;
 };
 
