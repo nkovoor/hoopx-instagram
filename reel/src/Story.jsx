@@ -32,6 +32,7 @@ const StoryHook = ({ story, night }) => {
   const l1 = spring({ frame: f - 10, fps, config: { damping: 11, stiffness: 160 } });
   const l2 = interpolate(f, [24, 38], [0, 100], clamp);
   const tag = interpolate(f, [40, 52], [0, 1], clamp);
+  const stars = (night.games || []).filter((g) => g.star && g.star.name !== story.player?.name).slice(0, 5);
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks colour={team.primary} speed={1.4} />
@@ -44,6 +45,17 @@ const StoryHook = ({ story, night }) => {
       {story.hook.tag && (
         <div style={{ position: 'absolute', top: 1260, left: '50%', transform: `translateX(-50%) scale(${0.9 + tag * 0.1})`, opacity: tag, background: RED, color: '#fff', padding: '16px 40px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(story.hook.tag, 66, 940, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{story.hook.tag}</div>
       )}
+      <div style={{ position: 'absolute', top: 1400, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 28 }}>
+        {stars.map((g, i) => {
+          const pop = spring({ frame: f - 30 - i * 5, fps, config: { damping: 12, stiffness: 160 } });
+          const side = [g.away, g.home].find((t) => t.abbr === g.star.team) || g.home;
+          return (
+            <div key={g.id || i} style={{ transform: `scale(${interpolate(pop, [0, 1], [0.2, 1])})`, opacity: pop }}>
+              <Portrait photo={g.star.photo} team={{ primary: side.primary, secondary: side.secondary, abbr: side.abbr }} size={190} />
+            </div>
+          );
+        })}
+      </div>
       <div style={{ position: 'absolute', bottom: 150, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 42, color: 'rgba(255,244,220,0.8)', opacity: tag }}>{night.dateLabel}</div>
     </AbsoluteFill>
   );
