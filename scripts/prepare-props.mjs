@@ -42,7 +42,7 @@ if (props.story && story.etDate && story.etDate !== night.etDate) {
 // Music: pick a mood pool, rotate through it by date (no repeats until the pool is used up),
 // vary the start point on later cycles.
 const MOOD = { milestone: 'epic', record: 'epic', legend: 'legend', comeback: 'hype', 'game-winner': 'hype', rookie: 'hype', upset: 'hype', streak: 'hype' };
-const mood = composition === 'StoryReel' ? (MOOD[props.story.type] || 'hype') : 'chill';
+const mood = 'hype'; // only energetic tracks are kept; MOOD map unused for now
 const dir = path.join(root, 'reel', 'public', 'music', mood);
 const pool = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.mp3')).sort() : [];
 if (pool.length) {
