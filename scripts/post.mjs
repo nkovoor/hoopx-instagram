@@ -20,7 +20,7 @@ export function buildCaption(night, story) {
   lines.push('');
   lines.push('Every final score and top scorer from last night. Full highlights on the NBA\'s official YouTube channel.');
   lines.push('');
-  lines.push('Unofficial fan account, not affiliated with the NBA or any team. More on hoopx.vercel.app');
+  lines.push('Unofficial fan account, not affiliated with the NBA or any team. More on hoopxnba.com');
   lines.push('');
   lines.push('#NBA #basketball #nbahighlights #hoops #nbaedits');
   return lines.join('\n').slice(0, 2100);

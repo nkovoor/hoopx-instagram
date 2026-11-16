@@ -41,7 +41,7 @@ const Outro = ({ n, total }) => (
     <div style={{ position: 'absolute', top: 480, width: '100%', textAlign: 'center' }}>
       <div style={{ fontFamily: ANTON, fontSize: 200, color: GOLD, lineHeight: 1 }}>HOOPX</div>
       <div style={{ fontFamily: BEBAS, fontSize: 64, letterSpacing: '0.2em', color: CREAM, marginTop: 24 }}>FOLLOW FOR DAILY NBA</div>
-      <div style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: 40, color: 'rgba(255,244,220,0.75)', marginTop: 30 }}>@hoopxnba · hoopx.vercel.app</div>
+      <div style={{ fontFamily: OUTFIT, fontWeight: 600, fontSize: 40, color: 'rgba(255,244,220,0.75)', marginTop: 30 }}>@hoopxnba · hoopxnba.com</div>
       <div style={{ fontFamily: OUTFIT, fontSize: 28, color: 'rgba(255,244,220,0.45)', marginTop: 60 }}>Unofficial fan account, not affiliated with the NBA or any team.</div>
     </div>
   </Page>
