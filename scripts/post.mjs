@@ -69,12 +69,13 @@ const pub = await fetch(`${G}/${IG_USER_ID}/media_publish`, { method: 'POST', bo
 if (!pub.id) throw new Error('publish failed: ' + JSON.stringify(pub));
 console.log('PUBLISHED', pub.id);
 
-// Also share to Stories (never fails the run). Video story if it fits (<=59s), else the cover image.
+// Also share to Stories with a text card (never fails the run).
 try {
-  const { execSync } = await import('node:child_process');
-  const secs = Number(execSync('ffprobe -v error -show_entries format=duration -of csv=p=0 reel/out/reel.mp4').toString());
-  const asVideo = secs <= 59 || !coverUrl;
-  const body = asVideo ? { media_type: 'STORIES', video_url: videoUrl } : { media_type: 'STORIES', image_url: coverUrl };
+  const sname = `story-${night.etDate}-${Date.now()}.jpg`;
+  const sup = await fetch(`${SB}/storage/v1/object/${BUCKET}/${sname}`, { method: 'POST', headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY, 'Content-Type': 'image/jpeg' }, body: fs.readFileSync('reel/out/storycard.jpg') });
+  if (!sup.ok) throw new Error('story card upload failed');
+  const asVideo = false;
+  const body = { media_type: 'STORIES', image_url: `${SB}/storage/v1/object/public/${BUCKET}/${sname}` };
   const st = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form(body) }).then((r) => r.json());
   if (!st.id) throw new Error(JSON.stringify(st));
   let ok = false;

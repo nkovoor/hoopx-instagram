@@ -53,5 +53,13 @@ if (pool.length) {
   props.music = { file: `music/${mood}/${file}`, startSec: (cycle % 3) * 10 };
   console.log(`music=${props.music.file} start=${props.music.startSec}s`);
 }
+// Image card for the Story (text on it points people to the Reel).
+{
+  const sp = props.story;
+  const pl = sp?.player?.name ? { photo: sp.player.photo, abbr: sp.player.team } : night.potn ? { photo: night.potn.photo, abbr: night.potn.teamAbbr } : {};
+  const tm = night.games.flatMap((g) => [g.away, g.home]).find((t) => t.abbr === pl.abbr) || night.games[0].home;
+  const hk = sp?.hook ? { line1: sp.hook.line1, line2: sp.hook.line2 } : { line1: night.hook.line1, line2: night.hook.line2 };
+  fs.writeFileSync(path.join(root, 'reel', 'card.json'), JSON.stringify({ card: { ...hk, dateLabel: night.dateLabel, photo: pl.photo || null, primary: tm.primary, secondary: tm.secondary } }));
+}
 fs.writeFileSync(path.join(root, 'reel', 'props.json'), JSON.stringify(props));
 console.log(`composition=${composition}`);

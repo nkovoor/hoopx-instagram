@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
-import { GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, fit, Grain, Portrait } from './Reel';
+import { GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, fit, Grain, Portrait, DrawRing } from './Reel';
 
 const W = 1080;
 const Page = ({ children, n, total }) => (
@@ -104,3 +104,20 @@ export const Carousel = ({ kind, data, slide }) => {
     </Page>
   );
 };
+
+// 1080x1920 image for the Instagram Story that points people to the new Reel.
+export const StoryCard = ({ card }) => (
+  <AbsoluteFill style={{ background: BG, overflow: 'hidden' }}>
+    <Grain />
+    <div style={{ position: 'absolute', top: 170, width: '100%', textAlign: 'center', fontFamily: BEBAS, fontSize: 64, letterSpacing: '0.28em', color: GOLD }}>NEW REEL</div>
+    <div style={{ position: 'absolute', top: 290, left: 280 }}>
+      <Portrait photo={card.photo} team={{ primary: card.primary, secondary: card.secondary }} size={520} />
+      <DrawRing size={520} start={0} dur={1} />
+    </div>
+    <div style={{ position: 'absolute', top: 920, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(card.line1, 200, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{card.line1}</div>
+    <div style={{ position: 'absolute', top: 1150, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(card.line2, 100, 1000, 0.5), color: CREAM }}>{card.line2}</div>
+    <div style={{ position: 'absolute', top: 1360, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 44, color: 'rgba(255,244,220,0.8)' }}>{card.dateLabel}</div>
+    <div style={{ position: 'absolute', top: 1500, left: 140, right: 140, textAlign: 'center', background: RED, color: '#fff', padding: '26px 0', borderRadius: 18, fontFamily: BEBAS, fontSize: 60, letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>WATCH IT ON OUR PAGE</div>
+    <div style={{ position: 'absolute', bottom: 150, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 40, color: 'rgba(255,244,220,0.7)' }}>@hoopxnba · hoopxnba.com</div>
+  </AbsoluteFill>
+);

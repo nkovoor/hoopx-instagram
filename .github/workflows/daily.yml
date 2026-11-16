@@ -53,6 +53,10 @@ jobs:
         if: steps.gate.outputs.status == 'ok'
         working-directory: reel
         run: npx remotion still src/index.jsx ${{ steps.prep.outputs.composition }} out/cover.jpg --props=props.json --frame=75 --image-format=jpeg --jpeg-quality=92
+      - name: Render Story card
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel
+        run: npx remotion still src/index.jsx StoryCard out/storycard.jpg --props=card.json --image-format=jpeg --jpeg-quality=92
       - name: Post (dry run unless post=true)
         if: steps.gate.outputs.status == 'ok'
         env:
@@ -69,4 +73,5 @@ jobs:
             data/night.json
             reel/out/reel.mp4
             reel/out/cover.jpg
+            reel/out/storycard.jpg
           retention-days: 3
