@@ -152,9 +152,9 @@ const MomentBeat = ({ beat, story, team }) => {
           </g>
         )}
       </svg>
-      <div style={{ position: 'absolute', top: 1400, left: 70, right: 70, display: 'flex', justifyContent: 'space-between', alignItems: 'center', opacity: clock }}>
-        <div style={{ fontFamily: ANTON, fontSize: 130, color: GOLD }}>{beat.clock}</div>
-        <div style={{ fontFamily: ANTON, fontSize: 96, color: CREAM, textAlign: 'right' }}>{beat.score}</div>
+      <div style={{ position: 'absolute', top: 1360, left: 70, right: 70, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: clock }}>
+        <div style={{ fontFamily: ANTON, fontSize: 130, color: GOLD, lineHeight: 1 }}>{beat.clock}</div>
+        <div style={{ fontFamily: ANTON, fontSize: 80, color: CREAM, lineHeight: 1.2 }}>{beat.score}</div>
       </div>
       <div style={{ position: 'absolute', top: 1620, left: 70, right: 70, textAlign: 'center', fontFamily: BEBAS, fontSize: fit(beat.text || '', 70, 940, 0.36), letterSpacing: '0.08em', color: CREAM }}>{beat.text}</div>
     </Frame>
