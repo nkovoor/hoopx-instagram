@@ -69,24 +69,32 @@ const pub = await fetch(`${G}/${IG_USER_ID}/media_publish`, { method: 'POST', bo
 if (!pub.id) throw new Error('publish failed: ' + JSON.stringify(pub));
 console.log('PUBLISHED', pub.id);
 
-// Also share to Stories with a text card (never fails the run).
-try {
-  const sname = `story-${night.etDate}-${Date.now()}.jpg`;
-  const sup = await fetch(`${SB}/storage/v1/object/${BUCKET}/${sname}`, { method: 'POST', headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY, 'Content-Type': 'image/jpeg' }, body: fs.readFileSync('reel/out/storycard.jpg') });
-  if (!sup.ok) throw new Error('story card upload failed');
-  const asVideo = false;
-  const body = { media_type: 'STORIES', image_url: `${SB}/storage/v1/object/public/${BUCKET}/${sname}` };
-  const st = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form(body) }).then((r) => r.json());
+// Also share to Stories: video (card + Reel cut) if available, else the still card. Never fails the run.
+async function postStory(kind) {
+  const isVid = kind === 'video';
+  const file = isVid ? 'reel/out/story.mp4' : 'reel/out/storycard.jpg';
+  const sname = `story-${night.etDate}-${Date.now()}.${isVid ? 'mp4' : 'jpg'}`;
+  const sup = await fetch(`${SB}/storage/v1/object/${BUCKET}/${sname}`, { method: 'POST', headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY, 'Content-Type': isVid ? 'video/mp4' : 'image/jpeg' }, body: fs.readFileSync(file) });
+  if (!sup.ok) throw new Error('story upload failed');
+  const url = `${SB}/storage/v1/object/public/${BUCKET}/${sname}`;
+  const st = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form({ media_type: 'STORIES', ...(isVid ? { video_url: url } : { image_url: url }) }) }).then((r) => r.json());
   if (!st.id) throw new Error(JSON.stringify(st));
   let ok = false;
-  for (let i = 0; i < 30 && !ok; i += 1) {
+  for (let i = 0; i < 40 && !ok; i += 1) {
     await new Promise((r) => setTimeout(r, 5000));
     const x = await fetch(`${G}/${st.id}?fields=status_code&access_token=${IG_TOKEN}`).then((r) => r.json());
     if (x.status_code === 'FINISHED') ok = true;
-    if (x.status_code === 'ERROR') throw new Error('story processing failed');
+    if (x.status_code === 'ERROR' || x.status_code === 'EXPIRED') throw new Error('story processing failed');
   }
+  if (!ok) throw new Error('story timed out');
   const sp = await fetch(`${G}/${IG_USER_ID}/media_publish`, { method: 'POST', body: form({ creation_id: st.id }) }).then((r) => r.json());
-  console.log('STORY', asVideo ? 'video' : 'image', sp.id || JSON.stringify(sp));
+  if (!sp.id) throw new Error(JSON.stringify(sp));
+  console.log('STORY', kind, sp.id);
+}
+try {
+  if (fs.existsSync('reel/out/story.mp4')) {
+    try { await postStory('video'); } catch (e) { console.log('video story failed, trying card:', e.message); await postStory('image'); }
+  } else await postStory('image');
 } catch (e) { console.log('story skipped:', e.message); }
 
 // Clean up: delete files older than 3 days from the bucket.

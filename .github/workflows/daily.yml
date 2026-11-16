@@ -57,6 +57,14 @@ jobs:
         if: steps.gate.outputs.status == 'ok'
         working-directory: reel
         run: npx remotion still src/index.jsx StoryCard out/storycard.jpg --props=card.json --image-format=jpeg --jpeg-quality=92
+      - name: Build Story video (headline card + first 17s of the Reel)
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel/out
+        continue-on-error: true
+        run: |
+          ffmpeg -y -loop 1 -framerate 30 -t 3 -i storycard.jpg -t 17 -i reel.mp4 -f lavfi -t 3 -i anullsrc=r=44100:cl=stereo \
+            -filter_complex "[0:v]scale=1080:1920,format=yuv420p,setsar=1[a];[1:v]scale=1080:1920,fps=30,format=yuv420p,setsar=1[b];[2:a]aformat=sample_rates=44100:channel_layouts=stereo[s];[1:a]aformat=sample_rates=44100:channel_layouts=stereo[m];[a][s][b][m]concat=n=2:v=1:a=1[v][au]" \
+            -map "[v]" -map "[au]" -c:v libx264 -crf 20 -preset veryfast -c:a aac -b:a 128k -movflags +faststart story.mp4
       - name: Post (dry run unless post=true)
         if: steps.gate.outputs.status == 'ok'
         env:
@@ -74,4 +82,5 @@ jobs:
             reel/out/reel.mp4
             reel/out/cover.jpg
             reel/out/storycard.jpg
+            reel/out/story.mp4
           retention-days: 3
