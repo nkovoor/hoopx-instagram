@@ -69,6 +69,25 @@ const pub = await fetch(`${G}/${IG_USER_ID}/media_publish`, { method: 'POST', bo
 if (!pub.id) throw new Error('publish failed: ' + JSON.stringify(pub));
 console.log('PUBLISHED', pub.id);
 
+// Also share to Stories (never fails the run). Video story if it fits (<=59s), else the cover image.
+try {
+  const { execSync } = await import('node:child_process');
+  const secs = Number(execSync('ffprobe -v error -show_entries format=duration -of csv=p=0 reel/out/reel.mp4').toString());
+  const asVideo = secs <= 59 || !coverUrl;
+  const body = asVideo ? { media_type: 'STORIES', video_url: videoUrl } : { media_type: 'STORIES', image_url: coverUrl };
+  const st = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form(body) }).then((r) => r.json());
+  if (!st.id) throw new Error(JSON.stringify(st));
+  let ok = false;
+  for (let i = 0; i < 30 && !ok; i += 1) {
+    await new Promise((r) => setTimeout(r, 5000));
+    const x = await fetch(`${G}/${st.id}?fields=status_code&access_token=${IG_TOKEN}`).then((r) => r.json());
+    if (x.status_code === 'FINISHED') ok = true;
+    if (x.status_code === 'ERROR') throw new Error('story processing failed');
+  }
+  const sp = await fetch(`${G}/${IG_USER_ID}/media_publish`, { method: 'POST', body: form({ creation_id: st.id }) }).then((r) => r.json());
+  console.log('STORY', asVideo ? 'video' : 'image', sp.id || JSON.stringify(sp));
+} catch (e) { console.log('story skipped:', e.message); }
+
 // Clean up: delete files older than 3 days from the bucket.
 try {
   const list = await fetch(`${SB}/storage/v1/object/list/${BUCKET}`, { method: 'POST', headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ limit: 200 }) }).then((r) => r.json());
