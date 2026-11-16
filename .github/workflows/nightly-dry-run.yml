@@ -1,0 +1,60 @@
+name: Nightly recap (dry run - never posts)
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "ET date to recap, YYYYMMDD (blank = last night)"
+        required: false
+  # Scheduled run is added later, once the dry run looks right.
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: reel/package-lock.json
+
+      - name: Unit tests
+        run: node --test test/fetch-night.test.mjs
+
+      - name: Fetch last night's results from ESPN
+        run: node scripts/fetch-night.mjs ${{ github.event.inputs.date }}
+
+      - name: Stop here if there is nothing to post
+        id: gate
+        run: |
+          status=$(node -p "require('./data/night.json').status")
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          echo "Night status: $status"
+
+      - name: Install Remotion
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel
+        run: npm ci
+
+      - name: Prepare props (story if data/story.json exists, else Night in Numbers)
+        id: prep
+        if: steps.gate.outputs.status == 'ok'
+        run: node scripts/prepare-props.mjs | tee -a "$GITHUB_OUTPUT"
+
+      - name: Render the Reel
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel
+        run: npx remotion render src/index.jsx ${{ steps.prep.outputs.composition }} out/reel.mp4 --props=props.json --codec=h264 --crf=20
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: night-${{ github.run_id }}
+          path: |
+            data/night.json
+            reel/out/reel.mp4
+          retention-days: 3
