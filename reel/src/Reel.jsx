@@ -25,12 +25,12 @@ const Streaks = ({ colour = GOLD, speed = 1 }) => {
   return (
     <AbsoluteFill style={{ overflow: 'hidden' }}>
       {lines.map((i) => {
-        const x = ((f * 14 * speed + i * 420) % 2600) - 900;
+        const x = ((f * 5 * speed + i * 420) % 2600) - 900;
         return (
           <div key={i} style={{
             position: 'absolute', left: x, top: -400, width: 10 + (i % 3) * 8, height: 2800,
             background: `linear-gradient(180deg, transparent, ${colour}, transparent)`,
-            opacity: 0.10 + (i % 2) * 0.06, transform: 'rotate(24deg)',
+            opacity: 0.05 + (i % 2) * 0.03, transform: 'rotate(24deg)',
           }} />
         );
       })}
@@ -47,15 +47,7 @@ const Grain = () => (
 // Gold bar that sweeps across at the start of a scene
 const Wipe = () => {
   const f = useCurrentFrame();
-  const x = interpolate(f, [0, 10], [-1300, 1300], { ...clamp, easing: Easing.inOut(Easing.cubic) });
-  return (
-    <AbsoluteFill style={{ pointerEvents: 'none' }}>
-      <div style={{
-        position: 'absolute', top: -200, left: x, width: 420, height: 2400,
-        background: GOLD, transform: 'skewX(-18deg)', opacity: f < 11 ? 1 : 0,
-      }} />
-    </AbsoluteFill>
-  );
+  return <AbsoluteFill style={{ pointerEvents: 'none', background: BG, opacity: interpolate(f, [0, 8], [1, 0], clamp) }} />;
 };
 
 const Count = ({ to, start = 0, dur = 30, style }) => {
@@ -110,7 +102,6 @@ const Hook = ({ night }) => {
         position: 'absolute', bottom: 160, width: '100%', textAlign: 'center',
         fontFamily: OUTFIT, fontWeight: 600, fontSize: 44, color: 'rgba(255,244,220,0.8)', opacity: sub,
       }}>{night.dateLabel}</div>
-      <AbsoluteFill style={{ background: '#fff', opacity: flash }} />
     </AbsoluteFill>
   );
 };
@@ -247,11 +238,6 @@ const PlayerOfNight = ({ night }) => {
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks colour={p.colour} speed={0.6} />
-      {[0, 0.33, 0.66].map((o, i) => {
-        const r = ((ring + o) % 1);
-        const d = 2 * (230 + r * 520);
-        return <div key={i} style={{ position: 'absolute', left: 540 - d / 2, top: 510 - d / 2, width: d, height: d, borderRadius: '50%', border: `4px solid ${GOLD}`, opacity: (1 - r) * 0.3 }} />;
-      })}
       <div style={{ position: 'absolute', top: 150, width: '100%', textAlign: 'center', opacity: title, fontFamily: BEBAS, fontSize: 78, letterSpacing: '0.2em', color: GOLD }}>PLAYER OF THE NIGHT</div>
       <div style={{ position: 'absolute', top: 270, left: 540 - 220, transform: `scale(${pic})` }}>
         <Portrait photo={p.photo} team={team} size={440} />
