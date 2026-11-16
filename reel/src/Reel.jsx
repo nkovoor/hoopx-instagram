@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing,
+  AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing, Img, staticFile,
 } from 'remotion';
 
 const GOLD = '#FDB927';
@@ -115,70 +115,120 @@ const Hook = ({ night }) => {
   );
 };
 
+const isLight = (c) => ['#C4CED4', '#EEE1C6', '#FDB927', '#FFC72C', '#FFFFFF'].includes((c || '').toUpperCase());
+
+// Photo (when we have one) or a team-colour badge with the team code.
+const Portrait = ({ photo, team, size, ring = GOLD }) => (
+  <div style={{
+    width: size, height: size, borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
+    background: `radial-gradient(circle at 50% 30%, ${team.secondary} 0%, ${team.primary} 75%)`,
+    border: `${Math.max(6, size * 0.025)}px solid ${ring}`, boxSizing: 'border-box',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  }}>
+    {photo ? (
+      <Img src={staticFile(`players/${photo}`)} style={{ width: '135%', height: '135%', objectFit: 'cover', objectPosition: '50% 12%', marginTop: size * 0.06 }} />
+    ) : (
+      <span style={{ fontFamily: ANTON, fontSize: size * 0.38, color: isLight(team.primary) ? '#0b0b0b' : '#fff', letterSpacing: '0.02em' }}>{team.abbr}</span>
+    )}
+  </div>
+);
+
 const TeamPanel = ({ team, top, won, enter, side }) => {
   const dim = won ? 1 : 0.85;
   const x = interpolate(enter, [0, 1], [side === 'left' ? -1100 : 1100, 0]);
-  const light = ['#C4CED4', '#EEE1C6', '#FDB927', '#FFC72C'].includes(team.primary);
-  const ink = light ? '#0b0b0b' : '#ffffff';
+  const ink = isLight(team.primary) ? '#0b0b0b' : '#ffffff';
   return (
     <div style={{
-      position: 'absolute', left: 60, right: 60, top, height: 380, transform: `translateX(${x}px)`,
+      position: 'absolute', left: 60, right: 60, top, height: 290, transform: `translateX(${x}px)`,
       background: `linear-gradient(110deg, ${team.primary} 0%, ${team.primary} 44%, ${team.secondary} 44%, ${team.secondary} 48%, ${team.primary} 48%)`,
       borderRadius: 28, overflow: 'hidden',
       boxShadow: won ? `0 0 0 6px ${GOLD}` : 'none',
     }}>
-      <div style={{ position: 'absolute', left: 48, top: 40, fontFamily: ANTON, fontSize: 150, color: ink, lineHeight: 1, opacity: dim }}>
-        {team.abbr}
-      </div>
-      <div style={{ position: 'absolute', left: 52, bottom: 46, fontFamily: BEBAS, fontSize: fit(team.name, 64, 300, 0.5), letterSpacing: '0.12em', color: ink, opacity: dim }}>
-        {team.name}
-      </div>
+      <div style={{ position: 'absolute', left: 44, top: 26, fontFamily: ANTON, fontSize: 124, color: ink, lineHeight: 1, opacity: dim }}>{team.abbr}</div>
+      <div style={{ position: 'absolute', left: 48, bottom: 30, fontFamily: BEBAS, fontSize: fit(team.name, 54, 300, 0.5), letterSpacing: '0.12em', color: ink, opacity: dim }}>{team.name}</div>
       <div style={{
-        position: 'absolute', right: 48, top: 70, fontFamily: ANTON, fontSize: 210, lineHeight: 1,
-        color: won ? (light ? '#0b0b0b' : GOLD) : ink, opacity: dim,
-      }}>
-        <Count to={team.score} start={14} dur={34} />
-      </div>
+        position: 'absolute', right: 44, top: 44, fontFamily: ANTON, fontSize: 170, lineHeight: 1,
+        color: won ? (isLight(team.primary) ? '#0b0b0b' : GOLD) : ink, opacity: dim,
+      }}><Count to={team.score} start={14} dur={46} /></div>
       {won && (
         <div style={{
-          position: 'absolute', right: 52, bottom: 30, fontFamily: BEBAS, fontSize: 46, letterSpacing: '0.16em',
-          background: GOLD, color: '#1a0a00', padding: '4px 18px', borderRadius: 8,
+          position: 'absolute', right: 48, bottom: 22, fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.16em',
+          background: GOLD, color: '#1a0a00', padding: '2px 16px', borderRadius: 8,
         }}>WIN</div>
       )}
     </div>
   );
 };
 
+// Quarter-by-quarter table. Only rendered when ESPN gave us the quarter scores.
+const LineScore = ({ game, appear }) => {
+  const q = game.away.quarters || [];
+  if (!q.length) return null;
+  const cols = q.map((_, i) => (i < 4 ? `Q${i + 1}` : i === 4 ? 'OT' : `${i - 3}OT`)).concat('T');
+  const row = (t, bold) => (
+    <div style={{ display: 'flex', alignItems: 'center', height: 76 }}>
+      <div style={{ width: 150, fontFamily: ANTON, fontSize: 52, color: bold ? GOLD : CREAM }}>{t.abbr}</div>
+      {(t.quarters || []).concat(t.score).map((v, i, arr) => (
+        <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: ANTON, fontSize: i === arr.length - 1 ? 58 : 50, color: i === arr.length - 1 ? (bold ? GOLD : CREAM) : 'rgba(255,244,220,0.85)' }}>{v}</div>
+      ))}
+    </div>
+  );
+  return (
+    <div style={{
+      position: 'absolute', left: 60, right: 60, top: 880, opacity: appear, transform: `translateY(${(1 - appear) * 40}px)`,
+      background: 'rgba(255,244,220,0.08)', border: '3px solid rgba(253,185,39,0.45)', borderRadius: 24, padding: '14px 36px',
+    }}>
+      <div style={{ display: 'flex', height: 56, alignItems: 'center', borderBottom: '2px solid rgba(253,185,39,0.35)' }}>
+        <div style={{ width: 150, fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.14em', color: GOLD }}>QUARTERS</div>
+        {cols.map((c, i) => <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.1em', color: GOLD }}>{c}</div>)}
+      </div>
+      {row(game.away, game.away.score > game.home.score)}
+      {row(game.home, game.home.score > game.away.score)}
+    </div>
+  );
+};
+
+const teamByAbbr = (game, abbr) => (game.home.abbr === abbr ? game.home : game.away);
+
 const GameCard = ({ game, index, total }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const a = spring({ frame: f - 4, fps, config: { damping: 15, stiffness: 120 } });
-  const b = spring({ frame: f - 10, fps, config: { damping: 15, stiffness: 120 } });
-  const star = interpolate(f, [52, 66], [220, 0], { ...clamp, easing: Easing.out(Easing.back(1.4)) });
-  const note = interpolate(f, [74, 86], [0, 1], clamp);
+  const b = spring({ frame: f - 14, fps, config: { damping: 15, stiffness: 120 } });
+  const lineIn = interpolate(f, [90, 112], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const starIn = interpolate(f, [150, 176], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const note = interpolate(f, [210, 228], [0, 1], clamp);
   const awayWon = game.away.score > game.home.score;
-  const vs = spring({ frame: f - 18, fps, config: { damping: 9 } });
+  const vs = spring({ frame: f - 24, fps, config: { damping: 9 } });
+  const hasLine = (game.away.quarters || []).length > 0;
+  const starTop = hasLine ? 1190 : 920;
   return (
     <AbsoluteFill style={{ background: BG }}>
-      <Grain /><Streaks colour={game.away.primary === '#C4CED4' ? '#C4CED4' : GOLD} />
+      <Grain /><Streaks colour={game.away.primary === '#C4CED4' ? '#C4CED4' : GOLD} speed={0.7} />
       <Header text={`${game.label || 'FINAL'} · GAME ${index + 1} OF ${total}`} />
-      <TeamPanel team={game.away} top={290} won={awayWon} enter={a} side="left" />
+      <TeamPanel team={game.away} top={230} won={awayWon} enter={a} side="left" />
+      <div style={{ position: 'absolute', top: 528, width: '100%', textAlign: 'center', transform: `scale(${vs})`, fontFamily: BEBAS, fontSize: 52, letterSpacing: '0.2em', color: CREAM }}>AT</div>
+      <TeamPanel team={game.home} top={590} won={!awayWon} enter={b} side="right" />
+      {hasLine && <LineScore game={game} appear={lineIn} />}
       <div style={{
-        position: 'absolute', top: 690, width: '100%', textAlign: 'center',
-        transform: `scale(${vs})`, fontFamily: BEBAS, fontSize: 60, letterSpacing: '0.2em', color: CREAM,
-      }}>AT</div>
-      <TeamPanel team={game.home} top={780} won={!awayWon} enter={b} side="right" />
-      <div style={{
-        position: 'absolute', left: 60, right: 60, top: 1250, transform: `translateY(${star}px)`, opacity: f > 52 ? 1 : 0,
-        background: CREAM, borderRadius: 24, padding: '36px 40px 30px',
+        position: 'absolute', left: 60, right: 60, top: starTop, opacity: starIn, transform: `translateY(${(1 - starIn) * 60}px)`,
+        background: CREAM, borderRadius: 28, padding: '34px 40px', display: 'flex', alignItems: 'center', gap: 36,
       }}>
-        <div style={{ fontFamily: BEBAS, fontSize: 44, letterSpacing: '0.16em', color: '#5b1f8a' }}>TOP PERFORMER · {game.star.team}</div>
-        <div style={{ fontFamily: ANTON, fontSize: fit(game.star.name, 96, 940, 0.5), color: '#12001f', lineHeight: 1.15 }}>{game.star.name}</div>
-        <div style={{ fontFamily: ANTON, fontSize: fit(game.star.line, 70, 940, 0.5), color: RED, lineHeight: 1.1 }}>{game.star.line}</div>
+        <Portrait photo={game.star.photo} team={teamByAbbr(game, game.star.team)} size={300} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontFamily: BEBAS, fontSize: 42, letterSpacing: '0.16em', color: '#5b1f8a' }}>TOP PERFORMER · {game.star.team}</div>
+          <div style={{ fontFamily: ANTON, fontSize: fit(game.star.name, 84, 560, 0.5), color: '#12001f', lineHeight: 1.15 }}>{game.star.name}</div>
+          <div style={{ fontFamily: ANTON, fontSize: fit(game.star.line, 64, 560, 0.5), color: RED, lineHeight: 1.15 }}>{game.star.line}</div>
+        </div>
       </div>
+      {(game.leaders || []).length > 0 && (
+        <div style={{ position: 'absolute', left: 60, right: 60, top: starTop + 400, opacity: note, fontFamily: BEBAS, fontSize: 44, letterSpacing: '0.1em', color: CREAM, textAlign: 'center', lineHeight: 1.4 }}>
+          {game.leaders.map((l, i) => <div key={i}>{l}</div>)}
+        </div>
+      )}
       <div style={{
-        position: 'absolute', bottom: 150, width: '100%', textAlign: 'center', opacity: note,
-        fontFamily: BEBAS, fontSize: fit(game.note || '', 50, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
+        position: 'absolute', bottom: 110, width: '100%', textAlign: 'center', opacity: note,
+        fontFamily: BEBAS, fontSize: fit(game.note || '', 54, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
       }}>{game.note}</div>
     </AbsoluteFill>
   );
@@ -188,66 +238,43 @@ const PlayerOfNight = ({ night }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const p = night.potn;
-  const title = interpolate(f, [0, 12], [0, 1], clamp);
-  const first = spring({ frame: f - 10, fps, config: { damping: 13 } });
-  const last = spring({ frame: f - 18, fps, config: { damping: 13 } });
-  const ring = (f % 45) / 45;
+  const team = { abbr: p.teamAbbr || '', primary: p.teamPrimary || p.colour, secondary: p.teamSecondary || '#111111' };
+  const title = interpolate(f, [0, 14], [0, 1], clamp);
+  const pic = spring({ frame: f - 8, fps, config: { damping: 12 } });
+  const first = spring({ frame: f - 30, fps, config: { damping: 13 } });
+  const last = spring({ frame: f - 40, fps, config: { damping: 13 } });
+  const ring = (f % 60) / 60;
   return (
     <AbsoluteFill style={{ background: BG }}>
-      <Grain /><Streaks colour={p.colour} speed={0.8} />
+      <Grain /><Streaks colour={p.colour} speed={0.6} />
       {[0, 0.33, 0.66].map((o, i) => {
         const r = ((ring + o) % 1);
-        return (
-          <div key={i} style={{
-            position: 'absolute', left: 540 - (200 + r * 500), top: 720 - (200 + r * 500),
-            width: 2 * (200 + r * 500), height: 2 * (200 + r * 500), borderRadius: '50%',
-            border: `4px solid ${GOLD}`, opacity: (1 - r) * 0.35,
-          }} />
-        );
+        const d = 2 * (230 + r * 520);
+        return <div key={i} style={{ position: 'absolute', left: 540 - d / 2, top: 510 - d / 2, width: d, height: d, borderRadius: '50%', border: `4px solid ${GOLD}`, opacity: (1 - r) * 0.3 }} />;
       })}
-      <div style={{
-        position: 'absolute', top: 210, width: '100%', textAlign: 'center', opacity: title,
-        fontFamily: BEBAS, fontSize: 82, letterSpacing: '0.2em', color: GOLD,
-      }}>PLAYER OF THE NIGHT</div>
-      <div style={{
-        position: 'absolute', top: 420, width: '100%', textAlign: 'center',
-        transform: `translateX(${interpolate(first, [0, 1], [-900, 0])}px)`,
-        fontFamily: ANTON, fontSize: fit(p.first, 150, 1000, 0.5), color: CREAM, lineHeight: 1,
-      }}>{p.first}</div>
-      <div style={{
-        position: 'absolute', top: 570, width: '100%', textAlign: 'center',
-        transform: `translateX(${interpolate(last, [0, 1], [900, 0])}px)`,
-        fontFamily: ANTON, fontSize: fit(p.last, 168, 1000, 0.5), color: p.colour, lineHeight: 1,
-        textShadow: `0 0 50px rgba(196,206,212,0.45)`,
-      }}>{p.last}</div>
-      <div style={{
-        position: 'absolute', top: 790, width: '100%', textAlign: 'center',
-        fontFamily: OUTFIT, fontWeight: 600, fontSize: 46, letterSpacing: '0.08em', color: 'rgba(255,244,220,0.85)',
-        opacity: interpolate(f, [26, 38], [0, 1], clamp),
-      }}>{p.team}</div>
-      <div style={{ position: 'absolute', top: 960, left: 60, right: 60, display: 'flex', gap: 30 }}>
+      <div style={{ position: 'absolute', top: 150, width: '100%', textAlign: 'center', opacity: title, fontFamily: BEBAS, fontSize: 78, letterSpacing: '0.2em', color: GOLD }}>PLAYER OF THE NIGHT</div>
+      <div style={{ position: 'absolute', top: 270, left: 540 - 220, transform: `scale(${pic})` }}>
+        <Portrait photo={p.photo} team={team} size={440} />
+      </div>
+      <div style={{ position: 'absolute', top: 750, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(first, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 120, 1000, 0.5), color: CREAM, lineHeight: 1 }}>{p.first}</div>
+      <div style={{ position: 'absolute', top: 880, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(last, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 140, 1000, 0.5), color: p.colour, lineHeight: 1, textShadow: '0 0 50px rgba(255,255,255,0.25)' }}>{p.last}</div>
+      <div style={{ position: 'absolute', top: 1040, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 42, letterSpacing: '0.08em', color: 'rgba(255,244,220,0.85)', opacity: interpolate(f, [50, 66], [0, 1], clamp) }}>{p.team}</div>
+      <div style={{ position: 'absolute', top: 1150, left: 60, right: 60, display: 'flex', gap: 28 }}>
         {p.stats.map((s, i) => {
-          const pop = spring({ frame: f - (40 + i * 8), fps, config: { damping: 10 } });
+          const pop = spring({ frame: f - (80 + i * 14), fps, config: { damping: 10 } });
           return (
             <div key={s.k} style={{
-              flex: 1, height: 400, borderRadius: 28, transform: `scale(${pop})`,
-              background: i === 0 ? GOLD : 'rgba(255,244,220,0.08)',
-              border: i === 0 ? 'none' : `4px solid ${GOLD}`,
+              flex: 1, height: 330, borderRadius: 28, transform: `scale(${pop})`,
+              background: i === 0 ? GOLD : 'rgba(255,244,220,0.08)', border: i === 0 ? 'none' : `4px solid ${GOLD}`,
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             }}>
-              <Count to={s.v} start={46 + i * 8} dur={30} style={{
-                fontFamily: ANTON, fontSize: 210, lineHeight: 1, color: i === 0 ? '#1a0a00' : CREAM,
-              }} />
-              <div style={{ fontFamily: BEBAS, fontSize: 78, letterSpacing: '0.16em', color: i === 0 ? '#1a0a00' : GOLD }}>{s.k}</div>
+              <Count to={s.v} start={84 + i * 14} dur={40} style={{ fontFamily: ANTON, fontSize: 190, lineHeight: 1, color: i === 0 ? '#1a0a00' : CREAM }} />
+              <div style={{ fontFamily: BEBAS, fontSize: 70, letterSpacing: '0.16em', color: i === 0 ? '#1a0a00' : GOLD }}>{s.k}</div>
             </div>
           );
         })}
       </div>
-      <div style={{
-        position: 'absolute', top: 1450, width: '100%', textAlign: 'center',
-        fontFamily: BEBAS, fontSize: 72, letterSpacing: '0.12em', color: CREAM,
-        opacity: interpolate(f, [80, 92], [0, 1], clamp),
-      }}>{p.note}</div>
+      <div style={{ position: 'absolute', top: 1560, width: '100%', textAlign: 'center', fontFamily: BEBAS, fontSize: fit(p.note, 66, 980, 0.36), letterSpacing: '0.1em', color: CREAM, opacity: interpolate(f, [150, 170], [0, 1], clamp) }}>{p.note}</div>
     </AbsoluteFill>
   );
 };
@@ -313,11 +340,11 @@ const FEATURED_MAX = 3;
 
 export const buildScenes = (night) => {
   const featured = night.games.slice(0, FEATURED_MAX);
-  const list = [{ key: 'hook', len: 90, el: <Hook night={night} /> }];
-  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 135, el: <GameCard game={g} index={i} total={night.games.length} /> }));
-  if (night.games.length > featured.length) list.push({ key: 'all', len: 150, el: <AllScores night={night} /> });
-  if (night.potn) list.push({ key: 'potn', len: 150, el: <PlayerOfNight night={night} /> });
-  list.push({ key: 'outro', len: 90, el: <Outro /> });
+  const list = [{ key: 'hook', len: 150, el: <Hook night={night} /> }];
+  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 270, el: <GameCard game={g} index={i} total={night.games.length} /> }));
+  if (night.games.length > featured.length) list.push({ key: 'all', len: 210, el: <AllScores night={night} /> });
+  if (night.potn) list.push({ key: 'potn', len: 240, el: <PlayerOfNight night={night} /> });
+  list.push({ key: 'outro', len: 120, el: <Outro /> });
   return list;
 };
 

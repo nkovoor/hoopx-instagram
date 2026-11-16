@@ -58,3 +58,14 @@ test('playoffs switch mode to epic', () => {
 test('no events -> no-games', () => {
   assert.equal(buildNight({ events: [] }, '20261115').status, 'no-games');
 });
+
+test('quarter scores and photo file are carried into the night data', () => {
+  const home = comp('SA', 124, 'home', cats(leader('Victor Wembanyama', '1', 32)));
+  home.linescores = [{ value: 28 }, { value: 34 }, { value: 30 }, { value: 32 }];
+  const away = comp('CHI', 119, 'away', cats(leader('Josh Giddey', '5', 22)));
+  away.linescores = [{ value: 30 }, { value: 28 }, { value: 31 }, { value: 30 }];
+  const n = buildNight({ season: { type: 2 }, events: [ev('5', home, away)] }, '20261115');
+  assert.deepEqual(n.games[0].home.quarters, [28, 34, 30, 32]);
+  assert.equal(n.games[0].star.photo, 'victor-wembanyama.png');
+  assert.equal(n.potn.photo, 'victor-wembanyama.png');
+});

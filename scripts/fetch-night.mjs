@@ -43,6 +43,7 @@ function teamOf(competitor) {
     name: (t.nickname || str(competitor?.team?.name) || abbr).toUpperCase(),
     fullName: t.name || str(competitor?.team?.displayName) || abbr,
     score: num(competitor?.score),
+    quarters: (competitor?.linescores || []).map((l) => num(l?.value ?? l?.displayValue)).filter((v) => v !== null),
     primary: t.primary || '#444444',
     secondary: t.secondary || '#FFFFFF',
   };
@@ -75,8 +76,15 @@ function starOf(home, away, homeLeads, awayLeads) {
     if (leads[cat] && leads[cat].id === p.id) stats.push({ k, v: leads[cat].value });
   }
   const tripleDouble = stats.length === 3 && stats.every((s) => s.v >= 10);
-  return { name: p.name, team: team.abbr, teamFull: team.fullName, colour: team.primary, stats, tripleDouble };
+  return { id: p.id, name: p.name, team: team.abbr, teamFull: team.fullName, colour: team.primary, secondary: team.secondary, stats, tripleDouble };
 }
+
+// Photos we are allowed to use live in reel/public/players/<slug>.png. No file = no photo.
+const slug = (name) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const photoFor = (name) => {
+  const file = `${slug(name)}.png`;
+  return fs.existsSync(path.join(here, '..', 'reel', 'public', 'players', file)) ? file : null;
+};
 
 const lastName = (full) => {
   const parts = full.split(/\s+/);
@@ -124,14 +132,28 @@ export function buildNight(scoreboard, etDate) {
     }
     if (seasonType === 3) { interest += 50; tags.push('playoffs'); }
 
+    // Up to two extra lines: the other team's top scorer, and the game's top rebounder/assister (10+).
+    const extra = [];
+    if (star) {
+      const otherLeads = star.team === h.abbr ? leadersOf(away) : leadersOf(home);
+      const op = otherLeads.points;
+      if (op && op.value != null) extra.push(`${star.team === h.abbr ? a.abbr : h.abbr} · ${op.name.toUpperCase()} · ${op.value} PTS`);
+      const all = [leadersOf(home), leadersOf(away)];
+      for (const [cat, k] of [['rebounds', 'REB'], ['assists', 'AST']]) {
+        const best = all.map((l) => l[cat]).filter(Boolean).sort((x, y) => y.value - x.value)[0];
+        if (best && best.value >= 10 && best.id !== star.id && extra.length < 2) extra.push(`${k} LEADER · ${best.name.toUpperCase()} · ${best.value}`);
+      }
+    }
+
     const note = headline || (ot ? (ot > 1 ? `${ot} OVERTIMES` : 'OVERTIME THRILLER') : margin <= 3 ? `DECIDED BY ${margin}` : margin >= 30 ? `${margin}-POINT BLOWOUT` : '');
     games.push({
       id: String(ev.id),
       label: ot ? `FINAL/${ot > 1 ? ot : ''}OT` : 'FINAL',
-      away: { abbr: a.abbr, name: a.name, score: a.score, primary: a.primary, secondary: a.secondary },
-      home: { abbr: h.abbr, name: h.name, score: h.score, primary: h.primary, secondary: h.secondary },
+      away: { abbr: a.abbr, name: a.name, score: a.score, quarters: a.quarters, primary: a.primary, secondary: a.secondary },
+      home: { abbr: h.abbr, name: h.name, score: h.score, quarters: h.quarters, primary: h.primary, secondary: h.secondary },
       winner: winner.abbr, margin, overtime: ot, tags, interest,
-      star: star ? { name: star.name.toUpperCase(), team: star.team, line: statLine(star.stats) } : { name: `${winner.name} WIN`, team: winner.abbr, line: `${h.score > a.score ? h.score : a.score}-${Math.min(h.score, a.score)}` },
+      leaders: extra,
+      star: star ? { name: star.name.toUpperCase(), team: star.team, line: statLine(star.stats), photo: photoFor(star.name) } : { name: `${winner.name} WIN`, team: winner.abbr, line: `${h.score > a.score ? h.score : a.score}-${Math.min(h.score, a.score)}` },
       note: note.toUpperCase(),
       _star: star,
     });
@@ -153,6 +175,10 @@ export function buildNight(scoreboard, etDate) {
     last: lastName(s.name).toUpperCase(),
     team: s.teamFull.toUpperCase(),
     colour: lighten(s.colour),
+    teamAbbr: s.team,
+    teamPrimary: s.colour,
+    teamSecondary: s.secondary,
+    photo: photoFor(s.name),
     note: top.note || `${s.team} WIN ${Math.max(top.home.score, top.away.score)}-${Math.min(top.home.score, top.away.score)}`,
     stats: s.stats,
   };
