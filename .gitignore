@@ -151,3 +151,5 @@ node_modules
 out
 frames
 scratch/
+reel/props.json
+data/night.json

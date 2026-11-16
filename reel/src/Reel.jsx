@@ -366,3 +366,7 @@ export const Reel = ({ night }) => {
     </AbsoluteFill>
   );
 };
+
+export {
+  GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
+};
