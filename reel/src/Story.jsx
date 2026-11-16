@@ -150,21 +150,46 @@ const MomentBeat = ({ beat, story, team }) => {
   const clock = interpolate(f, [0, 40], [0, 1], clamp);
   return (
     <Frame title={beat.title || 'THE MOMENT'} team={team} story={story}>
-      <svg viewBox="0 0 1080 1000" style={{ position: 'absolute', top: 360, left: 0, width: 1080, height: 1000 }}>
-        <g fill="none" stroke="rgba(255,244,220,0.55)" strokeWidth="6">
-          <rect x="90" y="60" width="900" height="880" rx="6" />
-          <rect x="390" y="60" width="300" height="380" />
-          <circle cx="540" cy="440" r="150" />
-          <path d="M 170 60 L 170 330 A 400 400 0 0 0 910 330 L 910 60" />
-          <circle cx="540" cy="140" r="26" stroke={GOLD} />
-        </g>
-        {shot && (
-          <g transform={`translate(${sx - 0}, ${sy - 360 + 60 - 60})`}>
-            <circle r={60 * dot} fill={GOLD} opacity="0.25" />
-            <circle r={26 * dot} fill={GOLD} />
+      <div style={{ position: 'absolute', top: 340, left: 40, width: 1000, height: 1000, borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,0.6)', transform: `scale(${interpolate(f, [0, 210], [1, 1.06], clamp)})` }}>
+        <svg viewBox="0 0 1080 1000" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
+          <defs>
+            <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#c58b4e" /><stop offset="0.5" stopColor="#d9a366" /><stop offset="1" stopColor="#a8703a" />
+            </linearGradient>
+            <pattern id="planks" width="60" height="1000" patternUnits="userSpaceOnUse">
+              <rect width="60" height="1000" fill="url(#wood)" />
+              <rect width="2.5" height="1000" fill="rgba(70,35,10,0.35)" />
+              <rect x="30" width="1.5" height="1000" fill="rgba(70,35,10,0.12)" />
+            </pattern>
+            <radialGradient id="spot" cx="50%" cy="35%" r="75%">
+              <stop offset="0" stopColor="rgba(255,240,200,0.35)" /><stop offset="1" stopColor="rgba(0,0,0,0.55)" />
+            </radialGradient>
+          </defs>
+          <rect width="1080" height="1000" fill="url(#planks)" />
+          <rect x="390" y="60" width="300" height="380" fill={team?.primary || '#552583'} opacity="0.85" />
+          <g fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="7">
+            <rect x="90" y="60" width="900" height="880" />
+            <rect x="390" y="60" width="300" height="380" />
+            <circle cx="540" cy="440" r="150" />
+            <path d="M 170 60 L 170 330 A 400 400 0 0 0 910 330 L 910 60" />
+            <path d="M 480 120 L 600 120" />
+            <circle cx="540" cy="140" r="26" stroke="#ff7a2f" />
           </g>
-        )}
-      </svg>
+          <rect width="1080" height="1000" fill="url(#spot)" />
+          {shot && (() => {
+            const p = interpolate(f, [34, 70], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+            const cx = (sx + 540) / 2, cy = Math.min(sy, 140) - 60 - 340 + 60;
+            const px = sy - 340;
+            return (
+              <g>
+                <path d={`M ${sx} ${px} Q ${(sx + 540) / 2} ${Math.min(px, 140) - 220} 540 140`} fill="none" stroke={GOLD} strokeWidth="6" strokeDasharray="14 12" pathLength="1" strokeDashoffset={1 - p} style={{ strokeDasharray: 1, strokeDashoffset: 1 - p }} opacity="0.95" />
+                <circle cx={sx} cy={px} r={64 * dot} fill={GOLD} opacity="0.3" />
+                <circle cx={sx} cy={px} r={24 * dot} fill={GOLD} stroke="#fff" strokeWidth="5" />
+              </g>
+            );
+          })()}
+        </svg>
+      </div>
       <div style={{ position: 'absolute', top: 1360, left: 70, right: 70, display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: clock }}>
         <div style={{ fontFamily: ANTON, fontSize: 130, color: GOLD, lineHeight: 1 }}>{beat.clock}</div>
         <div style={{ fontFamily: ANTON, fontSize: 80, color: CREAM, lineHeight: 1.2 }}>{beat.score}</div>
