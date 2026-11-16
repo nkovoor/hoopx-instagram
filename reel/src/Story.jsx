@@ -4,7 +4,7 @@
 import React from 'react';
 import { AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing } from 'remotion';
 import {
-  GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
+  DrawRing, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
 } from './Reel';
 
 const SAMPLE_TAG = (
@@ -39,6 +39,7 @@ const StoryHook = ({ story, night }) => {
       {story.sample && SAMPLE_TAG}
       <div style={{ position: 'absolute', top: 190, left: 540 - 260, transform: `scale(${interpolate(pic, [0, 1], [0.3, 1])})`, opacity: pic }}>
         <Portrait photo={story.player?.photo} team={team} size={520} />
+        <DrawRing size={520} start={12} />
       </div>
       <div style={{ position: 'absolute', top: 780, width: '100%', textAlign: 'center', transform: `scale(${interpolate(l1, [0, 1], [2.2, 1])})`, opacity: f < 10 ? 0 : 1, fontFamily: ANTON, fontSize: fit(story.hook.line1, 220, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{story.hook.line1}</div>
       <div style={{ position: 'absolute', top: 1040, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - l2}% 0 0)`, fontFamily: ANTON, fontSize: fit(story.hook.line2, 120, 1000, 0.5), color: CREAM }}>{story.hook.line2}</div>

@@ -25,12 +25,12 @@ const Streaks = ({ colour = GOLD, speed = 1 }) => {
   return (
     <AbsoluteFill style={{ overflow: 'hidden' }}>
       {lines.map((i) => {
-        const x = ((f * 5 * speed + i * 420) % 2600) - 900;
+        const x = ((f * 8 * speed + i * 420) % 2600) - 900;
         return (
           <div key={i} style={{
             position: 'absolute', left: x, top: -400, width: 10 + (i % 3) * 8, height: 2800,
             background: `linear-gradient(180deg, transparent, ${colour}, transparent)`,
-            opacity: 0.05 + (i % 2) * 0.03, transform: 'rotate(24deg)',
+            opacity: 0.08 + (i % 2) * 0.04, transform: 'rotate(24deg)',
           }} />
         );
       })}
@@ -47,7 +47,31 @@ const Grain = () => (
 // Gold bar that sweeps across at the start of a scene
 const Wipe = () => {
   const f = useCurrentFrame();
-  return <AbsoluteFill style={{ pointerEvents: 'none', background: BG, opacity: interpolate(f, [0, 8], [1, 0], clamp) }} />;
+  const x = interpolate(f, [0, 16], [-1500, 1700], { ...clamp, easing: Easing.bezier(0.65, 0, 0.35, 1) });
+  const fade = interpolate(f, [0, 10], [1, 0], clamp);
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', overflow: 'hidden' }}>
+      <AbsoluteFill style={{ background: BG, opacity: fade }} />
+      <div style={{
+        position: 'absolute', top: -200, left: x, width: 900, height: 2400, transform: 'skewX(-16deg)',
+        background: 'linear-gradient(90deg, transparent, rgba(253,185,39,0.55) 50%, transparent)', opacity: f < 17 ? 1 : 0,
+      }} />
+    </AbsoluteFill>
+  );
+};
+
+// One ring that draws itself around a portrait, then holds with a soft glow
+const DrawRing = ({ size, start = 0, dur = 28, colour = GOLD }) => {
+  const f = useCurrentFrame();
+  const r = size / 2 + 22;
+  const c = 2 * Math.PI * r;
+  const p = interpolate(f, [start, start + dur], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const glow = 0.5 + 0.5 * Math.sin((f - start) / 18);
+  return (
+    <svg width={size + 90} height={size + 90} viewBox={`${-(size + 90) / 2} ${-(size + 90) / 2} ${size + 90} ${size + 90}`} style={{ position: 'absolute', left: -45, top: -45, overflow: 'visible' }}>
+      <circle r={r} fill="none" stroke={colour} strokeWidth={6} strokeLinecap="round" strokeDasharray={c} strokeDashoffset={c * (1 - p)} transform="rotate(-90)" style={{ filter: `drop-shadow(0 0 ${10 + glow * 14}px ${colour})` }} />
+    </svg>
+  );
 };
 
 const Count = ({ to, start = 0, dur = 30, style }) => {
@@ -70,7 +94,7 @@ const Hook = ({ night }) => {
   const { fps } = useVideoConfig();
   const slam = spring({ frame: f - 8, fps, config: { damping: 11, stiffness: 160 } });
   const scale = interpolate(slam, [0, 1], [2.6, 1]);
-  const flash = interpolate(f, [8, 12, 22], [0, 0.55, 0], clamp);
+  const flash = interpolate(f, [8, 16, 40], [0, 0.22, 0], clamp);
   const kick = interpolate(f, [0, 10], [-80, 0], { ...clamp, easing: Easing.out(Easing.cubic) });
   const l2 = interpolate(f, [24, 36], [0, 100], clamp);
   const sub = interpolate(f, [40, 52], [0, 1], clamp);
@@ -102,6 +126,7 @@ const Hook = ({ night }) => {
         position: 'absolute', bottom: 160, width: '100%', textAlign: 'center',
         fontFamily: OUTFIT, fontWeight: 600, fontSize: 44, color: 'rgba(255,244,220,0.8)', opacity: sub,
       }}>{night.dateLabel}</div>
+      <AbsoluteFill style={{ background: 'radial-gradient(circle at 50% 45%, rgba(253,185,39,0.9), transparent 60%)', opacity: flash, pointerEvents: 'none' }} />
     </AbsoluteFill>
   );
 };
@@ -241,6 +266,7 @@ const PlayerOfNight = ({ night }) => {
       <div style={{ position: 'absolute', top: 150, width: '100%', textAlign: 'center', opacity: title, fontFamily: BEBAS, fontSize: 78, letterSpacing: '0.2em', color: GOLD }}>PLAYER OF THE NIGHT</div>
       <div style={{ position: 'absolute', top: 270, left: 540 - 220, transform: `scale(${pic})` }}>
         <Portrait photo={p.photo} team={team} size={440} />
+        <DrawRing size={440} start={14} />
       </div>
       <div style={{ position: 'absolute', top: 750, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(first, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 120, 1000, 0.5), color: CREAM, lineHeight: 1 }}>{p.first}</div>
       <div style={{ position: 'absolute', top: 880, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(last, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 140, 1000, 0.5), color: p.colour, lineHeight: 1, textShadow: '0 0 50px rgba(255,255,255,0.25)' }}>{p.last}</div>
@@ -354,5 +380,5 @@ export const Reel = ({ night }) => {
 };
 
 export {
-  GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
+  DrawRing, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
 };
