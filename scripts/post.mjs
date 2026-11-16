@@ -43,8 +43,15 @@ if (!up.ok) throw new Error(`upload failed ${up.status} ${await up.text()}`);
 const videoUrl = `${SB}/storage/v1/object/public/${BUCKET}/${name}`;
 console.log('uploaded', videoUrl);
 
+let coverUrl = null;
+if (fs.existsSync('reel/out/cover.jpg')) {
+  const cname = `cover-${night.etDate}-${Date.now()}.jpg`;
+  const cu = await fetch(`${SB}/storage/v1/object/${BUCKET}/${cname}`, { method: 'POST', headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY, 'Content-Type': 'image/jpeg' }, body: fs.readFileSync('reel/out/cover.jpg') });
+  if (cu.ok) coverUrl = `${SB}/storage/v1/object/public/${BUCKET}/${cname}`;
+  console.log('cover', coverUrl || 'upload failed, using default');
+}
 const form = (o) => new URLSearchParams({ ...o, access_token: IG_TOKEN });
-const create = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form({ media_type: 'REELS', video_url: videoUrl, caption, share_to_feed: 'true' }) }).then((r) => r.json());
+const create = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form({ media_type: 'REELS', video_url: videoUrl, caption, share_to_feed: 'true', ...(coverUrl ? { cover_url: coverUrl } : {}) }) }).then((r) => r.json());
 if (!create.id) throw new Error('container failed: ' + JSON.stringify(create));
 
 let status = '';

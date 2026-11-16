@@ -49,6 +49,10 @@ jobs:
         if: steps.gate.outputs.status == 'ok'
         working-directory: reel
         run: npx remotion render src/index.jsx ${{ steps.prep.outputs.composition }} out/reel.mp4 --props=props.json --codec=h264 --crf=20
+      - name: Render cover image (title frame)
+        if: steps.gate.outputs.status == 'ok'
+        working-directory: reel
+        run: npx remotion still src/index.jsx ${{ steps.prep.outputs.composition }} out/cover.jpg --props=props.json --frame=75 --image-format=jpeg --jpeg-quality=92
       - name: Post (dry run unless post=true)
         if: steps.gate.outputs.status == 'ok'
         env:
@@ -64,4 +68,5 @@ jobs:
           path: |
             data/night.json
             reel/out/reel.mp4
+            reel/out/cover.jpg
           retention-days: 3
