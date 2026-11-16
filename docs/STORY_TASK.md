@@ -12,6 +12,7 @@ Goal: find the ONE story that makes last night's Reel worth watching, and write 
      "player": { "name": "Full Name", "team": "ABBR" },
      "hook": { "line1": "SHORT BIG LINE", "line2": "SECOND LINE", "tag": "optional red tag" },
      "caption": "1-2 sentence Instagram caption",
+     "storyLine": "SHORT HYPE TEXT FOR THE INSTAGRAM STORY, max ~5 words, e.g. YAXEL POPPED OFF / ABSOLUTE BANGER LAST NIGHT / SGA PASSES KOBE",
      "beats": [ { "kind": "text|stat|quarters|moment|ladder|payoff", ... } ],   // 3-4 beats
      "sources": [ { "claim": "...", "url": "..." } ] }
 4. Rules: every factual claim needs a source URL in "sources" or it is removed. No logos, no game photos.

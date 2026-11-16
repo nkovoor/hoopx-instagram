@@ -109,14 +109,14 @@ export const Carousel = ({ kind, data, slide }) => {
 export const StoryCard = ({ card }) => (
   <AbsoluteFill style={{ background: BG, overflow: 'hidden' }}>
     <Grain />
-    <div style={{ position: 'absolute', top: 170, width: '100%', textAlign: 'center', fontFamily: BEBAS, fontSize: 64, letterSpacing: '0.28em', color: GOLD }}>NEW REEL</div>
-    <div style={{ position: 'absolute', top: 290, left: 280 }}>
-      <Portrait photo={card.photo} team={{ primary: card.primary, secondary: card.secondary }} size={520} />
-      <DrawRing size={520} start={0} dur={1} />
+    <div style={{ position: 'absolute', top: 250, left: 60, right: 60, textAlign: 'center', fontFamily: ANTON, fontSize: (card.headline || '').length > 30 ? 100 : (card.headline || '').length > 16 ? 112 : 150, lineHeight: 1.05, color: CREAM, textShadow: '0 0 50px rgba(253,185,39,0.45), 0 8px 0 #3a1500' }}>{card.headline || 'NEW REEL'}</div>
+    <div style={{ position: 'absolute', top: 480, left: 300 }}>
+      <Portrait photo={card.photo} team={{ primary: card.primary, secondary: card.secondary }} size={480} />
+      <DrawRing size={480} start={0} dur={1} />
     </div>
-    <div style={{ position: 'absolute', top: 920, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(card.line1, 200, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{card.line1}</div>
-    <div style={{ position: 'absolute', top: 1150, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(card.line2, 100, 1000, 0.5), color: CREAM }}>{card.line2}</div>
-    <div style={{ position: 'absolute', top: 1360, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 44, color: 'rgba(255,244,220,0.8)' }}>{card.dateLabel}</div>
+    <div style={{ position: 'absolute', top: 1080, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(card.line1, 120, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{card.line1}</div>
+    <div style={{ position: 'absolute', top: 1230, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(card.line2, 80, 1000, 0.5), color: GOLD }}>{card.line2}</div>
+    <div style={{ position: 'absolute', top: 1360, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 40, color: 'rgba(255,244,220,0.8)' }}>{card.dateLabel}</div>
     <div style={{ position: 'absolute', top: 1500, left: 140, right: 140, textAlign: 'center', background: RED, color: '#fff', padding: '26px 0', borderRadius: 18, fontFamily: BEBAS, fontSize: 60, letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>WATCH IT ON OUR PAGE</div>
     <div style={{ position: 'absolute', bottom: 150, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 40, color: 'rgba(255,244,220,0.7)' }}>@hoopxnba · hoopxnba.com</div>
   </AbsoluteFill>

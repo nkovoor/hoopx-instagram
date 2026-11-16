@@ -59,7 +59,12 @@ if (pool.length) {
   const pl = sp?.player?.name ? { photo: sp.player.photo, abbr: sp.player.team } : night.potn ? { photo: night.potn.photo, abbr: night.potn.teamAbbr } : {};
   const tm = night.games.flatMap((g) => [g.away, g.home]).find((t) => t.abbr === pl.abbr) || night.games[0].home;
   const hk = sp?.hook ? { line1: sp.hook.line1, line2: sp.hook.line2 } : { line1: night.hook.line1, line2: night.hook.line2 };
-  fs.writeFileSync(path.join(root, 'reel', 'card.json'), JSON.stringify({ card: { ...hk, dateLabel: night.dateLabel, photo: pl.photo || null, primary: tm.primary, secondary: tm.secondary } }));
+  const pts = Number((night.potn?.stats || []).find((x) => x.k === 'PTS')?.v || 0);
+  const last = night.potn?.last || '';
+  const tags = night.flags || [];
+  const auto = tags.includes('triple-double') ? `${last} WITH A TRIPLE-DOUBLE` : pts >= 40 ? `${last} WENT OFF FOR ${pts}` : tags.includes('overtime') ? 'OVERTIME DRAMA LAST NIGHT' : 'LAST NIGHT IN THE NBA';
+  const headline = (sp?.storyLine || auto).toUpperCase();
+  fs.writeFileSync(path.join(root, 'reel', 'card.json'), JSON.stringify({ card: { ...hk, headline, dateLabel: night.dateLabel, photo: pl.photo || null, primary: tm.primary, secondary: tm.secondary } }));
 }
 fs.writeFileSync(path.join(root, 'reel', 'props.json'), JSON.stringify(props));
 console.log(`composition=${composition}`);
