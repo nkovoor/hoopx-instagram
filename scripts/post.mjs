@@ -33,7 +33,10 @@ if (process.env.POST !== 'true') { console.log('DRY RUN: not posting.'); process
 const { IG_TOKEN, IG_USER_ID, SUPABASE_SERVICE_KEY } = process.env;
 if (!IG_TOKEN || !IG_USER_ID || !SUPABASE_SERVICE_KEY) throw new Error('missing secrets');
 
-const name = `reel-${night.etDate}-${Date.now()}.mp4`;
+const form = (o) => new URLSearchParams({ ...o, access_token: IG_TOKEN });
+let name = '';
+if (process.env.STORY_ONLY !== 'true') {
+name = `reel-${night.etDate}-${Date.now()}.mp4`;
 const up = await fetch(`${SB}/storage/v1/object/${BUCKET}/${name}`, {
   method: 'POST',
   headers: { Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`, apikey: SUPABASE_SERVICE_KEY, 'Content-Type': 'video/mp4' },
@@ -50,7 +53,6 @@ if (fs.existsSync('reel/out/cover.jpg')) {
   if (cu.ok) coverUrl = `${SB}/storage/v1/object/public/${BUCKET}/${cname}`;
   console.log('cover', coverUrl || 'upload failed, using default');
 }
-const form = (o) => new URLSearchParams({ ...o, access_token: IG_TOKEN });
 const create = await fetch(`${G}/${IG_USER_ID}/media`, { method: 'POST', body: form({ media_type: 'REELS', video_url: videoUrl, caption, share_to_feed: 'true', ...(coverUrl ? { cover_url: coverUrl } : {}) }) }).then((r) => r.json());
 if (!create.id) throw new Error('container failed: ' + JSON.stringify(create));
 
@@ -68,6 +70,8 @@ if (status !== 'FINISHED') throw new Error('timed out waiting for processing');
 const pub = await fetch(`${G}/${IG_USER_ID}/media_publish`, { method: 'POST', body: form({ creation_id: create.id }) }).then((r) => r.json());
 if (!pub.id) throw new Error('publish failed: ' + JSON.stringify(pub));
 console.log('PUBLISHED', pub.id);
+
+}
 
 // Also share to Stories: video (card + Reel cut) if available, else the still card. Never fails the run.
 async function postStory(kind) {

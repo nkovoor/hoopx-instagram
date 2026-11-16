@@ -11,6 +11,9 @@ on:
       post:
         description: "Really post to Instagram? (true/false)"
         default: "false"
+      story_only:
+        description: "Only post the Story, skip the Reel (true/false)"
+        default: "false"
   schedule:
     - cron: "30 7 * * *"   # 13:00 IST: fetch night.json for the story task
     - cron: "0 12 * * *"   # 17:30 IST: render and post
@@ -69,6 +72,7 @@ jobs:
         if: steps.gate.outputs.status == 'ok'
         env:
           POST: ${{ github.event.inputs.post || vars.POST_LIVE }}
+          STORY_ONLY: ${{ github.event.inputs.story_only }}
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
