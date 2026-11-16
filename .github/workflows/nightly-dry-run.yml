@@ -41,12 +41,15 @@ jobs:
         working-directory: reel
         run: npm ci
 
+      - name: Prepare props (story if data/story.json exists, else Night in Numbers)
+        id: prep
+        if: steps.gate.outputs.status == 'ok'
+        run: node scripts/prepare-props.mjs | tee -a "$GITHUB_OUTPUT"
+
       - name: Render the Reel
         if: steps.gate.outputs.status == 'ok'
         working-directory: reel
-        run: |
-          node -e "const n=require('../data/night.json');require('fs').writeFileSync('props.json',JSON.stringify({night:n}))"
-          npx remotion render src/index.jsx NightReel out/reel.mp4 --props=props.json --codec=h264 --crf=20
+        run: npx remotion render src/index.jsx ${{ steps.prep.outputs.composition }} out/reel.mp4 --props=props.json --codec=h264 --crf=20
 
       - uses: actions/upload-artifact@v4
         with:
