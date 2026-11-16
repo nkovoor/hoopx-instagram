@@ -4,7 +4,7 @@
 import React from 'react';
 import { AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing } from 'remotion';
 import {
-  DrawRing, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
+  DrawRing, SceneSeries, seqFrames, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
 } from './Reel';
 
 const SAMPLE_TAG = (
@@ -278,21 +278,6 @@ export const buildStoryScenes = (night, story) => {
   return list;
 };
 
-export const storyFrames = (night, story) => buildStoryScenes(night, story).reduce((a, s) => a + s.len, 0);
+export const storyFrames = (night, story) => seqFrames(buildStoryScenes(night, story));
 
-export const StoryReel = ({ night, story }) => {
-  let at = 0;
-  return (
-    <AbsoluteFill style={{ background: '#0c0018' }}>
-      {buildStoryScenes(night, story).map((s) => {
-        const from = at; at += s.len;
-        return (
-          <Sequence key={s.key} from={from} durationInFrames={s.len}>
-            {s.el}
-            {from > 0 && <Wipe />}
-          </Sequence>
-        );
-      })}
-    </AbsoluteFill>
-  );
-};
+export const StoryReel = ({ night, story }) => <SceneSeries scenes={buildStoryScenes(night, story)} />;

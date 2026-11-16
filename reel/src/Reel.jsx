@@ -1,4 +1,7 @@
 import React from 'react';
+import { TransitionSeries, linearTiming } from '@remotion/transitions';
+import { fade } from '@remotion/transitions/fade';
+import { slide } from '@remotion/transitions/slide';
 import {
   AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring, Easing, Img, staticFile,
 } from 'remotion';
@@ -360,24 +363,30 @@ export const buildScenes = (night) => {
   return list;
 };
 
-export const totalFrames = (night) => buildScenes(night).reduce((a, s) => a + s.len, 0);
+const T = 14; // frames each scene change overlaps
+export const seqFrames = (scenes) => scenes.reduce((a, s) => a + s.len, 0) - Math.max(0, scenes.length - 1) * T;
+const PRESENT = [() => slide({ direction: 'from-right' }), () => fade(), () => slide({ direction: 'from-bottom' }), () => fade()];
 
-export const Reel = ({ night }) => {
-  let at = 0;
-  return (
-    <AbsoluteFill style={{ background: '#0c0018' }}>
-      {buildScenes(night).map((s) => {
-        const from = at; at += s.len;
-        return (
-          <Sequence key={s.key} from={from} durationInFrames={s.len}>
-            {s.el}
-            {from > 0 && <Wipe />}
-          </Sequence>
-        );
+// Shared scene player: smooth eased slide/fade between scenes (Remotion TransitionSeries)
+export const SceneSeries = ({ scenes }) => (
+  <AbsoluteFill style={{ background: '#0c0018' }}>
+    <TransitionSeries>
+      {scenes.flatMap((s, i) => {
+        const out = [<TransitionSeries.Sequence key={s.key} durationInFrames={s.len}>{s.el}</TransitionSeries.Sequence>];
+        if (i < scenes.length - 1) {
+          out.push(
+            <TransitionSeries.Transition key={`t${i}`} presentation={PRESENT[i % PRESENT.length]()} timing={linearTiming({ durationInFrames: T, easing: Easing.bezier(0.65, 0, 0.35, 1) })} />,
+          );
+        }
+        return out;
       })}
-    </AbsoluteFill>
-  );
-};
+    </TransitionSeries>
+  </AbsoluteFill>
+);
+
+export const totalFrames = (night) => seqFrames(buildScenes(night));
+
+export const Reel = ({ night }) => <SceneSeries scenes={buildScenes(night)} />;
 
 export {
   DrawRing, GOLD, CREAM, RED, BG, ANTON, BEBAS, OUTFIT, clamp, fit, Streaks, Grain, Wipe, Count, Header, Portrait, isLight, Outro,
