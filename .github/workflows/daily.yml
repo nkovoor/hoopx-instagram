@@ -11,6 +11,9 @@ on:
       post:
         description: "Really post to Instagram? (true/false)"
         default: "false"
+      skip_story:
+        description: "Skip the Story (true/false)"
+        default: "false"
       story_only:
         description: "Only post the Story, skip the Reel (true/false)"
         default: "false"
@@ -73,6 +76,7 @@ jobs:
         env:
           POST: ${{ github.event.inputs.post || vars.POST_LIVE }}
           STORY_ONLY: ${{ github.event.inputs.story_only }}
+          SKIP_STORY: ${{ github.event.inputs.skip_story }}
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}

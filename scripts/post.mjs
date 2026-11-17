@@ -96,7 +96,8 @@ async function postStory(kind) {
   console.log('STORY', kind, sp.id);
 }
 try {
-  if (fs.existsSync('reel/out/story.mp4')) {
+  if (process.env.SKIP_STORY === 'true') console.log('story skipped by request');
+  else if (fs.existsSync('reel/out/story.mp4')) {
     try { await postStory('video'); } catch (e) { console.log('video story failed, trying card:', e.message); await postStory('image'); }
   } else await postStory('image');
 } catch (e) { console.log('story skipped:', e.message); }
