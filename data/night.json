@@ -1,0 +1,435 @@
+{
+  "status": "ok",
+  "etDate": "2026-11-16",
+  "dateLabel": "MONDAY · NOVEMBER 16",
+  "seasonType": 2,
+  "mode": "hype",
+  "flags": [],
+  "pendingGames": 0,
+  "hook": {
+    "kicker": "LAST NIGHT IN THE NBA",
+    "line1": "MITCHELL",
+    "line2": "39 PTS",
+    "sub": "8 GAMES · 8 FINALS"
+  },
+  "games": [
+    {
+      "id": "401909995",
+      "label": "FINAL",
+      "away": {
+        "abbr": "CHI",
+        "name": "BULLS",
+        "city": "CHICAGO",
+        "nick": "BULLS",
+        "score": 115,
+        "quarters": [
+          31,
+          17,
+          31,
+          36
+        ],
+        "primary": "#CE1141",
+        "secondary": "#000000"
+      },
+      "home": {
+        "abbr": "CLE",
+        "name": "CAVALIERS",
+        "city": "CLEVELAND",
+        "nick": "CAVALIERS",
+        "score": 126,
+        "quarters": [
+          25,
+          32,
+          31,
+          38
+        ],
+        "primary": "#860038",
+        "secondary": "#BC945C"
+      },
+      "winner": "CLE",
+      "margin": 11,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "CHI · NORMAN POWELL · 27 PTS",
+        "REB LEADER · JARRETT ALLEN · 14"
+      ],
+      "star": {
+        "name": "DONOVAN MITCHELL",
+        "team": "CLE",
+        "line": "39 PTS",
+        "photo": "donovan-mitchell.png"
+      },
+      "note": ""
+    },
+    {
+      "id": "401909997",
+      "label": "FINAL",
+      "away": {
+        "abbr": "PHI",
+        "name": "76ERS",
+        "city": "PHILADELPHIA",
+        "nick": "76ERS",
+        "score": 135,
+        "quarters": [
+          33,
+          45,
+          27,
+          30
+        ],
+        "primary": "#1D428A",
+        "secondary": "#E01234"
+      },
+      "home": {
+        "abbr": "BKN",
+        "name": "NETS",
+        "city": "BROOKLYN",
+        "nick": "NETS",
+        "score": 123,
+        "quarters": [
+          26,
+          33,
+          36,
+          28
+        ],
+        "primary": "#000000",
+        "secondary": "#FFFFFF"
+      },
+      "winner": "PHI",
+      "margin": 12,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "BKN · JULIUS RANDLE · 33 PTS",
+        "REB LEADER · JAYLEN BROWN · 13"
+      ],
+      "star": {
+        "name": "JOEL EMBIID",
+        "team": "PHI",
+        "line": "37 PTS",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401909999",
+      "label": "FINAL",
+      "away": {
+        "abbr": "POR",
+        "name": "TRAIL BLAZERS",
+        "city": "PORTLAND",
+        "nick": "TRAIL BLAZERS",
+        "score": 98,
+        "quarters": [
+          26,
+          25,
+          22,
+          25
+        ],
+        "primary": "#E03A3E",
+        "secondary": "#000000"
+      },
+      "home": {
+        "abbr": "MIN",
+        "name": "TIMBERWOLVES",
+        "city": "MINNESOTA",
+        "nick": "TIMBERWOLVES",
+        "score": 106,
+        "quarters": [
+          26,
+          33,
+          28,
+          19
+        ],
+        "primary": "#266092",
+        "secondary": "#79BC43"
+      },
+      "winner": "MIN",
+      "margin": 8,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "POR · DENI AVDIJA · 27 PTS",
+        "REB LEADER · RUDY GOBERT · 15"
+      ],
+      "star": {
+        "name": "TERRENCE SHANNON JR.",
+        "team": "MIN",
+        "line": "34 PTS · 6 AST",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401909996",
+      "label": "FINAL",
+      "away": {
+        "abbr": "MEM",
+        "name": "GRIZZLIES",
+        "city": "MEMPHIS",
+        "nick": "GRIZZLIES",
+        "score": 136,
+        "quarters": [
+          33,
+          26,
+          42,
+          35
+        ],
+        "primary": "#5D76A9",
+        "secondary": "#12173F"
+      },
+      "home": {
+        "abbr": "WAS",
+        "name": "WIZARDS",
+        "city": "WASHINGTON",
+        "nick": "WIZARDS",
+        "score": 120,
+        "quarters": [
+          35,
+          34,
+          18,
+          33
+        ],
+        "primary": "#E31837",
+        "secondary": "#002B5C"
+      },
+      "winner": "MEM",
+      "margin": 16,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "WAS · ANTHONY DAVIS · 23 PTS",
+        "REB LEADER · ZACH EDEY · 10"
+      ],
+      "star": {
+        "name": "CAMERON BOOZER",
+        "team": "MEM",
+        "line": "29 PTS",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401910000",
+      "label": "FINAL",
+      "away": {
+        "abbr": "GSW",
+        "name": "WARRIORS",
+        "city": "GOLDEN STATE",
+        "nick": "WARRIORS",
+        "score": 94,
+        "quarters": [
+          11,
+          25,
+          29,
+          29
+        ],
+        "primary": "#1D428A",
+        "secondary": "#FDB927"
+      },
+      "home": {
+        "abbr": "NOP",
+        "name": "PELICANS",
+        "city": "NEW ORLEANS",
+        "nick": "PELICANS",
+        "score": 115,
+        "quarters": [
+          35,
+          26,
+          32,
+          22
+        ],
+        "primary": "#0A2240",
+        "secondary": "#B4975A"
+      },
+      "winner": "NOP",
+      "margin": 21,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "NOP · SADDIQ BEY · 23 PTS",
+        "REB LEADER · YVES MISSI · 14"
+      ],
+      "star": {
+        "name": "YAXEL LENDEBORG",
+        "team": "GSW",
+        "line": "28 PTS · 8 REB",
+        "photo": "yaxel-lendeborg.png"
+      },
+      "note": ""
+    },
+    {
+      "id": "401910001",
+      "label": "FINAL",
+      "away": {
+        "abbr": "PHX",
+        "name": "SUNS",
+        "city": "PHOENIX",
+        "nick": "SUNS",
+        "score": 117,
+        "quarters": [
+          20,
+          36,
+          34,
+          27
+        ],
+        "primary": "#29127A",
+        "secondary": "#E56020"
+      },
+      "home": {
+        "abbr": "DEN",
+        "name": "NUGGETS",
+        "city": "DENVER",
+        "nick": "NUGGETS",
+        "score": 105,
+        "quarters": [
+          24,
+          29,
+          29,
+          23
+        ],
+        "primary": "#0E2240",
+        "secondary": "#FEC524"
+      },
+      "winner": "PHX",
+      "margin": 12,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "PHX · DEVIN BOOKER · 20 PTS"
+      ],
+      "star": {
+        "name": "NIKOLA JOKIC",
+        "team": "DEN",
+        "line": "28 PTS · 15 REB · 7 AST",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401909994",
+      "label": "FINAL",
+      "away": {
+        "abbr": "ORL",
+        "name": "MAGIC",
+        "city": "ORLANDO",
+        "nick": "MAGIC",
+        "score": 115,
+        "quarters": [
+          20,
+          30,
+          25,
+          40
+        ],
+        "primary": "#0150B5",
+        "secondary": "#9CA0A3"
+      },
+      "home": {
+        "abbr": "BOS",
+        "name": "CELTICS",
+        "city": "BOSTON",
+        "nick": "CELTICS",
+        "score": 105,
+        "quarters": [
+          17,
+          24,
+          36,
+          28
+        ],
+        "primary": "#008348",
+        "secondary": "#BA9653"
+      },
+      "winner": "ORL",
+      "margin": 10,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "BOS · JAYSON TATUM · 24 PTS",
+        "REB LEADER · JAYSON TATUM · 12"
+      ],
+      "star": {
+        "name": "DESMOND BANE",
+        "team": "ORL",
+        "line": "24 PTS · 8 REB",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401909998",
+      "label": "FINAL",
+      "away": {
+        "abbr": "HOU",
+        "name": "ROCKETS",
+        "city": "HOUSTON",
+        "nick": "ROCKETS",
+        "score": 110,
+        "quarters": [
+          15,
+          31,
+          35,
+          29
+        ],
+        "primary": "#CE0E2D",
+        "secondary": "#000000"
+      },
+      "home": {
+        "abbr": "MIA",
+        "name": "HEAT",
+        "city": "MIAMI",
+        "nick": "HEAT",
+        "score": 128,
+        "quarters": [
+          29,
+          33,
+          39,
+          27
+        ],
+        "primary": "#98002E",
+        "secondary": "#000000"
+      },
+      "winner": "MIA",
+      "margin": 18,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "MIA · GIANNIS ANTETOKOUNMPO · 20 PTS",
+        "REB LEADER · GIANNIS ANTETOKOUNMPO · 13"
+      ],
+      "star": {
+        "name": "ALPEREN SENGUN",
+        "team": "HOU",
+        "line": "23 PTS",
+        "photo": "alperen-sengun.png"
+      },
+      "note": ""
+    }
+  ],
+  "potn": {
+    "first": "DONOVAN",
+    "last": "MITCHELL",
+    "team": "CLEVELAND CAVALIERS",
+    "colour": "#c3809c",
+    "teamAbbr": "CLE",
+    "teamPrimary": "#860038",
+    "teamSecondary": "#BC945C",
+    "photo": "donovan-mitchell.png",
+    "note": "CLE WIN 126-115",
+    "stats": [
+      {
+        "k": "PTS",
+        "v": 39
+      }
+    ]
+  },
+  "facts": [
+    "CAVALIERS beat BULLS 126-115; DONOVAN MITCHELL had 39 PTS.",
+    "76ERS beat NETS 135-123; JOEL EMBIID had 37 PTS.",
+    "TIMBERWOLVES beat TRAIL BLAZERS 106-98; TERRENCE SHANNON JR. had 34 PTS · 6 AST.",
+    "GRIZZLIES beat WIZARDS 136-120; CAMERON BOOZER had 29 PTS.",
+    "PELICANS beat WARRIORS 115-94; YAXEL LENDEBORG had 28 PTS · 8 REB.",
+    "SUNS beat NUGGETS 117-105; NIKOLA JOKIC had 28 PTS · 15 REB · 7 AST.",
+    "MAGIC beat CELTICS 115-105; DESMOND BANE had 24 PTS · 8 REB.",
+    "HEAT beat ROCKETS 128-110; ALPEREN SENGUN had 23 PTS."
+  ]
+}
