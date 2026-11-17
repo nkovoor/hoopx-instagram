@@ -177,31 +177,50 @@ const MomentBeat = ({ beat, story, team }) => {
             <rect x="390" y="60" width="300" height="380" />
             <circle cx="540" cy="440" r="150" />
             <path d="M 170 60 L 170 330 A 400 400 0 0 0 910 330 L 910 60" />
-            <path d="M 480 120 L 600 120" />
-            <circle cx="540" cy="140" r="26" stroke="#ff7a2f" />
           </g>
           <rect width="1080" height="1000" fill="url(#spot)" />
           {(() => {
-            // Player silhouette at the shot spot -> jumps -> releases -> ball arcs into the rim -> net swish.
-            const spot = shot || { x: 25, y: 30 };
-            const ox = 90 + (spot.x / 50) * 900;
-            const oy = 80 + (Math.min(spot.y, 47) / 47) * 760;
-            const HX = 540, HY = 140; // rim centre
-            const appear = interpolate(f, [28, 42], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-            const jump = interpolate(f, [44, 56, 66], [0, -34, 0], { ...clamp, easing: Easing.inOut(Easing.quad) });
-            const REL = 54, LAND = 92;
+            // Real-feet geometry: court is 50ft wide, 18px/ft across and 18.7px/ft deep; rim centre is 5.25ft from the baseline.
+            const PXX = 18, PXY = 18.7, K = 12; // K = px of screen height per foot of ball height
+            const spot = shot || { x: 25, y: 28 };
+            const sx = Math.max(0, Math.min(50, spot.x)), sy = Math.max(0, Math.min(47, spot.y));
+            const ox = 90 + sx * PXX, oy = 60 + sy * PXY;
+            const HX = 90 + 25 * PXX, HFY = 60 + 5.25 * PXY, RIM_FT = 10;
+            const HY = HFY - RIM_FT * K; // rim as drawn (elevated)
+            const distFt = Math.hypot(sx - 25, sy - 5.25);
+            const isThree = distFt >= 23.7 || (sy < 14 && (sx < 3 || sx > 47));
+            const kind = distFt < 4 ? 'AT THE RIM' : isThree ? 'THREE-POINTER' : 'MID-RANGE';
+            const name = (beat.player || story?.player?.name || '').toUpperCase();
+            // Physics: floor position moves linearly; ball height is a parabola (gravity), higher arc for longer shots.
+            const flightSec = 0.8 + 0.018 * distFt;
+            const FL = Math.round(flightSec * 30 * 1.6); // 1.6x slow-mo
+            const REL = 56, LAND = REL + FL;
+            const SIL = 0.65;
+            const appear = interpolate(f, [26, 40], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+            const jumpAt = (fr) => interpolate(fr, [44, 56, 68], [0, -30, 0], { ...clamp, easing: Easing.inOut(Easing.quad) });
+            const jump = jumpAt(f);
+            const handsPx = 140 * SIL;
+            const h0 = (handsPx - jumpAt(REL)) / K; // ft above floor at release
+            const A = 2.2 + distFt * 0.16;
+            const at = (t) => ({
+              x: ox + (HX - ox) * t,
+              y: oy + (HFY - oy) * t,
+              h: h0 + (RIM_FT - h0) * t + 4 * A * t * (1 - t),
+            });
             const t = interpolate(f, [REL, LAND], [0, 1], clamp);
-            const sx0 = ox + 6, sy0 = oy - 150 + jump; // hands at release
-            const cx = (sx0 + HX) / 2, cy = Math.min(sy0, HY) - 90;
-            const bx = (1 - t) * (1 - t) * sx0 + 2 * (1 - t) * t * cx + t * t * HX;
-            const by = (1 - t) * (1 - t) * sy0 + 2 * (1 - t) * t * cy + t * t * HY;
-            const drop = interpolate(f, [LAND, LAND + 14], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
             const held = f < REL;
-            const ballX = held ? ox + 6 : bx;
-            const ballY = held ? oy - 150 + jump : by + drop * 70;
-            const ballOp = f < 38 ? 0 : interpolate(f, [LAND + 8, LAND + 16], [1, 0], clamp);
-            const swish = interpolate(f, [LAND, LAND + 6, LAND + 20], [0, 1, 0], clamp);
-            const flash = interpolate(f, [LAND, LAND + 4, LAND + 24], [0, 0.9, 0], clamp);
+            const pass = interpolate(f, [LAND, LAND + 16], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
+            let bx, by, bh, gx, gy;
+            if (held) { gx = ox; gy = oy; bh = h0; bx = ox; by = oy - handsPx + jump; }
+            else if (f <= LAND) { const p = at(t); gx = p.x; gy = p.y; bh = p.h; bx = gx; by = gy - bh * K; }
+            else { gx = HX; gy = HFY; bh = RIM_FT - 5 * pass; bx = HX; by = gy - bh * K; }
+            const ballR = 20 + bh * 0.7;
+            const ballOp = f < 36 ? 0 : interpolate(f, [LAND + 12, LAND + 20], [1, 0], clamp);
+            const swish = interpolate(f, [LAND - 2, LAND + 6, LAND + 22], [0, 1, 0], clamp);
+            const flash = interpolate(f, [LAND, LAND + 4, LAND + 26], [0, 0.9, 0], clamp);
+            const spin = held ? 0 : (f - REL) * 14;
+            const trail = [];
+            if (!held) for (let i = 0; i <= 24; i += 1) { const tt = (t * i) / 24; const p = at(tt); trail.push(`${p.x},${p.y - p.h * K}`); }
             const sil = '#0b0b16';
             const body = (col, w) => (
               <g stroke={col} strokeLinecap="round" strokeLinejoin="round" fill={col}>
@@ -211,31 +230,55 @@ const MomentBeat = ({ beat, story, team }) => {
                 <path d="M 16 -90 L 14 -150 M -14 -90 L -8 -134" fill="none" strokeWidth={11 + w} />
               </g>
             );
+            const labelOp = interpolate(f, [34, 48], [0, 1], clamp);
+            const mx = (ox + HX) / 2, my = (oy + HFY) / 2;
+            const lineP = interpolate(f, [30, 52], [0, 1], clamp);
             return (
               <g>
-                {/* spot marker + shadow */}
-                <ellipse cx={ox} cy={oy + 24} rx={70 * appear} ry={16 * appear} fill="rgba(0,0,0,0.45)" />
-                <circle cx={ox} cy={oy + 20} r={70 * appear} fill={GOLD} opacity={0.18} />
-                {/* silhouette (white outline then dark fill) */}
-                <g transform={`translate(${ox} ${oy + jump}) scale(${appear})`} opacity={appear}>
-                  {body('#ffffff', 6)}
+                {/* distance dimension line on the floor, shooter -> basket */}
+                <line x1={ox} y1={oy} x2={ox + (HX - ox) * lineP} y2={oy + (HFY - oy) * lineP} stroke="#fff" strokeWidth="4" strokeDasharray="10 10" opacity="0.85" />
+                <circle cx={HX} cy={HFY} r="8" fill="#fff" opacity={0.9 * lineP} />
+                <g opacity={labelOp} transform={`translate(${mx} ${my})`}>
+                  <rect x="-92" y="-28" width="184" height="56" rx="28" fill="#0b0b16" stroke={GOLD} strokeWidth="4" />
+                  <text x="0" y="12" textAnchor="middle" fontFamily="Anton, Impact, sans-serif" fontSize="40" fill={GOLD}>{Math.round(distFt)} FT</text>
+                </g>
+                {/* basket back half + backboard */}
+                <line x1={HX - 62} y1={HY - 22} x2={HX + 62} y2={HY - 22} stroke="#fff" strokeWidth="9" strokeLinecap="round" />
+                <path d={`M ${HX - 28} ${HY} A 28 11 0 0 1 ${HX + 28} ${HY}`} fill="none" stroke="#ff7a2f" strokeWidth="6" />
+                {/* floor shadow of the ball */}
+                {!held && <ellipse cx={gx} cy={gy} rx={Math.max(8, 22 - bh * 0.6)} ry={Math.max(4, 9 - bh * 0.25)} fill="rgba(0,0,0,0.4)" opacity={ballOp} />}
+                {/* player silhouette */}
+                <ellipse cx={ox} cy={oy + 22} rx={62 * appear} ry={14 * appear} fill="rgba(0,0,0,0.45)" />
+                <g transform={`translate(${ox} ${oy + jump}) scale(${appear * SIL})`} opacity={appear}>
+                  {body('#ffffff', 7)}
                   {body(sil, 0)}
                 </g>
-                {/* flight trail */}
-                {f >= REL && f <= LAND + 4 && (
-                  <path d={`M ${sx0} ${sy0} Q ${cx} ${cy} ${HX} ${HY}`} fill="none" stroke={GOLD} strokeWidth="5" strokeDasharray="12 12" opacity="0.7" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 - t }} />
+                {/* player name tag */}
+                {name && (
+                  <g opacity={labelOp} transform={`translate(${ox} ${oy + 62})`}>
+                    <rect x={-Math.min(230, name.length * 14 + 36)} y="-26" width={Math.min(460, name.length * 28 + 72)} height="52" rx="12" fill="#0b0b16" opacity="0.92" />
+                    <text x="0" y="12" textAnchor="middle" fontFamily="Anton, Impact, sans-serif" fontSize="34" fill="#fff4dc">{name}</text>
+                  </g>
                 )}
-                {/* net */}
-                <g transform={`translate(${HX} ${HY}) scale(${1 + swish * 0.12} ${1 + swish * 0.5})`} opacity="0.95">
-                  <path d="M -26 0 L -16 46 M -9 4 L -6 48 M 9 4 L 6 48 M 26 0 L 16 46 M -22 22 L 22 22 M -18 36 L 18 36" stroke="#fff" strokeWidth="3" fill="none" />
-                </g>
+                {/* flight trail (follows the parabola) */}
+                {trail.length > 1 && <polyline points={trail.join(' ')} fill="none" stroke={GOLD} strokeWidth="5" strokeDasharray="12 12" strokeLinecap="round" opacity="0.7" />}
                 {/* ball */}
-                <g transform={`translate(${ballX} ${ballY}) rotate(${(held ? 0 : t * 720)})`} opacity={ballOp}>
+                <g transform={`translate(${bx} ${by}) rotate(${spin}) scale(${ballR / 27})`} opacity={ballOp}>
                   <circle r="27" fill="#e8761e" stroke="#5a2a08" strokeWidth="3" />
                   <path d="M -27 0 L 27 0 M 0 -27 L 0 27" stroke="#5a2a08" strokeWidth="2.5" />
                   <path d="M -19 -19 Q 0 0 -19 19 M 19 -19 Q 0 0 19 19" stroke="#5a2a08" strokeWidth="2.5" fill="none" />
                 </g>
-                <circle cx={HX} cy={HY} r={90 * swish} fill={GOLD} opacity={flash * 0.35} />
+                {/* net + front rim drawn over the ball so it drops THROUGH the hoop */}
+                <g transform={`translate(${HX} ${HY}) scale(${1 + swish * 0.1} ${1 + swish * 0.45})`} opacity="0.95">
+                  <path d="M -28 0 L -17 52 M -10 6 L -6 56 M 10 6 L 6 56 M 28 0 L 17 52 M -23 26 L 23 26 M -19 42 L 19 42" stroke="#fff" strokeWidth="3" fill="none" />
+                </g>
+                <path d={`M ${HX - 28} ${HY} A 28 11 0 0 0 ${HX + 28} ${HY}`} fill="none" stroke="#ff7a2f" strokeWidth="7" />
+                <circle cx={HX} cy={HY + 10} r={100 * swish} fill={GOLD} opacity={flash * 0.3} />
+                {/* shot-type tag */}
+                <g opacity={interpolate(f, [LAND, LAND + 10], [0, 1], clamp)} transform="translate(540 930)">
+                  <rect x="-190" y="-30" width="380" height="60" rx="30" fill={RED} />
+                  <text x="0" y="14" textAnchor="middle" fontFamily="Bebas Neue, Anton, sans-serif" fontSize="42" letterSpacing="4" fill="#fff">{kind}</text>
+                </g>
               </g>
             );
           })()}
