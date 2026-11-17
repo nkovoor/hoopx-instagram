@@ -1,0 +1,37 @@
+name: Fetch last night (commit data/night.json)
+# Runs before the daily story task (13:41 IST). Two schedules so a skipped/delayed run still gets covered.
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "ET date YYYYMMDD (blank = last night)"
+        required: false
+  schedule:
+    - cron: "15 7 * * *"   # 12:45 IST
+    - cron: "45 7 * * *"   # 13:15 IST (backup)
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fetch-night
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/fetch-night.mjs ${{ github.event.inputs.date }}
+      - name: Commit data/night.json
+        run: |
+          git config user.name hoopx-bot; git config user.email bot@users.noreply.github.com
+          git add -f data/night.json
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -m "night data $(node -p "require('./data/night.json').etDate")"
+          git pull --rebase -q origin main || true
+          git push origin HEAD:main
