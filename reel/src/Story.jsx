@@ -32,32 +32,36 @@ const StoryHook = ({ story, night }) => {
   const l1 = spring({ frame: f - 10, fps, config: { damping: 11, stiffness: 160 } });
   const l2 = interpolate(f, [24, 38], [0, 100], clamp);
   const tag = interpolate(f, [40, 52], [0, 1], clamp);
+  const day = night.dayName || (night.dateLabel || '').split(' · ')[0];
+  const dateLong = night.dateLong || (night.dateLabel || '').split(' · ')[1] || '';
   const stars = (night.games || []).filter((g) => g.star && g.star.name !== story.player?.name).slice(0, 5);
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks colour={team.primary} speed={1.4} />
       {story.sample && SAMPLE_TAG}
-      <div style={{ position: 'absolute', top: 190, left: 540 - 260, transform: `scale(${interpolate(pic, [0, 1], [0.3, 1])})`, opacity: pic }}>
-        <Portrait photo={story.player?.photo} team={team} size={520} />
-        <DrawRing size={520} start={12} />
+      <div style={{ position: 'absolute', top: 100, width: '100%', textAlign: 'center', fontFamily: BEBAS, fontSize: 112, letterSpacing: '0.2em', color: CREAM }}>LAST NIGHT</div>
+      <div style={{ position: 'absolute', top: 215, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(day, 200, 1000, 0.55), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.55), 0 10px 0 #3a1500' }}>{day}</div>
+      <div style={{ position: 'absolute', top: 430, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(dateLong, 120, 1000, 0.5), lineHeight: 1, color: CREAM, letterSpacing: '0.03em' }}>{dateLong}</div>
+      <div style={{ position: 'absolute', top: 590, left: 540 - 170, transform: `scale(${interpolate(pic, [0, 1], [0.3, 1])})`, opacity: pic }}>
+        <Portrait photo={story.player?.photo} team={team} size={340} />
+        <DrawRing size={340} start={12} />
       </div>
-      <div style={{ position: 'absolute', top: 780, width: '100%', textAlign: 'center', transform: `scale(${interpolate(l1, [0, 1], [2.2, 1])})`, opacity: f < 10 ? 0 : 1, fontFamily: ANTON, fontSize: fit(story.hook.line1, 220, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{story.hook.line1}</div>
-      <div style={{ position: 'absolute', top: 1040, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - l2}% 0 0)`, fontFamily: ANTON, fontSize: fit(story.hook.line2, 120, 1000, 0.5), color: CREAM }}>{story.hook.line2}</div>
+      <div style={{ position: 'absolute', top: 950, width: '100%', textAlign: 'center', transform: `scale(${interpolate(l1, [0, 1], [2.2, 1])})`, opacity: f < 10 ? 0 : 1, fontFamily: ANTON, fontSize: fit(story.hook.line1, 170, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{story.hook.line1}</div>
+      <div style={{ position: 'absolute', top: 1150, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - l2}% 0 0)`, fontFamily: ANTON, fontSize: fit(story.hook.line2, 100, 1000, 0.5), color: CREAM }}>{story.hook.line2}</div>
       {story.hook.tag && (
-        <div style={{ position: 'absolute', top: 1260, left: '50%', transform: `translateX(-50%) scale(${0.9 + tag * 0.1})`, opacity: tag, background: RED, color: '#fff', padding: '16px 40px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(story.hook.tag, 66, 940, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{story.hook.tag}</div>
+        <div style={{ position: 'absolute', top: 1330, left: '50%', transform: `translateX(-50%) scale(${0.9 + tag * 0.1})`, opacity: tag, background: RED, color: '#fff', padding: '16px 40px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(story.hook.tag, 66, 940, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{story.hook.tag}</div>
       )}
-      <div style={{ position: 'absolute', top: 1400, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 28 }}>
+      <div style={{ position: 'absolute', top: 1520, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 28 }}>
         {stars.map((g, i) => {
           const pop = spring({ frame: f - 30 - i * 5, fps, config: { damping: 12, stiffness: 160 } });
           const side = [g.away, g.home].find((t) => t.abbr === g.star.team) || g.home;
           return (
             <div key={g.id || i} style={{ transform: `scale(${interpolate(pop, [0, 1], [0.2, 1])})`, opacity: pop }}>
-              <Portrait photo={g.star.photo} team={{ primary: side.primary, secondary: side.secondary, abbr: side.abbr }} size={190} />
+              <Portrait photo={g.star.photo} team={{ primary: side.primary, secondary: side.secondary, abbr: side.abbr }} size={170} />
             </div>
           );
         })}
       </div>
-      <div style={{ position: 'absolute', bottom: 150, width: '100%', textAlign: 'center', fontFamily: OUTFIT, fontWeight: 600, fontSize: 42, color: 'rgba(255,244,220,0.8)', opacity: tag }}>{night.dateLabel}</div>
     </AbsoluteFill>
   );
 };
@@ -177,15 +181,61 @@ const MomentBeat = ({ beat, story, team }) => {
             <circle cx="540" cy="140" r="26" stroke="#ff7a2f" />
           </g>
           <rect width="1080" height="1000" fill="url(#spot)" />
-          {shot && (() => {
-            const p = interpolate(f, [34, 70], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-            const cx = (sx + 540) / 2, cy = Math.min(sy, 140) - 60 - 340 + 60;
-            const px = sy - 340;
+          {(() => {
+            // Player silhouette at the shot spot -> jumps -> releases -> ball arcs into the rim -> net swish.
+            const spot = shot || { x: 25, y: 30 };
+            const ox = 90 + (spot.x / 50) * 900;
+            const oy = 80 + (Math.min(spot.y, 47) / 47) * 760;
+            const HX = 540, HY = 140; // rim centre
+            const appear = interpolate(f, [28, 42], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+            const jump = interpolate(f, [44, 56, 66], [0, -34, 0], { ...clamp, easing: Easing.inOut(Easing.quad) });
+            const REL = 54, LAND = 92;
+            const t = interpolate(f, [REL, LAND], [0, 1], clamp);
+            const sx0 = ox + 6, sy0 = oy - 150 + jump; // hands at release
+            const cx = (sx0 + HX) / 2, cy = Math.min(sy0, HY) - 90;
+            const bx = (1 - t) * (1 - t) * sx0 + 2 * (1 - t) * t * cx + t * t * HX;
+            const by = (1 - t) * (1 - t) * sy0 + 2 * (1 - t) * t * cy + t * t * HY;
+            const drop = interpolate(f, [LAND, LAND + 14], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
+            const held = f < REL;
+            const ballX = held ? ox + 6 : bx;
+            const ballY = held ? oy - 150 + jump : by + drop * 70;
+            const ballOp = f < 38 ? 0 : interpolate(f, [LAND + 8, LAND + 16], [1, 0], clamp);
+            const swish = interpolate(f, [LAND, LAND + 6, LAND + 20], [0, 1, 0], clamp);
+            const flash = interpolate(f, [LAND, LAND + 4, LAND + 24], [0, 0.9, 0], clamp);
+            const sil = '#0b0b16';
+            const body = (col, w) => (
+              <g stroke={col} strokeLinecap="round" strokeLinejoin="round" fill={col}>
+                <circle cx="0" cy="-118" r="19" stroke="none" />
+                <path d="M -20 -96 L 22 -96 L 18 -40 L -16 -40 Z" strokeWidth={w} />
+                <path d="M -14 -40 L -22 18 M 12 -40 L 24 18" fill="none" strokeWidth={14 + w} />
+                <path d="M 16 -90 L 14 -150 M -14 -90 L -8 -134" fill="none" strokeWidth={11 + w} />
+              </g>
+            );
             return (
               <g>
-                <path d={`M ${sx} ${px} Q ${(sx + 540) / 2} ${Math.min(px, 140) - 220} 540 140`} fill="none" stroke={GOLD} strokeWidth="6" strokeDasharray="14 12" pathLength="1" strokeDashoffset={1 - p} style={{ strokeDasharray: 1, strokeDashoffset: 1 - p }} opacity="0.95" />
-                <circle cx={sx} cy={px} r={64 * dot} fill={GOLD} opacity="0.3" />
-                <circle cx={sx} cy={px} r={24 * dot} fill={GOLD} stroke="#fff" strokeWidth="5" />
+                {/* spot marker + shadow */}
+                <ellipse cx={ox} cy={oy + 24} rx={70 * appear} ry={16 * appear} fill="rgba(0,0,0,0.45)" />
+                <circle cx={ox} cy={oy + 20} r={70 * appear} fill={GOLD} opacity={0.18} />
+                {/* silhouette (white outline then dark fill) */}
+                <g transform={`translate(${ox} ${oy + jump}) scale(${appear})`} opacity={appear}>
+                  {body('#ffffff', 6)}
+                  {body(sil, 0)}
+                </g>
+                {/* flight trail */}
+                {f >= REL && f <= LAND + 4 && (
+                  <path d={`M ${sx0} ${sy0} Q ${cx} ${cy} ${HX} ${HY}`} fill="none" stroke={GOLD} strokeWidth="5" strokeDasharray="12 12" opacity="0.7" pathLength="1" style={{ strokeDasharray: 1, strokeDashoffset: 1 - t }} />
+                )}
+                {/* net */}
+                <g transform={`translate(${HX} ${HY}) scale(${1 + swish * 0.12} ${1 + swish * 0.5})`} opacity="0.95">
+                  <path d="M -26 0 L -16 46 M -9 4 L -6 48 M 9 4 L 6 48 M 26 0 L 16 46 M -22 22 L 22 22 M -18 36 L 18 36" stroke="#fff" strokeWidth="3" fill="none" />
+                </g>
+                {/* ball */}
+                <g transform={`translate(${ballX} ${ballY}) rotate(${(held ? 0 : t * 720)})`} opacity={ballOp}>
+                  <circle r="27" fill="#e8761e" stroke="#5a2a08" strokeWidth="3" />
+                  <path d="M -27 0 L 27 0 M 0 -27 L 0 27" stroke="#5a2a08" strokeWidth="2.5" />
+                  <path d="M -19 -19 Q 0 0 -19 19 M 19 -19 Q 0 0 19 19" stroke="#5a2a08" strokeWidth="2.5" fill="none" />
+                </g>
+                <circle cx={HX} cy={HY} r={90 * swish} fill={GOLD} opacity={flash * 0.35} />
               </g>
             );
           })()}
@@ -263,7 +313,7 @@ const ScoresPage = ({ games, page, pages }) => {
                 return (
                   <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 18, fontFamily: ANTON, fontSize: 84, lineHeight: 1, color: won ? GOLD : CREAM, opacity: won ? 1 : 0.85 }}>
                     <span style={{ width: 22, height: 70, borderRadius: 6, background: t.primary, border: `3px solid ${t.secondary}` }} />
-                    <span style={{ width: 190 }}>{t.abbr}</span><span>{t.score}</span>
+                    <span style={{ width: 300, fontSize: fit(t.nick || t.abbr, 84, 300, 0.5) }}>{t.nick || t.abbr}</span><span>{t.score}</span>
                   </div>
                 );
               })}

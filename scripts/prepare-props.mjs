@@ -20,6 +20,13 @@ if (!night || night.status !== 'ok') {
   console.log(`composition=none`);
   process.exit(0);
 }
+{
+  const d = new Date(`${night.etDate}T12:00:00Z`);
+  const o = (opt) => d.toLocaleDateString('en-US', { timeZone: 'UTC', ...opt }).toUpperCase();
+  night.dayName = o({ weekday: 'long' });
+  night.dateLong = o({ month: 'long', day: 'numeric' });
+  night.dateLabel = `${night.dayName} · ${night.dateLong}`;
+}
 // Refresh every game's photo against the folder (new files appear without re-fetching).
 for (const g of night.games) if (g.star) g.star.photo = photoFor(g.star.name);
 if (night.potn) night.potn.photo = photoFor(`${night.potn.first} ${night.potn.last}`);

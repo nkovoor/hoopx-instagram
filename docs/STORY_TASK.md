@@ -19,3 +19,6 @@ Goal: find the ONE story that makes last night's Reel worth watching, and write 
    Beat fields follow scratch examples in reel/src/Story.jsx (text: {text}; stat: {value,label}; quarters: {};
    moment: {clock,score,text,shot?}; ladder: {rows}; payoff: {text}).
 5. Commit and push data/story.json to main. Week 1: also send the plan to the owner for approval before posting.
+
+
+NAME RULES: always use players' FULL names (e.g. LUKA DONČIĆ, never just DONČIĆ) in hook.line1, captions and storyLine. Moment beats should include shot {x,y} so the animated ball shot plays from the right spot.

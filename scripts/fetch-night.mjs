@@ -162,7 +162,7 @@ export function buildNight(scoreboard, etDate) {
 
   const ymd = `${etDate.slice(0, 4)}-${etDate.slice(4, 6)}-${etDate.slice(6, 8)}`;
   const d = new Date(`${ymd}T12:00:00Z`);
-  const dateLabel = `${d.toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'short' }).toUpperCase()} · ${d.toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' }).toUpperCase()}`;
+  const dateLabel = `${d.toLocaleDateString('en-US', { timeZone: 'UTC', weekday: 'long' }).toUpperCase()} · ${d.toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', day: 'numeric' }).toUpperCase()}`;
 
   if (!games.length) {
     return { status: pending ? 'incomplete' : 'no-games', etDate: ymd, dateLabel, pendingGames: pending, games: [] };

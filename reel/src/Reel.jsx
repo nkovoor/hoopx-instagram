@@ -95,41 +95,42 @@ const Header = ({ text }) => (
 const Hook = ({ night }) => {
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const slam = spring({ frame: f - 8, fps, config: { damping: 11, stiffness: 160 } });
-  const scale = interpolate(slam, [0, 1], [2.6, 1]);
-  const flash = interpolate(f, [8, 16, 40], [0, 0.22, 0], clamp);
-  const kick = interpolate(f, [0, 10], [-80, 0], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const l2 = interpolate(f, [24, 36], [0, 100], clamp);
-  const sub = interpolate(f, [40, 52], [0, 1], clamp);
-  const shake = f > 8 && f < 18 ? Math.sin(f * 3) * (18 - f) : 0;
+  const p = night.potn;
+  const team = p ? { abbr: p.teamAbbr || '', primary: p.teamPrimary || p.colour, secondary: p.teamSecondary || '#111111' } : null;
+  const day = night.dayName || (night.dateLabel || '').split(' · ')[0];
+  const dateLong = night.dateLong || (night.dateLabel || '').split(' · ')[1] || '';
+  const k = interpolate(f, [0, 10], [0, 1], clamp);
+  const dSlam = spring({ frame: f - 6, fps, config: { damping: 11, stiffness: 170 } });
+  const d2 = interpolate(f, [16, 28], [0, 100], clamp);
+  const pic = spring({ frame: f - 22, fps, config: { damping: 12 } });
+  const n1 = spring({ frame: f - 40, fps, config: { damping: 13 } });
+  const n2 = spring({ frame: f - 48, fps, config: { damping: 13 } });
+  const stat = interpolate(f, [62, 74], [0, 1], clamp);
+  const sub = interpolate(f, [80, 92], [0, 1], clamp);
+  const y0 = p ? 0 : 160;
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks speed={1.6} />
-      <div style={{
-        position: 'absolute', top: 360, width: '100%', textAlign: 'center', transform: `translateY(${kick}px)`,
-        fontFamily: BEBAS, fontSize: 64, letterSpacing: '0.22em', color: CREAM, opacity: interpolate(f, [0, 8], [0, 1], clamp),
-      }}>{night.hook.kicker}</div>
-      <div style={{
-        position: 'absolute', top: 520, width: '100%', textAlign: 'center',
-        transform: `scale(${scale}) translateX(${shake}px)`, opacity: f < 8 ? 0 : 1,
-        fontFamily: ANTON, fontSize: fit(night.hook.line1, 340, 1000, 0.52), lineHeight: 1, color: GOLD,
-        textShadow: '0 0 60px rgba(253,185,39,0.55), 0 12px 0 #3a1500',
-      }}>{night.hook.line1}</div>
-      <div style={{
-        position: 'absolute', top: 920, width: '100%', textAlign: 'center',
-        clipPath: `inset(0 ${100 - l2}% 0 0)`,
-        fontFamily: ANTON, fontSize: fit(night.hook.line2, 132, 1000, 0.5), color: CREAM, letterSpacing: '0.02em',
-      }}>{night.hook.line2}</div>
-      <div style={{
-        position: 'absolute', top: 1160, left: '50%', transform: `translateX(-50%) scale(${0.9 + sub * 0.1})`,
-        opacity: sub, background: RED, color: '#fff', padding: '20px 44px', borderRadius: 14,
-        fontFamily: BEBAS, fontSize: fit(night.hook.sub, 72, 960, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap',
-      }}>{night.hook.sub}</div>
-      <div style={{
-        position: 'absolute', bottom: 160, width: '100%', textAlign: 'center',
-        fontFamily: OUTFIT, fontWeight: 600, fontSize: 44, color: 'rgba(255,244,220,0.8)', opacity: sub,
-      }}>{night.dateLabel}</div>
-      <AbsoluteFill style={{ background: 'radial-gradient(circle at 50% 45%, rgba(253,185,39,0.9), transparent 60%)', opacity: flash, pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: 100, width: '100%', textAlign: 'center', opacity: k, fontFamily: BEBAS, fontSize: 112, letterSpacing: '0.2em', color: CREAM }}>LAST NIGHT</div>
+      <div style={{ position: 'absolute', top: 215, width: '100%', textAlign: 'center', transform: `scale(${interpolate(dSlam, [0, 1], [2.4, 1])})`, opacity: f < 6 ? 0 : 1, fontFamily: ANTON, fontSize: fit(day, 200, 1000, 0.55), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.55), 0 10px 0 #3a1500' }}>{day}</div>
+      <div style={{ position: 'absolute', top: 430, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - d2}% 0 0)`, fontFamily: ANTON, fontSize: fit(dateLong, 120, 1000, 0.5), lineHeight: 1, color: CREAM, letterSpacing: '0.03em' }}>{dateLong}</div>
+      {p ? (
+        <>
+          <div style={{ position: 'absolute', top: 600, left: 540 - 170, transform: `scale(${pic})` }}>
+            <Portrait photo={p.photo} team={team} size={340} />
+            <DrawRing size={340} start={26} />
+          </div>
+          <div style={{ position: 'absolute', top: 960, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n1, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 96, 1000, 0.5), color: CREAM, lineHeight: 1 }}>{p.first}</div>
+          <div style={{ position: 'absolute', top: 1065, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n2, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 190, 1000, 0.52), color: GOLD, lineHeight: 1, textShadow: '0 0 50px rgba(253,185,39,0.4), 0 8px 0 #3a1500' }}>{p.last}</div>
+          <div style={{ position: 'absolute', top: 1290, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 100, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
+        </>
+      ) : (
+        <>
+          <div style={{ position: 'absolute', top: 700, width: '100%', textAlign: 'center', transform: `scale(${pic})`, fontFamily: ANTON, fontSize: fit(night.hook.line1, 260, 1000, 0.52), color: GOLD, lineHeight: 1 }}>{night.hook.line1}</div>
+          <div style={{ position: 'absolute', top: 1010, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 120, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
+        </>
+      )}
+      <div style={{ position: 'absolute', top: 1470 - y0 * 0, left: '50%', transform: `translateX(-50%) scale(${0.9 + sub * 0.1})`, opacity: sub, background: RED, color: '#fff', padding: '20px 44px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(night.hook.sub, 68, 960, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{night.hook.sub}</div>
     </AbsoluteFill>
   );
 };
@@ -344,9 +345,9 @@ const AllScores = ({ night }) => {
             border: `3px solid ${g.away.primary === '#000000' ? GOLD : g.away.primary}`,
             fontFamily: ANTON, fontSize: sz, color: CREAM,
           }}>
-            <span style={{ color: awayWon ? GOLD : CREAM }}>{g.away.abbr} {g.away.score}</span>
+            <span style={{ color: awayWon ? GOLD : CREAM }}>{g.away.nick || g.away.abbr} {g.away.score}</span>
             <span style={{ fontFamily: BEBAS, fontSize: sz * 0.6, color: 'rgba(255,244,220,0.6)' }}>{g.label || 'FINAL'}</span>
-            <span style={{ color: awayWon ? CREAM : GOLD }}>{g.home.score} {g.home.abbr}</span>
+            <span style={{ color: awayWon ? CREAM : GOLD }}>{g.home.score} {g.home.nick || g.home.abbr}</span>
           </div>
         );
       })}
