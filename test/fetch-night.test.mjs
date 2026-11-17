@@ -37,7 +37,7 @@ test('builds night data: OT game first, abbreviations fixed, pending game flagge
   assert.equal(n.games.find((g) => g.id === '2').home.abbr, 'NYK'); // NY -> NYK
   assert.equal(n.games.find((g) => g.id === '2').margin, 31);
   assert.ok(n.games.find((g) => g.id === '2').tags.includes('blowout'));
-  assert.equal(n.dateLabel, 'SUN · NOV 15');
+  assert.equal(n.dateLabel, 'SUNDAY · NOVEMBER 15');
   assert.equal(n.potn.first, 'SHAI');
   assert.equal(n.potn.last, 'GILGEOUS-ALEXANDER');
   assert.deepEqual(n.potn.stats.map((s) => s.k), ['PTS', 'REB', 'AST']);
