@@ -167,7 +167,7 @@ const TeamPanel = ({ team, top, won, enter, side }) => {
       <div style={{ position: 'absolute', left: 44, top: 22, fontFamily: ANTON, fontSize: 118, color: ink, lineHeight: 1, opacity: dim }}>{team.abbr}</div>
       <div style={{ position: 'absolute', left: 48, bottom: 26, width: 330, opacity: dim, color: ink, lineHeight: 1.05 }}>
         {team.city ? <div style={{ fontFamily: BEBAS, fontSize: fit(team.city, 46, 330, 0.36), letterSpacing: '0.1em' }}>{team.city}</div> : null}
-        <div style={{ fontFamily: ANTON, fontSize: fit(team.nick || team.name, 60, 330, 0.5), letterSpacing: '0.04em' }}>{team.nick || team.name}</div>
+        <div style={{ fontFamily: ANTON, fontSize: fit(team.nick || team.name, 60, 300, 0.56), letterSpacing: '0.04em' }}>{team.nick || team.name}</div>
       </div>
       <div style={{
         position: 'absolute', right: 44, top: 60, fontFamily: ANTON, fontSize: 180, lineHeight: 1,
@@ -328,6 +328,10 @@ const AllScores = ({ night }) => {
   const { fps } = useVideoConfig();
   const rows = night.games;
   const rowH = Math.min(150, Math.floor(1250 / Math.max(rows.length, 1)));
+  const nm = (t) => { const n = t.nick || t.abbr || ''; return n.includes(' ') && /^TRAIL/i.test(n) ? n.split(' ').pop() : n; };
+  const longest = Math.max(...rows.flatMap((g) => [`${nm(g.away)} ${g.away.score}`.length, `${g.home.score} ${nm(g.home)}`.length]), 8);
+  const sideW = 400; // each side's width inside the row (row inner width 888, centre gap ~88)
+  const szAll = Math.min(Math.floor(rowH * 0.5), Math.floor(sideW / (longest * 0.46)));
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks speed={1.2} />
@@ -335,19 +339,19 @@ const AllScores = ({ night }) => {
       {rows.map((g, i) => {
         const pop = spring({ frame: f - (6 + i * 4), fps, config: { damping: 14 } });
         const awayWon = g.away.score > g.home.score;
-        const sz = Math.floor(rowH * 0.5);
+        const sz = szAll;
         return (
           <div key={i} style={{
             position: 'absolute', left: 60, right: 60, top: 280 + i * rowH, height: rowH - 14,
             transform: `translateX(${interpolate(pop, [0, 1], [i % 2 ? 900 : -900, 0])}px)`,
             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            padding: '0 36px', borderRadius: 20, background: 'rgba(255,244,220,0.08)',
+            padding: '0 32px', borderRadius: 20, background: 'rgba(255,244,220,0.08)', whiteSpace: 'nowrap',
             border: `3px solid ${g.away.primary === '#000000' ? GOLD : g.away.primary}`,
             fontFamily: ANTON, fontSize: sz, color: CREAM,
           }}>
-            <span style={{ color: awayWon ? GOLD : CREAM }}>{g.away.nick || g.away.abbr} {g.away.score}</span>
-            <span style={{ fontFamily: BEBAS, fontSize: sz * 0.6, color: 'rgba(255,244,220,0.6)' }}>{g.label || 'FINAL'}</span>
-            <span style={{ color: awayWon ? CREAM : GOLD }}>{g.home.score} {g.home.nick || g.home.abbr}</span>
+            <span style={{ color: awayWon ? GOLD : CREAM, width: sideW, textAlign: 'left' }}>{nm(g.away)} {g.away.score}</span>
+            <span style={{ fontFamily: BEBAS, fontSize: Math.min(40, sz * 0.6), color: 'rgba(255,244,220,0.6)' }}>{g.overtime ? g.label : ''}</span>
+            <span style={{ color: awayWon ? CREAM : GOLD, width: sideW, textAlign: 'right' }}>{g.home.score} {nm(g.home)}</span>
           </div>
         );
       })}
