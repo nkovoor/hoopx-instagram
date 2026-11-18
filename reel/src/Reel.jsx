@@ -108,32 +108,39 @@ const Hook = ({ night }) => {
   const stat = interpolate(f, [62, 74], [0, 1], clamp);
   const sub = interpolate(f, [80, 92], [0, 1], clamp);
   const hasPic = !!(p && p.photo);
-  const up = hasPic ? 0 : 330;
+  // 3 zones: A when (date), B who/what (centred in free space), C call to action.
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks speed={1.6} />
-      <div style={{ position: 'absolute', top: 100, width: '100%', textAlign: 'center', opacity: k, fontFamily: BEBAS, fontSize: 112, letterSpacing: '0.2em', color: CREAM }}>LAST NIGHT</div>
-      <div style={{ position: 'absolute', top: 215, width: '100%', textAlign: 'center', transform: `scale(${interpolate(dSlam, [0, 1], [2.4, 1])})`, opacity: f < 6 ? 0 : 1, fontFamily: ANTON, fontSize: fit(day, 200, 1000, 0.55), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.55), 0 10px 0 #3a1500' }}>{day}</div>
-      <div style={{ position: 'absolute', top: 430, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - d2}% 0 0)`, fontFamily: ANTON, fontSize: fit(dateLong, 120, 1000, 0.5), lineHeight: 1, color: CREAM, letterSpacing: '0.03em' }}>{dateLong}</div>
-      {p ? (
-        <>
-          {hasPic && (
-            <div style={{ position: 'absolute', top: 600, left: 540 - 170, transform: `scale(${pic})` }}>
-              <Portrait photo={p.photo} team={team} size={340} />
-              <DrawRing size={340} start={26} />
-            </div>
+      <div style={{ position: 'absolute', top: 110, bottom: 110, left: 60, right: 60, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center', lineHeight: 1 }}>
+          <div style={{ opacity: k, fontFamily: BEBAS, fontSize: 76, letterSpacing: '0.3em', color: CREAM, paddingLeft: '0.3em' }}>LAST NIGHT</div>
+          <div style={{ marginTop: 14, transform: `scale(${interpolate(dSlam, [0, 1], [2.4, 1])})`, opacity: f < 6 ? 0 : 1, fontFamily: ANTON, fontSize: fit(day, 190, 960, 0.55), color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 8px 0 #3a1500' }}>{day}</div>
+          <div style={{ marginTop: 10, clipPath: `inset(0 ${100 - d2}% 0 0)`, fontFamily: ANTON, fontSize: fit(dateLong, 92, 960, 0.5), color: CREAM, letterSpacing: '0.04em' }}>{dateLong}</div>
+        </div>
+        <div style={{ width: 220 * k, height: 6, borderRadius: 3, background: GOLD, marginTop: 44, opacity: 0.9 }} />
+        <div style={{ marginTop: 80, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28 }}>
+          {p ? (
+            <>
+              {hasPic && (
+                <div style={{ position: 'relative', width: 320, height: 320, transform: `scale(${pic})` }}>
+                  <Portrait photo={p.photo} team={team} size={320} />
+                  <DrawRing size={320} start={26} />
+                </div>
+              )}
+              <div style={{ textAlign: 'center', lineHeight: 1, transform: `translateX(${interpolate(n1, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 84, 960, 0.5), color: CREAM }}>{p.first}</div>
+              <div style={{ textAlign: 'center', lineHeight: 1, marginTop: -10, transform: `translateX(${interpolate(n2, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 170, 960, 0.52), color: GOLD, textShadow: '0 0 50px rgba(253,185,39,0.4), 0 8px 0 #3a1500' }}>{p.last}</div>
+              <div style={{ textAlign: 'center', lineHeight: 1, opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 84, 960, 0.5), color: CREAM }}>{night.hook.line2}</div>
+            </>
+          ) : (
+            <>
+              <div style={{ textAlign: 'center', lineHeight: 1, transform: `scale(${pic})`, fontFamily: ANTON, fontSize: fit(night.hook.line1, 230, 960, 0.52), color: GOLD }}>{night.hook.line1}</div>
+              <div style={{ textAlign: 'center', lineHeight: 1, opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 100, 960, 0.5), color: CREAM }}>{night.hook.line2}</div>
+            </>
           )}
-          <div style={{ position: 'absolute', top: 960 - up, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n1, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 96, 1000, 0.5), color: CREAM, lineHeight: 1 }}>{p.first}</div>
-          <div style={{ position: 'absolute', top: 1065 - up, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n2, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 190, 1000, 0.52), color: GOLD, lineHeight: 1, textShadow: '0 0 50px rgba(253,185,39,0.4), 0 8px 0 #3a1500' }}>{p.last}</div>
-          <div style={{ position: 'absolute', top: 1290 - up, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 100, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
-        </>
-      ) : (
-        <>
-          <div style={{ position: 'absolute', top: 700, width: '100%', textAlign: 'center', transform: `scale(${pic})`, fontFamily: ANTON, fontSize: fit(night.hook.line1, 260, 1000, 0.52), color: GOLD, lineHeight: 1 }}>{night.hook.line1}</div>
-          <div style={{ position: 'absolute', top: 1010, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 120, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
-        </>
-      )}
-      <div style={{ position: 'absolute', top: 1470 - up, left: '50%', transform: `translateX(-50%) scale(${0.9 + sub * 0.1})`, opacity: sub, background: RED, color: '#fff', padding: '20px 44px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(night.hook.sub, 68, 960, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{night.hook.sub}</div>
+        </div>
+        <div style={{ marginTop: 80, opacity: sub, transform: `scale(${0.9 + sub * 0.1})`, background: RED, color: '#fff', padding: '18px 40px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(night.hook.sub, 60, 900, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{night.hook.sub}</div>
+      </div>
     </AbsoluteFill>
   );
 };
