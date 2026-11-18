@@ -238,10 +238,10 @@ const MomentBeat = ({ beat, story, team }) => {
                 {/* distance dimension line on the floor, shooter -> basket */}
                 <line x1={ox} y1={oy} x2={ox + (HX - ox) * lineP} y2={oy + (HFY - oy) * lineP} stroke="#fff" strokeWidth="4" strokeDasharray="10 10" opacity="0.85" />
                 <circle cx={HX} cy={HFY} r="8" fill="#fff" opacity={0.9 * lineP} />
-                <g opacity={labelOp} transform={`translate(${mx} ${my})`}>
+                {shot && <g opacity={labelOp} transform={`translate(${mx} ${my})`}>
                   <rect x="-92" y="-28" width="184" height="56" rx="28" fill="#0b0b16" stroke={GOLD} strokeWidth="4" />
                   <text x="0" y="12" textAnchor="middle" fontFamily="Anton, Impact, sans-serif" fontSize="40" fill={GOLD}>{Math.round(distFt)} FT</text>
-                </g>
+                </g>}
                 {/* basket back half + backboard */}
                 <line x1={HX - 62} y1={HY - 22} x2={HX + 62} y2={HY - 22} stroke="#fff" strokeWidth="9" strokeLinecap="round" />
                 <path d={`M ${HX - 28} ${HY} A 28 11 0 0 1 ${HX + 28} ${HY}`} fill="none" stroke="#ff7a2f" strokeWidth="6" />
@@ -275,10 +275,10 @@ const MomentBeat = ({ beat, story, team }) => {
                 <path d={`M ${HX - 28} ${HY} A 28 11 0 0 0 ${HX + 28} ${HY}`} fill="none" stroke="#ff7a2f" strokeWidth="7" />
                 <circle cx={HX} cy={HY + 10} r={100 * swish} fill={GOLD} opacity={flash * 0.3} />
                 {/* shot-type tag */}
-                <g opacity={interpolate(f, [LAND, LAND + 10], [0, 1], clamp)} transform="translate(540 930)">
+                {shot && <g opacity={interpolate(f, [LAND, LAND + 10], [0, 1], clamp)} transform="translate(540 930)">
                   <rect x="-190" y="-30" width="380" height="60" rx="30" fill={RED} />
                   <text x="0" y="14" textAnchor="middle" fontFamily="Bebas Neue, Anton, sans-serif" fontSize="42" letterSpacing="4" fill="#fff">{kind}</text>
-                </g>
+                </g>}
               </g>
             );
           })()}
