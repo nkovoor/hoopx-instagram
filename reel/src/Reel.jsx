@@ -107,7 +107,8 @@ const Hook = ({ night }) => {
   const n2 = spring({ frame: f - 48, fps, config: { damping: 13 } });
   const stat = interpolate(f, [62, 74], [0, 1], clamp);
   const sub = interpolate(f, [80, 92], [0, 1], clamp);
-  const y0 = p ? 0 : 160;
+  const hasPic = !!(p && p.photo);
+  const up = hasPic ? 0 : 330;
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks speed={1.6} />
@@ -116,13 +117,15 @@ const Hook = ({ night }) => {
       <div style={{ position: 'absolute', top: 430, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - d2}% 0 0)`, fontFamily: ANTON, fontSize: fit(dateLong, 120, 1000, 0.5), lineHeight: 1, color: CREAM, letterSpacing: '0.03em' }}>{dateLong}</div>
       {p ? (
         <>
-          <div style={{ position: 'absolute', top: 600, left: 540 - 170, transform: `scale(${pic})` }}>
-            <Portrait photo={p.photo} team={team} size={340} />
-            <DrawRing size={340} start={26} />
-          </div>
-          <div style={{ position: 'absolute', top: 960, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n1, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 96, 1000, 0.5), color: CREAM, lineHeight: 1 }}>{p.first}</div>
-          <div style={{ position: 'absolute', top: 1065, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n2, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 190, 1000, 0.52), color: GOLD, lineHeight: 1, textShadow: '0 0 50px rgba(253,185,39,0.4), 0 8px 0 #3a1500' }}>{p.last}</div>
-          <div style={{ position: 'absolute', top: 1290, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 100, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
+          {hasPic && (
+            <div style={{ position: 'absolute', top: 600, left: 540 - 170, transform: `scale(${pic})` }}>
+              <Portrait photo={p.photo} team={team} size={340} />
+              <DrawRing size={340} start={26} />
+            </div>
+          )}
+          <div style={{ position: 'absolute', top: 960 - up, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n1, [0, 1], [-900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.first, 96, 1000, 0.5), color: CREAM, lineHeight: 1 }}>{p.first}</div>
+          <div style={{ position: 'absolute', top: 1065 - up, width: '100%', textAlign: 'center', transform: `translateX(${interpolate(n2, [0, 1], [900, 0])}px)`, fontFamily: ANTON, fontSize: fit(p.last, 190, 1000, 0.52), color: GOLD, lineHeight: 1, textShadow: '0 0 50px rgba(253,185,39,0.4), 0 8px 0 #3a1500' }}>{p.last}</div>
+          <div style={{ position: 'absolute', top: 1290 - up, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 100, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
         </>
       ) : (
         <>
@@ -130,7 +133,7 @@ const Hook = ({ night }) => {
           <div style={{ position: 'absolute', top: 1010, width: '100%', textAlign: 'center', opacity: stat, fontFamily: ANTON, fontSize: fit(night.hook.line2, 120, 1000, 0.5), color: CREAM }}>{night.hook.line2}</div>
         </>
       )}
-      <div style={{ position: 'absolute', top: 1470 - y0 * 0, left: '50%', transform: `translateX(-50%) scale(${0.9 + sub * 0.1})`, opacity: sub, background: RED, color: '#fff', padding: '20px 44px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(night.hook.sub, 68, 960, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{night.hook.sub}</div>
+      <div style={{ position: 'absolute', top: 1470 - up, left: '50%', transform: `translateX(-50%) scale(${0.9 + sub * 0.1})`, opacity: sub, background: RED, color: '#fff', padding: '20px 44px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(night.hook.sub, 68, 960, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{night.hook.sub}</div>
     </AbsoluteFill>
   );
 };

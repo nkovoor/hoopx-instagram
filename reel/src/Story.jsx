@@ -34,7 +34,9 @@ const StoryHook = ({ story, night }) => {
   const tag = interpolate(f, [40, 52], [0, 1], clamp);
   const day = night.dayName || (night.dateLabel || '').split(' · ')[0];
   const dateLong = night.dateLong || (night.dateLabel || '').split(' · ')[1] || '';
-  const stars = (night.games || []).filter((g) => g.star && g.star.name !== story.player?.name).slice(0, 5);
+  const hasPic = !!story.player?.photo;
+  const up = hasPic ? 0 : 330; // no photo: no face/badge in the opening, text moves up
+  const stars = (night.games || []).filter((g) => g.star && g.star.photo && g.star.name !== story.player?.name).slice(0, 5);
   return (
     <AbsoluteFill style={{ background: BG }}>
       <Grain /><Streaks colour={team.primary} speed={1.4} />
@@ -42,16 +44,18 @@ const StoryHook = ({ story, night }) => {
       <div style={{ position: 'absolute', top: 100, width: '100%', textAlign: 'center', fontFamily: BEBAS, fontSize: 112, letterSpacing: '0.2em', color: CREAM }}>LAST NIGHT</div>
       <div style={{ position: 'absolute', top: 215, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(day, 200, 1000, 0.55), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.55), 0 10px 0 #3a1500' }}>{day}</div>
       <div style={{ position: 'absolute', top: 430, width: '100%', textAlign: 'center', fontFamily: ANTON, fontSize: fit(dateLong, 120, 1000, 0.5), lineHeight: 1, color: CREAM, letterSpacing: '0.03em' }}>{dateLong}</div>
-      <div style={{ position: 'absolute', top: 590, left: 540 - 170, transform: `scale(${interpolate(pic, [0, 1], [0.3, 1])})`, opacity: pic }}>
-        <Portrait photo={story.player?.photo} team={team} size={340} />
-        <DrawRing size={340} start={12} />
-      </div>
-      <div style={{ position: 'absolute', top: 950, width: '100%', textAlign: 'center', transform: `scale(${interpolate(l1, [0, 1], [2.2, 1])})`, opacity: f < 10 ? 0 : 1, fontFamily: ANTON, fontSize: fit(story.hook.line1, 170, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{story.hook.line1}</div>
-      <div style={{ position: 'absolute', top: 1150, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - l2}% 0 0)`, fontFamily: ANTON, fontSize: fit(story.hook.line2, 100, 1000, 0.5), color: CREAM }}>{story.hook.line2}</div>
-      {story.hook.tag && (
-        <div style={{ position: 'absolute', top: 1330, left: '50%', transform: `translateX(-50%) scale(${0.9 + tag * 0.1})`, opacity: tag, background: RED, color: '#fff', padding: '16px 40px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(story.hook.tag, 66, 940, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{story.hook.tag}</div>
+      {hasPic && (
+        <div style={{ position: 'absolute', top: 590, left: 540 - 170, transform: `scale(${interpolate(pic, [0, 1], [0.3, 1])})`, opacity: pic }}>
+          <Portrait photo={story.player.photo} team={team} size={340} />
+          <DrawRing size={340} start={12} />
+        </div>
       )}
-      <div style={{ position: 'absolute', top: 1520, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 28 }}>
+      <div style={{ position: 'absolute', top: 950 - up, width: '100%', textAlign: 'center', transform: `scale(${interpolate(l1, [0, 1], [2.2, 1])})`, opacity: f < 10 ? 0 : 1, fontFamily: ANTON, fontSize: fit(story.hook.line1, hasPic ? 170 : 200, 1000, 0.52), lineHeight: 1, color: GOLD, textShadow: '0 0 60px rgba(253,185,39,0.5), 0 10px 0 #3a1500' }}>{story.hook.line1}</div>
+      <div style={{ position: 'absolute', top: 1150 - up, width: '100%', textAlign: 'center', clipPath: `inset(0 ${100 - l2}% 0 0)`, fontFamily: ANTON, fontSize: fit(story.hook.line2, 100, 1000, 0.5), color: CREAM }}>{story.hook.line2}</div>
+      {story.hook.tag && (
+        <div style={{ position: 'absolute', top: 1330 - up, left: '50%', transform: `translateX(-50%) scale(${0.9 + tag * 0.1})`, opacity: tag, background: RED, color: '#fff', padding: '16px 40px', borderRadius: 14, fontFamily: BEBAS, fontSize: fit(story.hook.tag, 66, 940, 0.36), letterSpacing: '0.12em', whiteSpace: 'nowrap' }}>{story.hook.tag}</div>
+      )}
+      <div style={{ position: 'absolute', top: 1520 - up + 60, left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: 28 }}>
         {stars.map((g, i) => {
           const pop = spring({ frame: f - 30 - i * 5, fps, config: { damping: 12, stiffness: 160 } });
           const side = [g.away, g.home].find((t) => t.abbr === g.star.team) || g.home;
