@@ -1,46 +1,18 @@
 {
- "etDate": "2026-11-17",
- "type": "comeback",
- "player": {
-  "name": "Quentin Grimes",
-  "team": "LAL"
- },
- "hook": {
-  "line1": "QUENTIN GRIMES",
-  "line2": "47 POINTS · 10 THREES",
-  "tag": "LAKERS COMEBACK"
- },
- "caption": "Quentin Grimes went off for a career-high 47 and hit his 10th three to force overtime as the Lakers rallied from 18 down to beat the Hornets 118-114. Ninth straight win for LA.",
- "storyLine": "GRIMES WENT OFF FOR 47",
- "beats": [
-  {
-   "kind": "text",
-   "text": "LAKERS TRAILED BY 18 IN THE THIRD QUARTER"
-  },
-  {
-   "kind": "stat",
-   "value": "47",
-   "label": "CAREER-HIGH POINTS"
-  },
-  {
-   "kind": "moment",
-   "clock": "0:01.7",
-   "score": "10TH THREE · TIES IT",
-   "text": "GRIMES HITS IT FROM LUKA DONČIĆ'S PASS"
-  },
-  {
-   "kind": "payoff",
-   "text": "LAKERS WIN 118-114 IN OT · NINTH STRAIGHT"
-  }
- ],
- "sources": [
-  {
-   "claim": "Career-high 47 points, 10 threes (second Laker ever with 10+ after Kobe Bryant), trailed by 18 late in the third quarter, final 118-114 OT, Dončić in foul trouble",
-   "url": "https://www.nbcsports.com/nba/news/quentin-grimes-puts-lakers-on-his-back-scores-47-to-lift-lakers-to-ot-win-against-hornets"
-  },
-  {
-   "claim": "10th three with 1.7 seconds left in regulation on a pass from Luka Doncic; Lakers held Charlotte scoreless the final 4:24 of OT; ninth straight Lakers win",
-   "url": "https://www.breitbart.com/news/quentin-grimes-scores-47-forces-ot-with-10th-3-pointer-as-lakers-rally-past-hornets-118-114/"
-  }
- ]
+  "etDate": "2026-11-18",
+  "type": "record",
+  "player": { "name": "Taylor Hendricks", "team": "MEM" },
+  "hook": { "line1": "GRIZZLIES", "line2": "8 STRAIGHT ROAD WINS", "tag": "FRANCHISE RECORD" },
+  "caption": "The Grizzlies beat the Cavaliers 124-121 for their eighth straight road win, a franchise record. Taylor Hendricks sealed it with two free throws with 2.3 seconds left, and Cam Spencer scored 26.",
+  "storyLine": "GRIZZLIES MAKE ROAD HISTORY",
+  "beats": [
+    { "kind": "text", "text": "CAVS LED 119-116 WITH 2:43 LEFT" },
+    { "kind": "stat", "value": "8", "label": "STRAIGHT ROAD WINS · FRANCHISE RECORD" },
+    { "kind": "moment", "clock": "0:02.3", "score": "MEM 124 · CLE 121", "text": "TAYLOR HENDRICKS SEALS IT AT THE LINE" },
+    { "kind": "payoff", "text": "GRIZZLIES WIN 124-121 · PREVIOUS RECORD WAS 7" }
+  ],
+  "sources": [
+    { "claim": "Eighth straight road win is a franchise record (previous mark seven, set 2010); Cavs led 119-116 with 2:43 left; Memphis 8-2 run; Hendricks' free throws with 2.3 seconds left set the 124-121 final; Spencer 26, Hendricks 20; Mitchell 34", "url": "https://www.cleveland19.com/2026/11/19/grizzlies-beat-cavaliers-124-121-franchise-record-8th-straight-road-win/" },
+    { "claim": "Road win streak of eight games is a franchise record; Hendricks 20 points including two free throws with 2.3 seconds left; Spencer 26; 22 lead changes; Grizzlies 11-4", "url": "https://www.espn.com/nba/recap/_/gameId/401910007" }
+  ]
 }
