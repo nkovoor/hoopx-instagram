@@ -1,7 +1,240 @@
 {
-  "status": "incomplete",
+  "status": "ok",
   "etDate": "2026-11-19",
   "dateLabel": "THURSDAY · NOVEMBER 19",
-  "pendingGames": 4,
-  "games": []
+  "seasonType": 2,
+  "mode": "hype",
+  "flags": [
+    "thriller"
+  ],
+  "pendingGames": 0,
+  "hook": {
+    "kicker": "LAST NIGHT IN THE NBA",
+    "line1": "KUMINGA",
+    "line2": "23 PTS",
+    "sub": "DECIDED BY 3"
+  },
+  "games": [
+    {
+      "id": "401910021",
+      "label": "FINAL",
+      "away": {
+        "abbr": "NYK",
+        "name": "KNICKS",
+        "city": "NEW YORK",
+        "nick": "KNICKS",
+        "score": 102,
+        "quarters": [
+          33,
+          32,
+          25,
+          12
+        ],
+        "primary": "#1D428A",
+        "secondary": "#F58426"
+      },
+      "home": {
+        "abbr": "MIN",
+        "name": "TIMBERWOLVES",
+        "city": "MINNESOTA",
+        "nick": "TIMBERWOLVES",
+        "score": 99,
+        "quarters": [
+          26,
+          24,
+          28,
+          21
+        ],
+        "primary": "#266092",
+        "secondary": "#79BC43"
+      },
+      "winner": "NYK",
+      "margin": 3,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "NYK · KARL-ANTHONY TOWNS · 22 PTS",
+        "REB LEADER · KARL-ANTHONY TOWNS · 12"
+      ],
+      "star": {
+        "name": "JONATHAN KUMINGA",
+        "team": "MIN",
+        "line": "23 PTS",
+        "photo": null
+      },
+      "note": "DECIDED BY 3"
+    },
+    {
+      "id": "401910020",
+      "label": "FINAL",
+      "away": {
+        "abbr": "POR",
+        "name": "TRAIL BLAZERS",
+        "city": "PORTLAND",
+        "nick": "TRAIL BLAZERS",
+        "score": 124,
+        "quarters": [
+          24,
+          36,
+          36,
+          28
+        ],
+        "primary": "#E03A3E",
+        "secondary": "#000000"
+      },
+      "home": {
+        "abbr": "MIL",
+        "name": "BUCKS",
+        "city": "MILWAUKEE",
+        "nick": "BUCKS",
+        "score": 114,
+        "quarters": [
+          21,
+          37,
+          34,
+          22
+        ],
+        "primary": "#00471B",
+        "secondary": "#EEE1C6"
+      },
+      "winner": "POR",
+      "margin": 10,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "MIL · TYLER HERRO · 19 PTS",
+        "REB LEADER · DONOVAN CLINGAN · 13"
+      ],
+      "star": {
+        "name": "DAMIAN LILLARD",
+        "team": "POR",
+        "line": "33 PTS",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401910022",
+      "label": "FINAL",
+      "away": {
+        "abbr": "LAC",
+        "name": "CLIPPERS",
+        "city": "LA",
+        "nick": "CLIPPERS",
+        "score": 112,
+        "quarters": [
+          21,
+          33,
+          34,
+          24
+        ],
+        "primary": "#12173F",
+        "secondary": "#C8102E"
+      },
+      "home": {
+        "abbr": "SAS",
+        "name": "SPURS",
+        "city": "SAN ANTONIO",
+        "nick": "SPURS",
+        "score": 124,
+        "quarters": [
+          24,
+          33,
+          35,
+          32
+        ],
+        "primary": "#000000",
+        "secondary": "#C4CED4"
+      },
+      "winner": "SAS",
+      "margin": 12,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "LAC · BROOK LOPEZ · 23 PTS",
+        "AST LEADER · STEPHON CASTLE · 12"
+      ],
+      "star": {
+        "name": "VICTOR WEMBANYAMA",
+        "team": "SAS",
+        "line": "32 PTS · 11 REB",
+        "photo": "victor-wembanyama.png"
+      },
+      "note": ""
+    },
+    {
+      "id": "401910019",
+      "label": "FINAL",
+      "away": {
+        "abbr": "GSW",
+        "name": "WARRIORS",
+        "city": "GOLDEN STATE",
+        "nick": "WARRIORS",
+        "score": 98,
+        "quarters": [
+          24,
+          23,
+          26,
+          25
+        ],
+        "primary": "#1D428A",
+        "secondary": "#FDB927"
+      },
+      "home": {
+        "abbr": "MEM",
+        "name": "GRIZZLIES",
+        "city": "MEMPHIS",
+        "nick": "GRIZZLIES",
+        "score": 126,
+        "quarters": [
+          31,
+          24,
+          37,
+          34
+        ],
+        "primary": "#5D76A9",
+        "secondary": "#12173F"
+      },
+      "winner": "MEM",
+      "margin": 28,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "GSW · CHARLES BASSEY · 16 PTS",
+        "REB LEADER · CHARLES BASSEY · 13"
+      ],
+      "star": {
+        "name": "JAYLEN WELLS",
+        "team": "MEM",
+        "line": "22 PTS · 7 REB",
+        "photo": null
+      },
+      "note": ""
+    }
+  ],
+  "potn": {
+    "first": "JONATHAN",
+    "last": "KUMINGA",
+    "team": "MINNESOTA TIMBERWOLVES",
+    "colour": "#93b0c9",
+    "teamAbbr": "MIN",
+    "teamPrimary": "#266092",
+    "teamSecondary": "#79BC43",
+    "photo": null,
+    "note": "DECIDED BY 3",
+    "stats": [
+      {
+        "k": "PTS",
+        "v": 23
+      }
+    ]
+  },
+  "facts": [
+    "KNICKS beat TIMBERWOLVES 102-99; JONATHAN KUMINGA had 23 PTS.",
+    "TRAIL BLAZERS beat BUCKS 124-114; DAMIAN LILLARD had 33 PTS.",
+    "SPURS beat CLIPPERS 124-112; VICTOR WEMBANYAMA had 32 PTS · 11 REB.",
+    "GRIZZLIES beat WARRIORS 126-98; JAYLEN WELLS had 22 PTS · 7 REB."
+  ]
 }
