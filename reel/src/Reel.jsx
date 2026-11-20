@@ -228,9 +228,9 @@ const GameCard = ({ game, index, total }) => {
   const { fps } = useVideoConfig();
   const a = spring({ frame: f - 4, fps, config: { damping: 15, stiffness: 120 } });
   const b = spring({ frame: f - 14, fps, config: { damping: 15, stiffness: 120 } });
-  const lineIn = interpolate(f, [110, 136], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const starIn = interpolate(f, [190, 220], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
-  const note = interpolate(f, [270, 292], [0, 1], clamp);
+  const lineIn = interpolate(f, [34, 54], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const starIn = interpolate(f, [62, 86], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const note = interpolate(f, [100, 116], [0, 1], clamp);
   const awayWon = game.away.score > game.home.score;
   const vs = spring({ frame: f - 24, fps, config: { damping: 9 } });
   const hasLine = (game.away.quarters || []).length > 0;
@@ -255,13 +255,13 @@ const GameCard = ({ game, index, total }) => {
         </div>
       </div>
       {(game.leaders || []).length > 0 && (
-        <div style={{ position: 'absolute', left: 60, right: 60, top: starTop + 292, opacity: note, fontFamily: BEBAS, fontSize: 40, letterSpacing: '0.1em', color: CREAM, textAlign: 'center', lineHeight: 1.4 }}>
+        <div style={{ position: 'absolute', left: 60, right: 60, top: starTop + 304, opacity: note, fontFamily: BEBAS, fontSize: 34, letterSpacing: '0.08em', color: CREAM, textAlign: 'center', lineHeight: 1.25 }}>
           {game.leaders.map((l, i) => <div key={i}>{l}</div>)}
         </div>
       )}
       <div style={{
-        position: 'absolute', bottom: 36, width: '100%', textAlign: 'center', opacity: note,
-        fontFamily: BEBAS, fontSize: fit(game.note || '', 50, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
+        position: 'absolute', bottom: 30, width: '100%', textAlign: 'center', opacity: note,
+        fontFamily: BEBAS, fontSize: fit(game.note || '', 44, 980, 0.34), letterSpacing: '0.08em', color: GOLD,
       }}>{game.note}</div>
     </AbsoluteFill>
   );
@@ -373,15 +373,15 @@ const FEATURED_MAX = 3;
 
 export const buildScenes = (night) => {
   const featured = night.games.slice(0, FEATURED_MAX);
-  const list = [{ key: 'hook', len: 180, el: <Hook night={night} /> }];
-  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 350, el: <GameCard game={g} index={i} total={night.games.length} /> }));
-  if (night.games.length > featured.length) list.push({ key: 'all', len: 270, el: <AllScores night={night} /> });
-  if (night.potn) list.push({ key: 'potn', len: 300, el: <PlayerOfNight night={night} /> });
-  list.push({ key: 'outro', len: 150, el: <Outro /> });
+  const list = [{ key: 'hook', len: 100, el: <Hook night={night} /> }];
+  featured.forEach((g, i) => list.push({ key: `g${i}`, len: 200, el: <GameCard game={g} index={i} total={night.games.length} /> }));
+  if (night.games.length > featured.length) list.push({ key: 'all', len: 150, el: <AllScores night={night} /> });
+  if (night.potn) list.push({ key: 'potn', len: 190, el: <PlayerOfNight night={night} /> });
+  list.push({ key: 'outro', len: 90, el: <Outro /> });
   return list;
 };
 
-const T = 14; // frames each scene change overlaps
+const T = 10; // frames each scene change overlaps
 export const seqFrames = (scenes) => scenes.reduce((a, s) => a + s.len, 0) - Math.max(0, scenes.length - 1) * T;
 const PRESENT = [() => slide({ direction: 'from-right' }), () => fade(), () => slide({ direction: 'from-bottom' }), () => fade()];
 
