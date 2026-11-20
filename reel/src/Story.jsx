@@ -22,9 +22,58 @@ const teamOfStory = (story, night) => {
   return { abbr: abbr || '', primary: '#552583', secondary: '#FDB927' };
 };
 
+
+// ---------- Look & feel: 3 rotating styles + narration captions ----------
+export const VARIANTS = [
+  { name: 'broadcast', bg: BG, accent: RED, streak: null, capBg: 'rgba(8,4,24,0.88)', capBorder: RED },
+  { name: 'prestige', bg: 'radial-gradient(ellipse at 50% 30%, #231a05 0%, #0a0803 60%, #000 100%)', accent: GOLD, streak: GOLD, capBg: 'rgba(0,0,0,0.6)', capBorder: GOLD },
+  { name: 'neon', bg: 'linear-gradient(165deg, #06122e 0%, #14073d 55%, #2a0838 100%)', accent: '#2EE6D6', streak: '#2EE6D6', capBg: 'rgba(255,255,255,0.09)', capBorder: '#2EE6D6' },
+];
+export const variantFor = (night, story) => {
+  if (Number.isInteger(story?.style)) return VARIANTS[story.style % VARIANTS.length];
+  const d = parseInt(String(night?.etDate || story?.etDate || '').slice(-2), 10) || 0;
+  return VARIANTS[d % VARIANTS.length];
+};
+const SceneCtx = React.createContext({ i: 0, n: 1, v: VARIANTS[0] });
+const useScene = () => React.useContext(SceneCtx);
+
+const CHAPTER = { text: 'THE STORY', stat: 'BY THE NUMBERS', payoff: 'WHY IT MATTERS', quarters: 'HOW IT UNFOLDED', moment: 'THE MOMENT', ladder: 'THE STANDINGS' };
+
+// Narration caption (bottom third). Words appear one by one, like subtitles.
+const Caption = ({ text }) => {
+  const f = useCurrentFrame();
+  const { v } = useScene();
+  if (!text) return null;
+  const words = text.split(' ');
+  const shown = Math.min(words.length, Math.floor(interpolate(f, [4, 4 + words.length * 3.2], [0, words.length], clamp)) + 1);
+  const fs = text.length > 120 ? 50 : text.length > 80 ? 56 : 62;
+  const prestige = v.name === 'prestige';
+  return (
+    <div style={{ position: 'absolute', left: 50, right: 50, bottom: 110, minHeight: 250, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '28px 40px', boxSizing: 'border-box', borderRadius: prestige ? 0 : 26, background: v.capBg, borderLeft: prestige ? 'none' : `10px solid ${v.capBorder}`, borderTop: prestige ? `4px solid ${v.capBorder}` : 'none', backdropFilter: 'blur(6px)', textAlign: prestige ? 'center' : 'left', fontFamily: OUTFIT, fontWeight: 700, fontSize: fs, lineHeight: 1.22, color: CREAM, letterSpacing: '0.005em' }}>
+      <span>{words.map((w, i) => <span key={i} style={{ opacity: i < shown ? 1 : 0, color: i === shown - 1 ? '#fff' : CREAM }}>{w}{' '}</span>)}</span>
+    </div>
+  );
+};
+
+const Progress = () => {
+  const f = useCurrentFrame();
+  const { i, n, v } = useScene();
+  const cur = interpolate(f, [0, 80], [0, 1], clamp);
+  return (
+    <div style={{ position: 'absolute', top: 56, left: 50, right: 50, display: 'flex', gap: 8, zIndex: 20 }}>
+      {Array.from({ length: n }).map((_, k) => (
+        <div key={k} style={{ flex: 1, height: 8, borderRadius: 4, background: 'rgba(255,244,220,0.2)', overflow: 'hidden' }}>
+          <div style={{ width: `${k < i ? 100 : k === i ? cur * 100 : 0}%`, height: '100%', background: k <= i ? v.accent : 'transparent' }} />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // ---------- Scenes ----------
 
 const StoryHook = ({ story, night }) => {
+  const { v } = useScene();
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const team = teamOfStory(story, night);
@@ -41,8 +90,8 @@ const StoryHook = ({ story, night }) => {
   const stars = (night.games || []).filter((g) => g.star && g.star.photo && g.star.name !== story.player?.name).slice(0, 5);
   // Layout: 3 zones in a column. A = when (date), B = who/what (hero, centred in the free space), C = also tonight (strip).
   return (
-    <AbsoluteFill style={{ background: BG }}>
-      <Grain /><Streaks colour={team.primary} speed={1.4} />
+    <AbsoluteFill style={{ background: v.bg }}>
+      <Grain /><Streaks colour={v.streak || team.primary} speed={1.4} />
       {story.sample && SAMPLE_TAG}
       <div style={{ position: 'absolute', top: 110, bottom: 110, left: 60, right: 60, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         {/* A: when */}
@@ -85,14 +134,27 @@ const StoryHook = ({ story, night }) => {
   );
 };
 
-const Frame = ({ children, title, team, story }) => (
-  <AbsoluteFill style={{ background: BG }}>
-    <Grain /><Streaks colour={team?.primary || GOLD} speed={0.6} />
-    {story?.sample && SAMPLE_TAG}
-    {title && <Header text={title} />}
-    {children}
-  </AbsoluteFill>
-);
+const Frame = ({ children, title, team, story, caption, kind }) => {
+  const ctx = useScene();
+  const { v } = ctx;
+  const scaled = !!caption && ['quarters', 'moment', 'ladder'].includes(kind);
+  const inset = caption && !scaled ? 300 : 0;
+  const head = title || CHAPTER[kind];
+  return (
+    <AbsoluteFill style={{ background: v.bg }}>
+      <Grain /><Streaks colour={v.streak || team?.primary || GOLD} speed={0.6} />
+      {story?.sample && SAMPLE_TAG}
+      <Progress />
+      <SceneCtx.Provider value={{ ...ctx, inset }}>
+        <AbsoluteFill style={scaled ? { transform: 'scale(0.8)', transformOrigin: '50% 0%' } : undefined}>
+          {head && <Header text={head} />}
+          {children}
+        </AbsoluteFill>
+      </SceneCtx.Provider>
+      <Caption text={caption} />
+    </AbsoluteFill>
+  );
+};
 
 // Biggest font size at which `text` wraps inside w x h (Anton is narrow: ~0.47em per char).
 const nb = (t) => (t || '').replace(/(\d)-(\d)/g, '$1-\u2060$2');
@@ -106,12 +168,13 @@ const para = (text, w, h, max = 200, min = 60) => {
 };
 
 const TextBeat = ({ beat, story, team }) => {
+  const inset = beat.caption ? 300 : 0;
   const f = useCurrentFrame();
   const lines = beat.lines && beat.lines.length ? beat.lines : [beat.text || ''];
-  const fs = Math.min(...lines.map((l) => para(l, 920, 1100 / lines.length - 20)));
+  const fs = Math.min(...lines.map((l) => para(l, 920, (1460 - inset) / lines.length - 40)));
   return (
-    <Frame title={beat.title} team={team} story={story}>
-      <div style={{ position: 'absolute', top: 260, bottom: 200, left: 70, right: 70, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 36, textAlign: 'center' }}>
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="text">
+      <div style={{ position: 'absolute', top: 260, bottom: 200 + inset, left: 70, right: 70, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 36, textAlign: 'center' }}>
         {lines.map((l, i) => {
           const o = interpolate(f, [i * 18, 10 + i * 18], [0, 1], clamp);
           return <div key={i} style={{ opacity: o, transform: `translateY(${(1 - o) * 40}px)`, fontFamily: ANTON, fontSize: fs, color: i === lines.length - 1 ? GOLD : CREAM, lineHeight: 1.12, textShadow: '0 8px 0 rgba(0,0,0,0.35)' }}>{nb(l)}</div>;
@@ -122,6 +185,7 @@ const TextBeat = ({ beat, story, team }) => {
 };
 
 const StatBeat = ({ beat, story, team }) => {
+  const inset = beat.caption ? 300 : 0;
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const pop = spring({ frame: f, fps, config: { damping: 11, stiffness: 180 } });
@@ -129,12 +193,12 @@ const StatBeat = ({ beat, story, team }) => {
   const label = beat.label || '';
   const lfs = para(label, 800, 330, 110, 56);
   return (
-    <Frame title={beat.title} team={team} story={story}>
-      <div style={{ position: 'absolute', top: 260, bottom: beat.sub ? 330 : 200, left: 60, right: 60, borderRadius: 44, background: GOLD, transform: `scale(${interpolate(pop, [0, 1], [0.85, 1])})`, opacity: Math.min(1, pop * 2), display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 28, padding: '0 50px', boxSizing: 'border-box' }}>
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="stat">
+      <div style={{ position: 'absolute', top: 260, bottom: (beat.sub ? 330 : 200) + inset, left: 60, right: 60, borderRadius: 44, background: GOLD, transform: `scale(${interpolate(pop, [0, 1], [0.85, 1])})`, opacity: Math.min(1, pop * 2), display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 28, padding: '0 50px', boxSizing: 'border-box' }}>
         {Number.isFinite(Number(beat.value)) ? <Count to={Number(beat.value)} start={0} dur={30} style={{ fontFamily: ANTON, fontSize: fit(String(beat.value), 460, 860, 0.62), lineHeight: 1, color: '#1a0a00' }} /> : <span style={{ fontFamily: ANTON, fontSize: fit(String(beat.value), 300, 860, 0.62), lineHeight: 1, color: '#1a0a00' }}>{beat.value}</span>}
         <div style={{ textAlign: 'center', fontFamily: ANTON, fontSize: lfs, lineHeight: 1.1, color: '#1a0a00', letterSpacing: '0.02em' }}>{label}</div>
       </div>
-      {beat.sub && <div style={{ position: 'absolute', bottom: 200, left: 70, right: 70, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', opacity: sub, fontFamily: BEBAS, fontSize: fit(beat.sub, 78, 940, 0.36), letterSpacing: '0.08em', color: CREAM }}>{beat.sub}</div>}
+      {beat.sub && <div style={{ position: 'absolute', bottom: 200 + inset, left: 70, right: 70, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', opacity: sub, fontFamily: BEBAS, fontSize: fit(beat.sub, 78, 940, 0.36), letterSpacing: '0.08em', color: CREAM }}>{beat.sub}</div>}
     </Frame>
   );
 };
@@ -150,7 +214,7 @@ const QuartersBeat = ({ beat, night, story, team }) => {
   const labels = aq.map((_, i) => (i < 4 ? `Q${i + 1}` : i === 4 ? 'OT' : `${i - 3}OT`));
   const barW = Math.min(110, Math.floor(820 / aq.length / 2.4));
   return (
-    <Frame title={beat.title || 'QUARTER BY QUARTER'} team={team} story={story}>
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="quarters">
       <div style={{ position: 'absolute', left: 80, right: 80, top: 330, height: 900, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-around' }}>
         {aq.map((v, i) => {
           const grow = interpolate(f, [8 + i * 16, 30 + i * 16], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
@@ -186,7 +250,7 @@ const MomentBeat = ({ beat, story, team }) => {
   const sy = shot ? 420 + (1 - Math.min(shot.y, 47) / 47) * 0 + (Math.min(shot.y, 47) / 47) * 760 : 0;
   const clock = interpolate(f, [0, 40], [0, 1], clamp);
   return (
-    <Frame title={beat.title || 'THE MOMENT'} team={team} story={story}>
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="moment">
       <div style={{ position: 'absolute', top: 340, left: 40, width: 1000, height: 1000, borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,0.6)', transform: `scale(${interpolate(f, [0, 210], [1, 1.06], clamp)})` }}>
         {story?.court && <Img src={staticFile(story.court)} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />}
         <svg viewBox="0 0 1080 1000" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
@@ -333,7 +397,7 @@ const LadderBeat = ({ beat, story, team }) => {
   const rowH = 150;
   const move = interpolate(f, [50, 90], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
   return (
-    <Frame title={beat.title} team={team} story={story}>
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="ladder">
       <div style={{ position: 'absolute', top: 330, left: 60, right: 60 }}>
         {rows.map((r, i) => {
           const y = i * rowH + (r.climbsTo != null ? (r.climbsTo - i) * rowH * move : r.fallsTo != null ? (r.fallsTo - i) * rowH * move : 0);
@@ -353,6 +417,7 @@ const LadderBeat = ({ beat, story, team }) => {
 };
 
 const PayoffBeat = ({ beat, story, team }) => {
+  const inset = beat.caption ? 300 : 0;
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame: f, fps, config: { damping: 12, stiffness: 170 } });
@@ -361,23 +426,67 @@ const PayoffBeat = ({ beat, story, team }) => {
   const hasFact = !!beat.fact;
   const fs = para(line, 920, hasFact ? 560 : 1000, 190, 70);
   return (
-    <Frame title={beat.title || 'WHY IT MATTERS'} team={team} story={story}>
-      <div style={{ position: 'absolute', top: 260, bottom: hasFact ? 700 : 200, left: 60, right: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', transform: `scale(${interpolate(s, [0, 1], [0.8, 1])})`, opacity: Math.min(1, s * 2), fontFamily: ANTON, fontSize: fs, lineHeight: 1.1, color: GOLD, textShadow: '0 8px 0 #3a1500' }}>{nb(line)}</div>
-      {hasFact && <div style={{ position: 'absolute', bottom: 200, left: 70, right: 70, height: 440, opacity: fact, background: CREAM, borderRadius: 28, padding: '0 44px', display: 'flex', alignItems: 'center', fontFamily: ANTON, fontSize: para(beat.fact, 860, 380, 70, 40), lineHeight: 1.2, color: '#12001f' }}>{beat.fact}</div>}
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="payoff">
+      <div style={{ position: 'absolute', top: 260, bottom: (hasFact ? 700 : 200) + inset, left: 60, right: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', transform: `scale(${interpolate(s, [0, 1], [0.8, 1])})`, opacity: Math.min(1, s * 2), fontFamily: ANTON, fontSize: fs, lineHeight: 1.1, color: GOLD, textShadow: '0 8px 0 #3a1500' }}>{nb(line)}</div>
+      {hasFact && <div style={{ position: 'absolute', bottom: 200 + inset, left: 70, right: 70, height: 440, opacity: fact, background: CREAM, borderRadius: 28, padding: '0 44px', display: 'flex', alignItems: 'center', fontFamily: ANTON, fontSize: para(beat.fact, 860, 380, 70, 40), lineHeight: 1.2, color: '#12001f' }}>{beat.fact}</div>}
     </Frame>
   );
 };
 
-const BEATS = { text: TextBeat, stat: StatBeat, quarters: QuartersBeat, moment: MomentBeat, ladder: LadderBeat, payoff: PayoffBeat };
-const BEAT_LEN = { text: 105, stat: 95, quarters: 170, moment: 190, ladder: 170, payoff: 105 };
+// Several stats in ONE scene: glass cards slide in back-to-back, numbers count up, nothing sits empty.
+const StatsBeat = ({ beat, story, team }) => {
+  const inset = beat.caption ? 300 : 0;
+  const f = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const { v } = useScene();
+  const items = beat.items || [];
+  const hasCap = !!beat.caption;
+  const photo = story?.player?.photo;
+  const pic = spring({ frame: f, fps, config: { damping: 12, stiffness: 150 } });
+  const avail = 1480 - inset - 240 + 200 - 200;
+  const heroH = photo ? 300 : 0;
+  const cardH = Math.min(520, Math.floor((avail - heroH - (photo ? 30 : 0) - 28 * (items.length - 1)) / items.length));
+  return (
+    <Frame title={beat.title} team={team} story={story} caption={beat.caption} kind="stat">
+      <div style={{ position: 'absolute', top: 240, left: 60, right: 60, height: avail, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 28 }}>
+        {photo && (
+          <div style={{ height: heroH, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 30, transform: `scale(${interpolate(pic, [0, 1], [0.5, 1])})`, opacity: pic }}>
+            <div style={{ position: 'relative', width: 260, height: 260 }}><Portrait photo={photo} team={team} size={260} /><DrawRing size={260} start={4} /></div>
+            <div style={{ fontFamily: ANTON, fontSize: fit((story.player.name || '').toUpperCase(), 92, 600, 0.5), lineHeight: 1.05, color: CREAM, textTransform: 'uppercase', maxWidth: 600 }}>{story.player.name}</div>
+          </div>
+        )}
+        {items.map((it, i) => {
+          const t = spring({ frame: f - (4 + i * 16), fps, config: { damping: 13, stiffness: 150 } });
+          const num = Number.isFinite(Number(it.value));
+          const lfs = para(it.label || '', 480, cardH - 60, 96, 44);
+          return (
+            <div key={i} style={{ height: cardH, borderRadius: 30, overflow: 'hidden', display: 'flex', alignItems: 'center', gap: 34, padding: '0 44px', boxSizing: 'border-box', background: 'linear-gradient(100deg, rgba(255,244,220,0.14), rgba(255,244,220,0.05))', border: `3px solid ${v.accent}`, transform: `translateX(${interpolate(t, [0, 1], [i % 2 ? -900 : 900, 0])}px)`, boxShadow: `0 0 50px ${v.accent}33` }}>
+              <div style={{ width: 8, alignSelf: 'stretch', margin: '28px 0', borderRadius: 4, background: GOLD }} />
+              <div style={{ minWidth: 330, textAlign: 'center' }}>
+                {num ? <Count to={Number(it.value)} start={4 + i * 16} dur={28} style={{ fontFamily: ANTON, fontSize: Math.min(300, cardH - 80), lineHeight: 1, color: GOLD, textShadow: '0 8px 0 #3a1500' }} />
+                  : <span style={{ fontFamily: ANTON, fontSize: fit(String(it.value), Math.min(200, cardH - 80), 330, 0.62), lineHeight: 1, color: GOLD }}>{it.value}</span>}
+              </div>
+              <div style={{ flex: 1, fontFamily: ANTON, fontSize: lfs, lineHeight: 1.08, color: CREAM, textTransform: 'uppercase' }}>{it.label}</div>
+            </div>
+          );
+        })}
+      </div>
+    </Frame>
+  );
+};
+
+const BEATS = { text: TextBeat, stat: StatBeat, stats: StatsBeat, quarters: QuartersBeat, moment: MomentBeat, ladder: LadderBeat, payoff: PayoffBeat };
+const BEAT_LEN = { text: 105, stat: 95, stats: 120, quarters: 170, moment: 190, ladder: 170, payoff: 105 };
 
 // Five games per page, each with the game's top scorer.
 const ScoresPage = ({ games, page, pages }) => {
+  const { v } = useScene();
   const f = useCurrentFrame();
   const { fps } = useVideoConfig();
   return (
-    <AbsoluteFill style={{ background: BG }}>
-      <Grain /><Streaks speed={0.8} />
+    <AbsoluteFill style={{ background: v.bg }}>
+      <Grain /><Streaks colour={v.streak || GOLD} speed={0.8} />
+      <Progress />
       <Header text={`ALL FINAL SCORES · ${page}/${pages}`} />
       {games.map((g, i) => {
         const rowH = Math.min(320, Math.floor(1500 / games.length));
@@ -421,9 +530,17 @@ const MAX_PAGES = 3;
 export const buildStoryScenes = (night, story) => {
   const team = teamOfStory(story, night);
   const list = [{ key: 'hook', len: 90, el: <StoryHook story={story} night={night} /> }];
-  (story.beats || []).forEach((b, i) => {
+  // merge runs of 2-3 stat beats into one scene
+  const beats = [];
+  (story.beats || []).forEach((b) => {
+    const last = beats[beats.length - 1];
+    if (b.kind === 'stat' && last && (last.kind === 'stats') && last.items.length < 3) { last.items.push(b); last.caption = last.caption || b.caption; }
+    else if (b.kind === 'stat' && last && last.kind === 'stat') beats[beats.length - 1] = { kind: 'stats', items: [last, b], caption: last.caption || b.caption };
+    else beats.push(b);
+  });
+  beats.forEach((b, i) => {
     const C = BEATS[b.kind] || TextBeat;
-    list.push({ key: `b${i}`, len: BEAT_LEN[b.kind] || 150, el: <C beat={b} night={night} story={story} team={team} /> });
+    list.push({ key: `b${i}`, len: b.kind === 'stats' ? 70 + 24 * b.items.length : (BEAT_LEN[b.kind] || 150), el: <C beat={b} night={night} story={story} team={team} /> });
   });
   const games = [...(night.games || [])];
   const pages = Math.min(MAX_PAGES, Math.ceil(games.length / PER_PAGE));
@@ -431,7 +548,8 @@ export const buildStoryScenes = (night, story) => {
     list.push({ key: `s${p}`, len: 150, el: <ScoresPage games={games.slice(p * PER_PAGE, (p + 1) * PER_PAGE)} page={p + 1} pages={pages} /> });
   }
   list.push({ key: 'outro', len: 90, el: <Outro /> });
-  return list;
+  const v = variantFor(night, story);
+  return list.map((sc, i) => ({ ...sc, el: <SceneCtx.Provider value={{ i, n: list.length, v }}>{sc.el}</SceneCtx.Provider> }));
 };
 
 export const storyFrames = (night, story) => seqFrames(buildStoryScenes(night, story));

@@ -22,3 +22,10 @@ Goal: find the ONE story that makes last night's Reel worth watching, and write 
 
 
 NAME RULES: always use players' FULL names (e.g. LUKA DONČIĆ, never just DONČIĆ) in hook.line1, captions and storyLine. Moment beats should include shot {x,y} so the animated ball shot plays from the right spot.
+
+
+CAPTIONS (required): EVERY beat gets a "caption": one plain sentence (max ~110 chars) that narrates what happened, like subtitles
+for a silent video. Read in order, the captions must tell the whole story: setup -> turn -> result -> why it matters.
+Use full player names and full team names. The big on-screen text stays short (the beat's text/value/label); the caption carries the explanation.
+Beat order that works best: text (setup) -> stat -> stat (consecutive stats are merged into one scene) -> moment/quarters (the turn) -> payoff.
+Optional "style": 0 broadcast (red), 1 prestige (black+gold), 2 neon (cyan). If omitted it rotates by date automatically.
