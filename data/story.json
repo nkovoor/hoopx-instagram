@@ -1,18 +1,17 @@
 {
-  "etDate": "2026-11-18",
-  "type": "record",
-  "player": { "name": "Taylor Hendricks", "team": "MEM" },
-  "hook": { "line1": "GRIZZLIES", "line2": "8 STRAIGHT ROAD WINS", "tag": "FRANCHISE RECORD" },
-  "caption": "The Grizzlies beat the Cavaliers 124-121 for their eighth straight road win, a franchise record. Taylor Hendricks sealed it with two free throws with 2.3 seconds left, and Cam Spencer scored 26.",
-  "storyLine": "GRIZZLIES MAKE ROAD HISTORY",
+  "etDate": "2026-11-19",
+  "type": "streak",
+  "player": { "name": "Damian Lillard", "team": "POR" },
+  "hook": { "line1": "DAMIAN LILLARD", "line2": "33 PTS IN MILWAUKEE", "tag": "BUCKS LOSE 12 STRAIGHT" },
+  "caption": "Damian Lillard scored a season-high 33 points in his return to Milwaukee as the Trail Blazers beat the Bucks 124-114, Milwaukee's 12th straight loss. Only a 15-game skid in 1996 was longer in Bucks history.",
+  "storyLine": "DAMIAN LILLARD RETURNS, BUCKS FALL",
   "beats": [
-    { "kind": "text", "text": "CAVS LED 119-116 WITH 2:43 LEFT" },
-    { "kind": "stat", "value": "8", "label": "STRAIGHT ROAD WINS · FRANCHISE RECORD" },
-    { "kind": "moment", "clock": "0:02.3", "score": "MEM 124 · CLE 121", "text": "TAYLOR HENDRICKS SEALS IT AT THE LINE" },
-    { "kind": "payoff", "text": "GRIZZLIES WIN 124-121 · PREVIOUS RECORD WAS 7" }
+    { "kind": "text", "text": "FIRST TIME BACK IN MILWAUKEE SINCE THE BUCKS WAIVED HIM" },
+    { "kind": "stat", "value": "33", "label": "DAMIAN LILLARD SEASON-HIGH POINTS" },
+    { "kind": "stat", "value": "12", "label": "STRAIGHT BUCKS LOSSES" },
+    { "kind": "payoff", "text": "BUCKS ARE 1-15, THEIR WORST START EVER" }
   ],
   "sources": [
-    { "claim": "Eighth straight road win is a franchise record (previous mark seven, set 2010); Cavs led 119-116 with 2:43 left; Memphis 8-2 run; Hendricks' free throws with 2.3 seconds left set the 124-121 final; Spencer 26, Hendricks 20; Mitchell 34", "url": "https://www.cleveland19.com/2026/11/19/grizzlies-beat-cavaliers-124-121-franchise-record-8th-straight-road-win/" },
-    { "claim": "Road win streak of eight games is a franchise record; Hendricks 20 points including two free throws with 2.3 seconds left; Spencer 26; 22 lead changes; Grizzlies 11-4", "url": "https://www.espn.com/nba/recap/_/gameId/401910007" }
+    { "claim": "Lillard scored a season-high 33 in his return to Milwaukee; Blazers won 124-114; Bucks' 12th straight loss; only longer skid was 15 straight in March 1996; 1-15 is worst 16-game start in franchise history; first time at Milwaukee since being waived in summer 2025; Portland scored final nine points after 115-114", "url": "https://www.espn.com/nba/recap/_/gameId/401910020" }
   ]
 }
