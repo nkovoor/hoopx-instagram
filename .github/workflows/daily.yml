@@ -17,8 +17,6 @@ on:
       story_only:
         description: "Only post the Story, skip the Reel (true/false)"
         default: "false"
-  schedule:
-    - cron: "0 12 * * *"   # 17:30 IST: render and post
 
 permissions:
   contents: write
