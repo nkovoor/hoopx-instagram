@@ -1,17 +1,19 @@
 {
-  "etDate": "2026-11-19",
-  "type": "streak",
-  "player": { "name": "Damian Lillard", "team": "POR" },
-  "hook": { "line1": "DAMIAN LILLARD", "line2": "33 PTS IN MILWAUKEE", "tag": "BUCKS LOSE 12 STRAIGHT" },
-  "caption": "Damian Lillard scored a season-high 33 points in his return to Milwaukee as the Trail Blazers beat the Bucks 124-114, Milwaukee's 12th straight loss. Only a 15-game skid in 1996 was longer in Bucks history.",
-  "storyLine": "DAMIAN LILLARD RETURNS, BUCKS FALL",
+  "etDate": "2026-11-20",
+  "type": "milestone",
+  "player": { "name": "James Harden", "team": "CLE" },
+  "hook": { "line1": "JAMES HARDEN", "line2": "51 PTS PASSES KOBE BRYANT", "tag": "26TH 50-POINT GAME" },
+  "caption": "James Harden scored 51 points as the Cleveland Cavaliers beat the Indiana Pacers 128-119 in the NBA Cup. It was his 26th 50-point game, passing Kobe Bryant for third-most in NBA history.",
+  "storyLine": "JAMES HARDEN PASSES KOBE BRYANT",
   "beats": [
-    { "kind": "text", "text": "FIRST TIME BACK IN MILWAUKEE SINCE THE BUCKS WAIVED HIM" },
-    { "kind": "stat", "value": "33", "label": "DAMIAN LILLARD SEASON-HIGH POINTS" },
-    { "kind": "stat", "value": "12", "label": "STRAIGHT BUCKS LOSSES" },
-    { "kind": "payoff", "text": "BUCKS ARE 1-15, THEIR WORST START EVER" }
+    { "kind": "text", "text": "JAMES HARDEN WENT OFF FOR 51", "caption": "James Harden scored 51 points as the Cleveland Cavaliers beat the Indiana Pacers 128-119 in an NBA Cup game." },
+    { "kind": "stat", "value": "51", "label": "JAMES HARDEN POINTS", "caption": "Harden shot 15-of-26 from the field, including 7-of-11 from three-point range." },
+    { "kind": "stat", "value": "14/14", "label": "JAMES HARDEN FREE THROWS", "caption": "He also made all 14 of his free throws, adding six rebounds and six assists." },
+    { "kind": "stat", "value": "26", "label": "CAREER 50-POINT GAMES", "caption": "It was the 26th 50-point game of his career, passing Kobe Bryant for third-most in NBA history." },
+    { "kind": "payoff", "text": "ONLY WILT CHAMBERLAIN AND MICHAEL JORDAN HAVE MORE", "caption": "Only Wilt Chamberlain (118) and Michael Jordan (31) have more 50-point games than James Harden." }
   ],
   "sources": [
-    { "claim": "Lillard scored a season-high 33 in his return to Milwaukee; Blazers won 124-114; Bucks' 12th straight loss; only longer skid was 15 straight in March 1996; 1-15 is worst 16-game start in franchise history; first time at Milwaukee since being waived in summer 2025; Portland scored final nine points after 115-114", "url": "https://www.espn.com/nba/recap/_/gameId/401910020" }
+    { "claim": "Harden scored 51 as Cavaliers beat Pacers 128-119 in NBA Cup; 26th 50-point game passing Kobe Bryant for third-most; only Wilt Chamberlain (118) and Michael Jordan (31) ahead; 15-of-26 FG, 7-of-11 from three, 14-of-14 FT, six rebounds, six assists", "url": "https://www.espn.com/nba/story/_/id/50546191/james-harden-explodes-51-points-propels-cavs-pacers" },
+    { "claim": "AP: 51 points, 26th 50-point game, passes Kobe Bryant for third-most, Cavaliers 128-119 over Pacers", "url": "https://www.washingtonpost.com/sports/nba/2026/11/20/pacers-cavaliers-harden-score/1792160e-e559-11f1-a99e-b3e3805c6b8b_story.html" }
   ]
 }
