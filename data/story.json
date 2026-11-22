@@ -1,19 +1,19 @@
 {
-  "etDate": "2026-11-20",
-  "type": "milestone",
-  "player": { "name": "James Harden", "team": "CLE" },
-  "hook": { "line1": "JAMES HARDEN", "line2": "51 PTS PASSES KOBE BRYANT", "tag": "26TH 50-POINT GAME" },
-  "caption": "James Harden scored 51 points as the Cleveland Cavaliers beat the Indiana Pacers 128-119 in the NBA Cup. It was his 26th 50-point game, passing Kobe Bryant for third-most in NBA history.",
-  "storyLine": "JAMES HARDEN PASSES KOBE BRYANT",
+  "etDate": "2026-11-21",
+  "type": "record",
+  "player": { "name": "Tyler Herro", "team": "MIL" },
+  "hook": { "line1": "TYLER HERRO", "line2": "CAREER-HIGH 50 · TYING 3 WAVED OFF", "tag": "BUCKS LOSE 132-129" },
+  "caption": "Tyler Herro scored a career-high 50 points in Philadelphia, but his last-second three didn't count and the Milwaukee Bucks fell 132-129 to the Philadelphia 76ers for their 13th straight loss.",
+  "storyLine": "TYLER HERRO DROPS 50, STILL LOSES",
   "beats": [
-    { "kind": "text", "text": "JAMES HARDEN WENT OFF FOR 51", "caption": "James Harden scored 51 points as the Cleveland Cavaliers beat the Indiana Pacers 128-119 in an NBA Cup game." },
-    { "kind": "stat", "value": "51", "label": "JAMES HARDEN POINTS", "caption": "Harden shot 15-of-26 from the field, including 7-of-11 from three-point range." },
-    { "kind": "stat", "value": "14/14", "label": "JAMES HARDEN FREE THROWS", "caption": "He also made all 14 of his free throws, adding six rebounds and six assists." },
-    { "kind": "stat", "value": "26", "label": "CAREER 50-POINT GAMES", "caption": "It was the 26th 50-point game of his career, passing Kobe Bryant for third-most in NBA history." },
-    { "kind": "payoff", "text": "ONLY WILT CHAMBERLAIN AND MICHAEL JORDAN HAVE MORE", "caption": "Only Wilt Chamberlain (118) and Michael Jordan (31) have more 50-point games than James Harden." }
+    { "kind": "text", "text": "TYLER HERRO WENT FOR A CAREER-HIGH 50", "caption": "Tyler Herro scored a career-high 50 points for the Milwaukee Bucks against the Philadelphia 76ers." },
+    { "kind": "stat", "value": "50", "label": "TYLER HERRO POINTS", "caption": "Tyler Herro shot 15-of-23 from the field and had 15 points in the first quarter alone." },
+    { "kind": "stat", "value": "35", "label": "POINTS AFTER THREE QUARTERS", "caption": "Herro had 35 after three quarters and hit 40 with eight minutes left to keep Milwaukee within three." },
+    { "kind": "text", "text": "THE TYING THREE WAS WAVED OFF", "caption": "Herro's final shot, a game-tying three at the buzzer, did not count, and Philadelphia held on 132-129." },
+    { "kind": "payoff", "text": "13TH STRAIGHT LOSS FOR THE BUCKS", "caption": "Despite Herro's 50, the Milwaukee Bucks lost their 13th straight game while Philadelphia won its fifth in a row." }
   ],
   "sources": [
-    { "claim": "Harden scored 51 as Cavaliers beat Pacers 128-119 in NBA Cup; 26th 50-point game passing Kobe Bryant for third-most; only Wilt Chamberlain (118) and Michael Jordan (31) ahead; 15-of-26 FG, 7-of-11 from three, 14-of-14 FT, six rebounds, six assists", "url": "https://www.espn.com/nba/story/_/id/50546191/james-harden-explodes-51-points-propels-cavs-pacers" },
-    { "claim": "AP: 51 points, 26th 50-point game, passes Kobe Bryant for third-most, Cavaliers 128-119 over Pacers", "url": "https://www.washingtonpost.com/sports/nba/2026/11/20/pacers-cavaliers-harden-score/1792160e-e559-11f1-a99e-b3e3805c6b8b_story.html" }
+    { "claim": "Herro scored a career-high 50 points; final shot did not beat the buzzer; 76ers won 132-129", "url": "https://www.washingtonpost.com/sports/nba/2026/11/21/milwaukee-bucks-tyler-herro-50/59e70b24-e5fc-11f1-a99e-b3e3805c6b8b_story.html" },
+    { "claim": "50 points on 15/23 shooting; 15 points in first quarter; 35 after three; 40 with eight minutes left; game-tying buzzer-beater called off; Bucks 13th straight loss; 76ers fifth straight win", "url": "https://www.brewhoop.com/bucks-scores-results/82095/milwaukee-vs-philadelphia-76ers-final-score-recap-tyler-herro-joel-embiid" }
   ]
 }
