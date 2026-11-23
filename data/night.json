@@ -1,7 +1,400 @@
 {
-  "status": "incomplete",
+  "status": "ok",
   "etDate": "2026-11-22",
   "dateLabel": "SUNDAY · NOVEMBER 22",
-  "pendingGames": 7,
-  "games": []
+  "seasonType": 2,
+  "mode": "hype",
+  "flags": [
+    "overtime",
+    "40-plus",
+    "triple-double",
+    "thriller"
+  ],
+  "pendingGames": 0,
+  "hook": {
+    "kicker": "LAST NIGHT IN THE NBA",
+    "line1": "MURRAY",
+    "line2": "45 PTS",
+    "sub": "OVERTIME THRILLER"
+  },
+  "games": [
+    {
+      "id": "401910032",
+      "label": "FINAL/OT",
+      "away": {
+        "abbr": "DEN",
+        "name": "NUGGETS",
+        "city": "DENVER",
+        "nick": "NUGGETS",
+        "score": 151,
+        "quarters": [
+          33,
+          39,
+          33,
+          26,
+          20
+        ],
+        "primary": "#0E2240",
+        "secondary": "#FEC524"
+      },
+      "home": {
+        "abbr": "CHI",
+        "name": "BULLS",
+        "city": "CHICAGO",
+        "nick": "BULLS",
+        "score": 145,
+        "quarters": [
+          31,
+          39,
+          25,
+          36,
+          14
+        ],
+        "primary": "#CE1141",
+        "secondary": "#000000"
+      },
+      "winner": "DEN",
+      "margin": 6,
+      "overtime": 1,
+      "tags": [
+        "overtime",
+        "40-plus"
+      ],
+      "leaders": [
+        "CHI · BUDDY HIELD · 33 PTS",
+        "REB LEADER · NIKOLA JOKIC · 18"
+      ],
+      "star": {
+        "name": "JAMAL MURRAY",
+        "team": "DEN",
+        "line": "45 PTS",
+        "photo": "jamal-murray.png"
+      },
+      "note": "OVERTIME THRILLER"
+    },
+    {
+      "id": "401910030",
+      "label": "FINAL",
+      "away": {
+        "abbr": "OKC",
+        "name": "THUNDER",
+        "city": "OKLAHOMA CITY",
+        "nick": "THUNDER",
+        "score": 113,
+        "quarters": [
+          24,
+          30,
+          26,
+          33
+        ],
+        "primary": "#007AC1",
+        "secondary": "#EF3B24"
+      },
+      "home": {
+        "abbr": "MIA",
+        "name": "HEAT",
+        "city": "MIAMI",
+        "nick": "HEAT",
+        "score": 123,
+        "quarters": [
+          36,
+          31,
+          28,
+          28
+        ],
+        "primary": "#98002E",
+        "secondary": "#000000"
+      },
+      "winner": "MIA",
+      "margin": 10,
+      "overtime": 0,
+      "tags": [
+        "triple-double"
+      ],
+      "leaders": [
+        "OKC · BENNETT STIRTZ · 21 PTS"
+      ],
+      "star": {
+        "name": "BAM ADEBAYO",
+        "team": "MIA",
+        "line": "24 PTS · 15 REB · 12 AST",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401910033",
+      "label": "FINAL",
+      "away": {
+        "abbr": "DAL",
+        "name": "MAVERICKS",
+        "city": "DALLAS",
+        "nick": "MAVERICKS",
+        "score": 116,
+        "quarters": [
+          33,
+          31,
+          27,
+          25
+        ],
+        "primary": "#0064B1",
+        "secondary": "#BBC4CA"
+      },
+      "home": {
+        "abbr": "UTA",
+        "name": "JAZZ",
+        "city": "UTAH",
+        "nick": "JAZZ",
+        "score": 114,
+        "quarters": [
+          35,
+          22,
+          17,
+          40
+        ],
+        "primary": "#4E008E",
+        "secondary": "#79A3DC"
+      },
+      "winner": "DAL",
+      "margin": 2,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "DAL · COOPER FLAGG · 28 PTS",
+        "REB LEADER · MO BAMBA · 10"
+      ],
+      "star": {
+        "name": "SVI MYKHAILIUK",
+        "team": "UTA",
+        "line": "39 PTS",
+        "photo": null
+      },
+      "note": "DECIDED BY 2"
+    },
+    {
+      "id": "401910035",
+      "label": "FINAL",
+      "away": {
+        "abbr": "BOS",
+        "name": "CELTICS",
+        "city": "BOSTON",
+        "nick": "CELTICS",
+        "score": 87,
+        "quarters": [
+          20,
+          22,
+          33,
+          12
+        ],
+        "primary": "#008348",
+        "secondary": "#BA9653"
+      },
+      "home": {
+        "abbr": "GSW",
+        "name": "WARRIORS",
+        "city": "GOLDEN STATE",
+        "nick": "WARRIORS",
+        "score": 88,
+        "quarters": [
+          27,
+          17,
+          25,
+          19
+        ],
+        "primary": "#1D428A",
+        "secondary": "#FDB927"
+      },
+      "winner": "GSW",
+      "margin": 1,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "GSW · BRANDIN PODZIEMSKI · 18 PTS"
+      ],
+      "star": {
+        "name": "JAYSON TATUM",
+        "team": "BOS",
+        "line": "27 PTS · 10 REB · 6 AST",
+        "photo": "jayson-tatum.png"
+      },
+      "note": "DECIDED BY 1"
+    },
+    {
+      "id": "401910034",
+      "label": "FINAL",
+      "away": {
+        "abbr": "IND",
+        "name": "PACERS",
+        "city": "INDIANA",
+        "nick": "PACERS",
+        "score": 106,
+        "quarters": [
+          26,
+          25,
+          27,
+          28
+        ],
+        "primary": "#0C2340",
+        "secondary": "#FFD520"
+      },
+      "home": {
+        "abbr": "NYK",
+        "name": "KNICKS",
+        "city": "NEW YORK",
+        "nick": "KNICKS",
+        "score": 113,
+        "quarters": [
+          26,
+          29,
+          34,
+          24
+        ],
+        "primary": "#1D428A",
+        "secondary": "#F58426"
+      },
+      "winner": "NYK",
+      "margin": 7,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "IND · PASCAL SIAKAM · 25 PTS",
+        "REB LEADER · IVICA ZUBAC · 14"
+      ],
+      "star": {
+        "name": "KARL-ANTHONY TOWNS",
+        "team": "NYK",
+        "line": "30 PTS · 13 REB",
+        "photo": null
+      },
+      "note": ""
+    },
+    {
+      "id": "401910029",
+      "label": "FINAL",
+      "away": {
+        "abbr": "DET",
+        "name": "PISTONS",
+        "city": "DETROIT",
+        "nick": "PISTONS",
+        "score": 97,
+        "quarters": [
+          26,
+          26,
+          33,
+          12
+        ],
+        "primary": "#1D428A",
+        "secondary": "#C8102E"
+      },
+      "home": {
+        "abbr": "ATL",
+        "name": "HAWKS",
+        "city": "ATLANTA",
+        "nick": "HAWKS",
+        "score": 107,
+        "quarters": [
+          29,
+          22,
+          23,
+          33
+        ],
+        "primary": "#C8102E",
+        "secondary": "#FDB927"
+      },
+      "winner": "ATL",
+      "margin": 10,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "DET · ISAIAH JOE · 19 PTS",
+        "REB LEADER · DYSON DANIELS · 14"
+      ],
+      "star": {
+        "name": "NICKEIL ALEXANDER-WALKER",
+        "team": "ATL",
+        "line": "27 PTS",
+        "photo": "nickeil-alexander-walker.png"
+      },
+      "note": ""
+    },
+    {
+      "id": "401910031",
+      "label": "FINAL",
+      "away": {
+        "abbr": "ORL",
+        "name": "MAGIC",
+        "city": "ORLANDO",
+        "nick": "MAGIC",
+        "score": 96,
+        "quarters": [
+          21,
+          30,
+          26,
+          19
+        ],
+        "primary": "#0150B5",
+        "secondary": "#9CA0A3"
+      },
+      "home": {
+        "abbr": "WAS",
+        "name": "WIZARDS",
+        "city": "WASHINGTON",
+        "nick": "WIZARDS",
+        "score": 116,
+        "quarters": [
+          38,
+          25,
+          34,
+          19
+        ],
+        "primary": "#E31837",
+        "secondary": "#002B5C"
+      },
+      "winner": "WAS",
+      "margin": 20,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "ORL · TRISTAN DA SILVA · 18 PTS",
+        "AST LEADER · TRAE YOUNG · 11"
+      ],
+      "star": {
+        "name": "KYSHAWN GEORGE",
+        "team": "WAS",
+        "line": "24 PTS",
+        "photo": null
+      },
+      "note": ""
+    }
+  ],
+  "potn": {
+    "first": "JAMAL",
+    "last": "MURRAY",
+    "team": "DENVER NUGGETS",
+    "colour": "#8791a0",
+    "teamAbbr": "DEN",
+    "teamPrimary": "#0E2240",
+    "teamSecondary": "#FEC524",
+    "photo": "jamal-murray.png",
+    "note": "OVERTIME THRILLER",
+    "stats": [
+      {
+        "k": "PTS",
+        "v": 45
+      }
+    ]
+  },
+  "facts": [
+    "NUGGETS beat BULLS 151-145 in overtime; JAMAL MURRAY had 45 PTS.",
+    "HEAT beat THUNDER 123-113; BAM ADEBAYO had 24 PTS · 15 REB · 12 AST.",
+    "MAVERICKS beat JAZZ 116-114; SVI MYKHAILIUK had 39 PTS.",
+    "WARRIORS beat CELTICS 88-87; JAYSON TATUM had 27 PTS · 10 REB · 6 AST.",
+    "KNICKS beat PACERS 113-106; KARL-ANTHONY TOWNS had 30 PTS · 13 REB.",
+    "HAWKS beat PISTONS 107-97; NICKEIL ALEXANDER-WALKER had 27 PTS.",
+    "WIZARDS beat MAGIC 116-96; KYSHAWN GEORGE had 24 PTS."
+  ]
 }
