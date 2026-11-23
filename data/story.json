@@ -1,19 +1,18 @@
 {
-  "etDate": "2026-11-21",
-  "type": "record",
-  "player": { "name": "Tyler Herro", "team": "MIL" },
-  "hook": { "line1": "TYLER HERRO", "line2": "CAREER-HIGH 50 · TYING 3 WAVED OFF", "tag": "BUCKS LOSE 132-129" },
-  "caption": "Tyler Herro scored a career-high 50 points in Philadelphia, but his last-second three didn't count and the Milwaukee Bucks fell 132-129 to the Philadelphia 76ers for their 13th straight loss.",
-  "storyLine": "TYLER HERRO DROPS 50, STILL LOSES",
+  "etDate": "2026-11-22",
+  "type": "milestone",
+  "player": { "name": "Nikola Jokic", "team": "DEN" },
+  "hook": { "line1": "NIKOLA JOKIC", "line2": "202ND CAREER TRIPLE-DOUBLE", "tag": "NUGGETS WIN 151-145 IN OT" },
+  "caption": "Nikola Jokic had 37 points, 18 rebounds and 11 assists for the 202nd triple-double of his career, and Jamal Murray scored a season-high 45 as the Denver Nuggets beat the Chicago Bulls 151-145 in overtime.",
+  "storyLine": "JOKIC 202 TRIPLE-DOUBLES, NUGGETS SURVIVE",
   "beats": [
-    { "kind": "text", "text": "TYLER HERRO WENT FOR A CAREER-HIGH 50", "caption": "Tyler Herro scored a career-high 50 points for the Milwaukee Bucks against the Philadelphia 76ers." },
-    { "kind": "stat", "value": "50", "label": "TYLER HERRO POINTS", "caption": "Tyler Herro shot 15-of-23 from the field and had 15 points in the first quarter alone." },
-    { "kind": "stat", "value": "35", "label": "POINTS AFTER THREE QUARTERS", "caption": "Herro had 35 after three quarters and hit 40 with eight minutes left to keep Milwaukee within three." },
-    { "kind": "text", "text": "THE TYING THREE WAS WAVED OFF", "caption": "Herro's final shot, a game-tying three at the buzzer, did not count, and Philadelphia held on 132-129." },
-    { "kind": "payoff", "text": "13TH STRAIGHT LOSS FOR THE BUCKS", "caption": "Despite Herro's 50, the Milwaukee Bucks lost their 13th straight game while Philadelphia won its fifth in a row." }
+    { "kind": "text", "text": "NIKOLA JOKIC HIT TRIPLE-DOUBLE NO. 202", "caption": "Nikola Jokic recorded the 202nd triple-double of his career as the Denver Nuggets visited the Chicago Bulls." },
+    { "kind": "stat", "value": "37", "label": "POINTS", "caption": "Nikola Jokic scored 37 points, grabbed 18 rebounds and handed out 11 assists." },
+    { "kind": "stat", "value": "209", "label": "WESTBROOK'S RECORD", "caption": "Nikola Jokic is now seven triple-doubles shy of Russell Westbrook's NBA record of 209." },
+    { "kind": "text", "text": "BULLS TIED IT WITH 7 SECONDS LEFT", "caption": "Buddy Hield stole the ball from Nikola Jokic and Josh Giddey's layup tied it at 131, forcing overtime." },
+    { "kind": "payoff", "text": "JAMAL MURRAY CLOSED IT OUT: 45", "caption": "Jamal Murray scored eight of his season-high 45 points in overtime as the Denver Nuggets won 151-145." }
   ],
   "sources": [
-    { "claim": "Herro scored a career-high 50 points; final shot did not beat the buzzer; 76ers won 132-129", "url": "https://www.washingtonpost.com/sports/nba/2026/11/21/milwaukee-bucks-tyler-herro-50/59e70b24-e5fc-11f1-a99e-b3e3805c6b8b_story.html" },
-    { "claim": "50 points on 15/23 shooting; 15 points in first quarter; 35 after three; 40 with eight minutes left; game-tying buzzer-beater called off; Bucks 13th straight loss; 76ers fifth straight win", "url": "https://www.brewhoop.com/bucks-scores-results/82095/milwaukee-vs-philadelphia-76ers-final-score-recap-tyler-herro-joel-embiid" }
+    { "claim": "Jokic 37 pts/18 reb/11 ast, 202nd career triple-double; Westbrook record 209; Murray season-high 45 with 8 in OT; Hield steal and Giddey layup tied it at 131; Nuggets won 151-145", "url": "https://www.espn.com/nba/recap/_/gameId/401910032" }
   ]
 }
