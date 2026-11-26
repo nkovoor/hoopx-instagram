@@ -23,8 +23,11 @@ const board = {
   ],
 };
 
-test('lastNightET gives the ET calendar date 8h earlier', () => {
+test('lastNightET gives last night ET date all day (02:30 IST to 02:30 IST)', () => {
   assert.equal(lastNightET(new Date('2026-11-16T07:30:00Z')), '20261115');
+  assert.equal(lastNightET(new Date('2026-11-16T12:00:00Z')), '20261115');
+  assert.equal(lastNightET(new Date('2026-11-16T13:00:00Z')), '20261115');
+  assert.equal(lastNightET(new Date('2026-11-16T20:00:00Z')), '20261115');
 });
 
 test('builds night data: OT game first, abbreviations fixed, pending game flagged', () => {

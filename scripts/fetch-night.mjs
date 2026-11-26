@@ -17,9 +17,9 @@ const num = (v) => {
 };
 
 // The NBA's "night" is the America/New_York calendar date. We run in the IST afternoon
-// (~02:00-03:00 ET), so "last night" = ET date of (now - 8h).
+// (~02:00-03:00 ET), so "last night" = ET date of (now - 16h): correct from ~02:30 IST until the next 02:30 IST, so evening manual runs work too.
 export function lastNightET(now = new Date()) {
-  const d = new Date(now.getTime() - 8 * 3600 * 1000);
+  const d = new Date(now.getTime() - 16 * 3600 * 1000);
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' })
     .format(d).replaceAll('-', '');
 }
