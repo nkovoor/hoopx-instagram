@@ -1,18 +1,18 @@
 {
-  "etDate": "2026-11-22",
+  "etDate": "2026-11-25",
   "type": "milestone",
-  "player": { "name": "Nikola Jokic", "team": "DEN" },
-  "hook": { "line1": "NIKOLA JOKIC", "line2": "202ND CAREER TRIPLE-DOUBLE", "tag": "NUGGETS WIN 151-145 IN OT" },
-  "caption": "Nikola Jokic had 37 points, 18 rebounds and 11 assists for the 202nd triple-double of his career, and Jamal Murray scored a season-high 45 as the Denver Nuggets beat the Chicago Bulls 151-145 in overtime.",
-  "storyLine": "JOKIC 202 TRIPLE-DOUBLES, NUGGETS SURVIVE",
+  "player": { "name": "Kevin Durant", "team": "HOU" },
+  "hook": { "line1": "KEVIN DURANT", "line2": "33,000 CAREER POINTS", "tag": "ROCKETS WIN 116-104" },
+  "caption": "Kevin Durant scored 20 points and became the fifth player in NBA history to reach 33,000 career points, joining LeBron James, Kareem Abdul-Jabbar, Karl Malone and Kobe Bryant as the Houston Rockets beat the Phoenix Suns 116-104.",
+  "storyLine": "KEVIN DURANT JOINS THE 33K CLUB",
   "beats": [
-    { "kind": "text", "text": "NIKOLA JOKIC HIT TRIPLE-DOUBLE NO. 202", "caption": "Nikola Jokic recorded the 202nd triple-double of his career as the Denver Nuggets visited the Chicago Bulls." },
-    { "kind": "stat", "value": "37", "label": "POINTS", "caption": "Nikola Jokic scored 37 points, grabbed 18 rebounds and handed out 11 assists." },
-    { "kind": "stat", "value": "209", "label": "WESTBROOK'S RECORD", "caption": "Nikola Jokic is now seven triple-doubles shy of Russell Westbrook's NBA record of 209." },
-    { "kind": "text", "text": "BULLS TIED IT WITH 7 SECONDS LEFT", "caption": "Buddy Hield stole the ball from Nikola Jokic and Josh Giddey's layup tied it at 131, forcing overtime." },
-    { "kind": "payoff", "text": "JAMAL MURRAY CLOSED IT OUT: 45", "caption": "Jamal Murray scored eight of his season-high 45 points in overtime as the Denver Nuggets won 151-145." }
+    { "kind": "text", "text": "KEVIN DURANT HIT 33,000 POINTS", "caption": "Kevin Durant became the fifth player in NBA history to reach 33,000 career points." },
+    { "kind": "stat", "value": "33,000", "label": "CAREER POINTS", "caption": "A three-pointer late in the second quarter put Kevin Durant over the mark." },
+    { "kind": "stat", "value": "20", "label": "POINTS · 10 REBOUNDS", "caption": "Kevin Durant finished with 20 points and 10 rebounds on 7-of-15 shooting." },
+    { "kind": "text", "text": "ELITE COMPANY", "caption": "He joins LeBron James, Kareem Abdul-Jabbar, Karl Malone and Kobe Bryant in the 33,000-point club." },
+    { "kind": "payoff", "text": "ROCKETS BEAT SUNS 116-104", "caption": "Alperen Sengun added a triple-double as the Houston Rockets beat the Phoenix Suns 116-104." }
   ],
   "sources": [
-    { "claim": "Jokic 37 pts/18 reb/11 ast, 202nd career triple-double; Westbrook record 209; Murray season-high 45 with 8 in OT; Hield steal and Giddey layup tied it at 131; Nuggets won 151-145", "url": "https://www.espn.com/nba/recap/_/gameId/401910032" }
+    { "claim": "Durant 20 pts, 7-of-15, 10 reb; fifth player to reach 33,000; three-pointer with 46.3s left in 2nd quarter; joins LeBron James, Kareem Abdul-Jabbar, Karl Malone, Kobe Bryant; Sengun triple-double; Rockets won 116-104", "url": "https://www.tsn.ca/nba/article/durant-reaches-33000-points-for-career-as-rockets-beat-suns/" }
   ]
 }
