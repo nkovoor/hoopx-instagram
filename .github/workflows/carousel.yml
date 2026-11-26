@@ -5,9 +5,6 @@ on:
       kind:
         description: "week or six"
         default: "week"
-  schedule:
-    - cron: "30 13 * * 1"   # Monday 19:00 IST -> week
-    - cron: "30 13 * * 4"   # Thursday 19:00 IST -> six
 permissions:
   contents: read
 jobs:
