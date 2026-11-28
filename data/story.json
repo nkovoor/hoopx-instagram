@@ -1,0 +1,20 @@
+{
+  "etDate": "2026-11-27",
+  "type": "comeback",
+  "player": { "name": "Stephon Castle", "team": "SAS" },
+  "hook": { "line1": "STEPHON CASTLE", "line2": "SPURS ERASE 16-POINT HOLE", "tag": "NBA CUP" },
+  "caption": "Down 54-38 at the half, the San Antonio Spurs stormed back behind Stephon Castle's 26 points and Victor Wembanyama's 25 and 16 to beat the Lakers 99-96 and knock Luka Dončić's team out of the NBA Cup.",
+  "storyLine": "SPURS COMEBACK KNOCKS LAKERS OUT",
+  "beats": [
+    { "kind": "text", "text": "SPURS DOWN 16 AT HALF", "caption": "The Los Angeles Lakers led the San Antonio Spurs 54-38 at halftime after a 27-14 first quarter." },
+    { "kind": "stat", "value": "30-14", "label": "SPURS THIRD QUARTER", "caption": "San Antonio outscored Los Angeles 30-14 in the third quarter, tying the game at 68 on a Keldon Johnson three." },
+    { "kind": "stat", "value": "26 PTS", "label": "STEPHON CASTLE", "caption": "Stephon Castle scored 26 points on 10-for-15 shooting, while Victor Wembanyama added 25 points and 16 rebounds." },
+    { "kind": "quarters", "caption": "The Spurs won the second half 61-42 and finished with a 99-96 victory over the Lakers." },
+    { "kind": "moment", "clock": "0:43", "score": "96-90", "text": "CASTLE HITS THE DAGGER THREE", "caption": "Stephon Castle's three-pointer with 43.4 seconds left put San Antonio up 96-90 and the Lakers never recovered." },
+    { "kind": "payoff", "text": "LAKERS ELIMINATED", "caption": "The win sends San Antonio into the NBA Cup knockout round, while Luka Dončić's 31 points were not enough for Los Angeles." }
+  ],
+  "sources": [
+    { "claim": "Final 99-96; Castle 26 pts (10-15 FG), Wembanyama 25 pts 16 reb, Dončić 31, Spurs trailed 54-38 at half, led 27-14 after Q1, won Q3 30-14 tying 68-68 on Keldon Johnson three, Castle three made it 96-90 with 43.4s left, advance to knockout round, Lakers eliminated", "url": "https://abcnews.com/Sports/wireStory/spurs-ride-half-surge-earn-spot-nba-cup-138493687" },
+    { "claim": "Quarter scores LAL 27-27-14-28, SAS 14-24-30-31", "url": "https://www.espn.com/nba/recap/_/gameId/401909333" }
+  ]
+}
