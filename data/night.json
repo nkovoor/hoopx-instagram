@@ -1,7 +1,598 @@
 {
-  "status": "no-games",
-  "etDate": "2026-11-26",
-  "dateLabel": "THURSDAY · NOVEMBER 26",
+  "status": "ok",
+  "etDate": "2026-11-27",
+  "dateLabel": "FRIDAY · NOVEMBER 27",
+  "seasonType": 2,
+  "mode": "hype",
+  "flags": [
+    "thriller"
+  ],
   "pendingGames": 0,
-  "games": []
+  "hook": {
+    "kicker": "LAST NIGHT IN THE NBA",
+    "line1": "DONCIC",
+    "line2": "31 PTS · 8 AST",
+    "sub": "NBA CUP - GROUP PLAY"
+  },
+  "games": [
+    {
+      "id": "401909333",
+      "label": "FINAL",
+      "away": {
+        "abbr": "LAL",
+        "name": "LAKERS",
+        "city": "LOS ANGELES",
+        "nick": "LAKERS",
+        "score": 96,
+        "quarters": [
+          27,
+          27,
+          14,
+          28
+        ],
+        "primary": "#552583",
+        "secondary": "#FDB927"
+      },
+      "home": {
+        "abbr": "SAS",
+        "name": "SPURS",
+        "city": "SAN ANTONIO",
+        "nick": "SPURS",
+        "score": 99,
+        "quarters": [
+          14,
+          24,
+          30,
+          31
+        ],
+        "primary": "#000000",
+        "secondary": "#C4CED4"
+      },
+      "winner": "SAS",
+      "margin": 3,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "SAS · STEPHON CASTLE · 26 PTS",
+        "REB LEADER · VICTOR WEMBANYAMA · 16"
+      ],
+      "star": {
+        "name": "LUKA DONCIC",
+        "team": "LAL",
+        "line": "31 PTS · 8 AST",
+        "photo": "luka-doncic.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909326",
+      "label": "FINAL",
+      "away": {
+        "abbr": "MIA",
+        "name": "HEAT",
+        "city": "MIAMI",
+        "nick": "HEAT",
+        "score": 108,
+        "quarters": [
+          31,
+          29,
+          26,
+          22
+        ],
+        "primary": "#98002E",
+        "secondary": "#000000"
+      },
+      "home": {
+        "abbr": "NYK",
+        "name": "KNICKS",
+        "city": "NEW YORK",
+        "nick": "KNICKS",
+        "score": 105,
+        "quarters": [
+          21,
+          23,
+          35,
+          26
+        ],
+        "primary": "#1D428A",
+        "secondary": "#F58426"
+      },
+      "winner": "MIA",
+      "margin": 3,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "MIA · BAM ADEBAYO · 25 PTS",
+        "REB LEADER · GIANNIS ANTETOKOUNMPO · 23"
+      ],
+      "star": {
+        "name": "JALEN BRUNSON",
+        "team": "NYK",
+        "line": "27 PTS · 8 AST",
+        "photo": "jalen-brunson.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909335",
+      "label": "FINAL",
+      "away": {
+        "abbr": "NOP",
+        "name": "PELICANS",
+        "city": "NEW ORLEANS",
+        "nick": "PELICANS",
+        "score": 105,
+        "quarters": [
+          29,
+          25,
+          26,
+          25
+        ],
+        "primary": "#0A2240",
+        "secondary": "#B4975A"
+      },
+      "home": {
+        "abbr": "LAC",
+        "name": "CLIPPERS",
+        "city": "LA",
+        "nick": "CLIPPERS",
+        "score": 104,
+        "quarters": [
+          28,
+          22,
+          27,
+          27
+        ],
+        "primary": "#12173F",
+        "secondary": "#C8102E"
+      },
+      "winner": "NOP",
+      "margin": 1,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "LAC · DARIUS GARLAND · 19 PTS",
+        "REB LEADER · YVES MISSI · 12"
+      ],
+      "star": {
+        "name": "ZION WILLIAMSON",
+        "team": "NOP",
+        "line": "25 PTS · 5 AST",
+        "photo": "zion-williamson.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909330",
+      "label": "FINAL",
+      "away": {
+        "abbr": "ATL",
+        "name": "HAWKS",
+        "city": "ATLANTA",
+        "nick": "HAWKS",
+        "score": 87,
+        "quarters": [
+          14,
+          25,
+          31,
+          17
+        ],
+        "primary": "#C8102E",
+        "secondary": "#FDB927"
+      },
+      "home": {
+        "abbr": "BOS",
+        "name": "CELTICS",
+        "city": "BOSTON",
+        "nick": "CELTICS",
+        "score": 86,
+        "quarters": [
+          29,
+          22,
+          18,
+          17
+        ],
+        "primary": "#008348",
+        "secondary": "#BA9653"
+      },
+      "winner": "ATL",
+      "margin": 1,
+      "overtime": 0,
+      "tags": [
+        "thriller"
+      ],
+      "leaders": [
+        "BOS · JAYSON TATUM · 20 PTS",
+        "REB LEADER · NEEMIAS QUETA · 22"
+      ],
+      "star": {
+        "name": "JALEN JOHNSON",
+        "team": "ATL",
+        "line": "24 PTS · 12 REB",
+        "photo": null
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909334",
+      "label": "FINAL",
+      "away": {
+        "abbr": "DEN",
+        "name": "NUGGETS",
+        "city": "DENVER",
+        "nick": "NUGGETS",
+        "score": 120,
+        "quarters": [
+          27,
+          25,
+          33,
+          35
+        ],
+        "primary": "#0E2240",
+        "secondary": "#FEC524"
+      },
+      "home": {
+        "abbr": "UTA",
+        "name": "JAZZ",
+        "city": "UTAH",
+        "nick": "JAZZ",
+        "score": 107,
+        "quarters": [
+          22,
+          31,
+          32,
+          22
+        ],
+        "primary": "#4E008E",
+        "secondary": "#79A3DC"
+      },
+      "winner": "DEN",
+      "margin": 13,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "UTA · KEYONTE GEORGE · 25 PTS",
+        "AST LEADER · NIKOLA JOKIC · 15"
+      ],
+      "star": {
+        "name": "JAMAL MURRAY",
+        "team": "DEN",
+        "line": "36 PTS",
+        "photo": "jamal-murray.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909329",
+      "label": "FINAL",
+      "away": {
+        "abbr": "BKN",
+        "name": "NETS",
+        "city": "BROOKLYN",
+        "nick": "NETS",
+        "score": 100,
+        "quarters": [
+          27,
+          28,
+          24,
+          21
+        ],
+        "primary": "#000000",
+        "secondary": "#FFFFFF"
+      },
+      "home": {
+        "abbr": "TOR",
+        "name": "RAPTORS",
+        "city": "TORONTO",
+        "nick": "RAPTORS",
+        "score": 124,
+        "quarters": [
+          31,
+          32,
+          39,
+          22
+        ],
+        "primary": "#D91244",
+        "secondary": "#000000"
+      },
+      "winner": "TOR",
+      "margin": 24,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "BKN · JULIUS RANDLE · 21 PTS",
+        "REB LEADER · IMMANUEL QUICKLEY · 10"
+      ],
+      "star": {
+        "name": "SCOTTIE BARNES",
+        "team": "TOR",
+        "line": "34 PTS",
+        "photo": "scottie-barnes.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909332",
+      "label": "FINAL",
+      "away": {
+        "abbr": "DAL",
+        "name": "MAVERICKS",
+        "city": "DALLAS",
+        "nick": "MAVERICKS",
+        "score": 113,
+        "quarters": [
+          28,
+          25,
+          25,
+          35
+        ],
+        "primary": "#0064B1",
+        "secondary": "#BBC4CA"
+      },
+      "home": {
+        "abbr": "PHX",
+        "name": "SUNS",
+        "city": "PHOENIX",
+        "nick": "SUNS",
+        "score": 109,
+        "quarters": [
+          29,
+          34,
+          32,
+          14
+        ],
+        "primary": "#29127A",
+        "secondary": "#E56020"
+      },
+      "winner": "DAL",
+      "margin": 4,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "PHX · DEVIN BOOKER · 31 PTS"
+      ],
+      "star": {
+        "name": "COOPER FLAGG",
+        "team": "DAL",
+        "line": "34 PTS · 8 AST",
+        "photo": "cooper-flagg.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909331",
+      "label": "FINAL",
+      "away": {
+        "abbr": "MEM",
+        "name": "GRIZZLIES",
+        "city": "MEMPHIS",
+        "nick": "GRIZZLIES",
+        "score": 114,
+        "quarters": [
+          32,
+          29,
+          21,
+          32
+        ],
+        "primary": "#5D76A9",
+        "secondary": "#12173F"
+      },
+      "home": {
+        "abbr": "MIN",
+        "name": "TIMBERWOLVES",
+        "city": "MINNESOTA",
+        "nick": "TIMBERWOLVES",
+        "score": 109,
+        "quarters": [
+          25,
+          25,
+          31,
+          28
+        ],
+        "primary": "#266092",
+        "secondary": "#79BC43"
+      },
+      "winner": "MEM",
+      "margin": 5,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "MEM · CEDRIC COWARD · 22 PTS"
+      ],
+      "star": {
+        "name": "AYO DOSUNMU",
+        "team": "MIN",
+        "line": "27 PTS · 8 AST",
+        "photo": null
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909336",
+      "label": "FINAL",
+      "away": {
+        "abbr": "GSW",
+        "name": "WARRIORS",
+        "city": "GOLDEN STATE",
+        "nick": "WARRIORS",
+        "score": 94,
+        "quarters": [
+          11,
+          33,
+          34,
+          16
+        ],
+        "primary": "#1D428A",
+        "secondary": "#FDB927"
+      },
+      "home": {
+        "abbr": "POR",
+        "name": "TRAIL BLAZERS",
+        "city": "PORTLAND",
+        "nick": "TRAIL BLAZERS",
+        "score": 116,
+        "quarters": [
+          37,
+          30,
+          24,
+          25
+        ],
+        "primary": "#E03A3E",
+        "secondary": "#000000"
+      },
+      "winner": "POR",
+      "margin": 22,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "GSW · YAXEL LENDEBORG · 18 PTS",
+        "REB LEADER · DONOVAN CLINGAN · 12"
+      ],
+      "star": {
+        "name": "DENI AVDIJA",
+        "team": "POR",
+        "line": "26 PTS · 7 AST",
+        "photo": "deni-avdija.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909327",
+      "label": "FINAL",
+      "away": {
+        "abbr": "MIL",
+        "name": "BUCKS",
+        "city": "MILWAUKEE",
+        "nick": "BUCKS",
+        "score": 98,
+        "quarters": [
+          29,
+          21,
+          26,
+          22
+        ],
+        "primary": "#00471B",
+        "secondary": "#EEE1C6"
+      },
+      "home": {
+        "abbr": "DET",
+        "name": "PISTONS",
+        "city": "DETROIT",
+        "nick": "PISTONS",
+        "score": 113,
+        "quarters": [
+          24,
+          24,
+          42,
+          23
+        ],
+        "primary": "#1D428A",
+        "secondary": "#C8102E"
+      },
+      "winner": "DET",
+      "margin": 15,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "DET · ISAIAH JOE · 22 PTS",
+        "REB LEADER · MYLES TURNER · 12"
+      ],
+      "star": {
+        "name": "BRAYDEN BURRIES",
+        "team": "MIL",
+        "line": "23 PTS",
+        "photo": null
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    },
+    {
+      "id": "401909328",
+      "label": "FINAL",
+      "away": {
+        "abbr": "PHI",
+        "name": "76ERS",
+        "city": "PHILADELPHIA",
+        "nick": "76ERS",
+        "score": 111,
+        "quarters": [
+          30,
+          25,
+          30,
+          26
+        ],
+        "primary": "#1D428A",
+        "secondary": "#E01234"
+      },
+      "home": {
+        "abbr": "IND",
+        "name": "PACERS",
+        "city": "INDIANA",
+        "nick": "PACERS",
+        "score": 87,
+        "quarters": [
+          22,
+          22,
+          14,
+          29
+        ],
+        "primary": "#0C2340",
+        "secondary": "#FFD520"
+      },
+      "winner": "PHI",
+      "margin": 24,
+      "overtime": 0,
+      "tags": [],
+      "leaders": [
+        "IND · JAY HUFF · 18 PTS",
+        "REB LEADER · IVICA ZUBAC · 16"
+      ],
+      "star": {
+        "name": "LEBRON JAMES",
+        "team": "PHI",
+        "line": "21 PTS",
+        "photo": "lebron-james.png"
+      },
+      "note": "NBA CUP - GROUP PLAY"
+    }
+  ],
+  "potn": {
+    "first": "LUKA",
+    "last": "DONCIC",
+    "team": "LOS ANGELES LAKERS",
+    "colour": "#aa92c1",
+    "teamAbbr": "LAL",
+    "teamPrimary": "#552583",
+    "teamSecondary": "#FDB927",
+    "photo": "luka-doncic.png",
+    "note": "NBA CUP - GROUP PLAY",
+    "stats": [
+      {
+        "k": "PTS",
+        "v": 31
+      },
+      {
+        "k": "AST",
+        "v": 8
+      }
+    ]
+  },
+  "facts": [
+    "SPURS beat LAKERS 99-96; LUKA DONCIC had 31 PTS · 8 AST.",
+    "HEAT beat KNICKS 108-105; JALEN BRUNSON had 27 PTS · 8 AST.",
+    "PELICANS beat CLIPPERS 105-104; ZION WILLIAMSON had 25 PTS · 5 AST.",
+    "HAWKS beat CELTICS 87-86; JALEN JOHNSON had 24 PTS · 12 REB.",
+    "NUGGETS beat JAZZ 120-107; JAMAL MURRAY had 36 PTS.",
+    "RAPTORS beat NETS 124-100; SCOTTIE BARNES had 34 PTS.",
+    "MAVERICKS beat SUNS 113-109; COOPER FLAGG had 34 PTS · 8 AST.",
+    "GRIZZLIES beat TIMBERWOLVES 114-109; AYO DOSUNMU had 27 PTS · 8 AST.",
+    "TRAIL BLAZERS beat WARRIORS 116-94; DENI AVDIJA had 26 PTS · 7 AST.",
+    "PISTONS beat BUCKS 113-98; BRAYDEN BURRIES had 23 PTS.",
+    "76ERS beat PACERS 111-87; LEBRON JAMES had 21 PTS."
+  ]
 }
